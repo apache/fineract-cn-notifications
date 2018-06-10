@@ -24,6 +24,8 @@ import org.apache.fineract.cn.command.annotation.Aggregate;
 import org.apache.fineract.cn.command.annotation.CommandHandler;
 import org.apache.fineract.cn.command.annotation.CommandLogLevel;
 import org.apache.fineract.cn.command.annotation.EventEmitter;
+import org.apache.fineract.cn.notification.service.internal.repository.SampleJpaEntity;
+import org.apache.fineract.cn.notification.service.internal.repository.SampleJpaEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 

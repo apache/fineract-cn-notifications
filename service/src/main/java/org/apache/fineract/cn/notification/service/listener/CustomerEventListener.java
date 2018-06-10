@@ -24,7 +24,6 @@ import org.apache.fineract.cn.lang.config.TenantHeaderFilter;
 import org.apache.fineract.cn.customer.api.v1.client.CustomerManager;
 import org.apache.fineract.cn.customer.api.v1.domain.ContactDetail;
 import org.apache.fineract.cn.customer.api.v1.domain.Customer;
-import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
 import org.apache.fineract.cn.notification.service.internal.service.EmailSender;
 import org.apache.fineract.cn.notification.service.internal.service.SMSSender;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -19,6 +19,7 @@
 package org.apache.fineract.cn.notification.service.internal.mapper;
 
 import org.apache.fineract.cn.notification.api.v1.domain.Sample;
+import org.apache.fineract.cn.notification.service.internal.repository.SampleJpaEntity;
 
 import java.util.ArrayList;
 import java.util.List;

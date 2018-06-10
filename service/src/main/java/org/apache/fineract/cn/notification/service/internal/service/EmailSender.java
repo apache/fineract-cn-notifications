@@ -18,13 +18,17 @@
  */
 package org.apache.fineract.cn.notification.service.internal.service;
 
+
+import org.apache.fineract.cn.notification.service.internal.mapper.EmailConfigurationMapper;
+import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfiguration;
+import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 
 @Service
 public class EmailSender {
@@ -32,6 +36,18 @@ public class EmailSender {
     @Autowired
     @Qualifier("gmail")
     private JavaMailSender sender;
+
+    private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
+
+    @Autowired
+    public EmailSender(final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository) {
+        super();
+        this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
+    }
+
+//    public Optional<EmailGatewayConfiguration> findByIdentifier(final String identifier) {
+//        return this.emailGatewayConfigurationRepository.findByIdentifier(identifier).map(EmailGatewayConfiguration::map);
+//    }
 
     public void sendEmail(String to, String subject, String message) {
         SimpleMailMessage mail = new SimpleMailMessage();

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
+/*
 package org.apache.fineract.cn.notification.service.listener;
 
 import org.apache.fineract.cn.cheque.AbstractChequeTest;
@@ -47,7 +47,7 @@ public class ChequeEventListener {
                                final String payload) {
         this.logger.debug("Cheques issued.");
     }
-/*
+
     @JmsListener(
             destination = EventConstants.DESTINATION,
             selector = EventConstants.SELECTOR_CHEQUE_TRANSACTION,
@@ -80,5 +80,6 @@ public class ChequeEventListener {
         this.logger.debug("Cheque transaction canceled.");
         this.eventRecorder.event(tenant, EventConstants.CHEQUE_TRANSACTION_CANCELED, payload, String.class);
     }
-*/
+
 }
+*/

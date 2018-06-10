@@ -20,6 +20,7 @@ package org.apache.fineract.cn.notification.service.internal.service;
 
 import org.apache.fineract.cn.notification.api.v1.domain.Sample;
 import org.apache.fineract.cn.notification.service.internal.mapper.SampleMapper;
+import org.apache.fineract.cn.notification.service.internal.repository.SampleJpaEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

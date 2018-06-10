@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
+/*
 package org.apache.fineract.cn.deposit.listener;
 
 import org.apache.fineract.cn.deposit.api.v1.EventConstants;
@@ -45,7 +45,7 @@ public class DepositEventListener {
     public void onAccrual(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                           final String payload) {
     }
-/*
+
     @JmsListener(
             destination = EventConstants.DESTINATION,
             selector = EventConstants.SELECTOR_DIVIDEND_DISTRIBUTION,
@@ -56,5 +56,6 @@ public class DepositEventListener {
         this.logger.debug("Dividend distributed for product {}.", payload);
         this.eventRecorder.event(tenant, EventConstants.DIVIDEND_DISTRIBUTION, payload, String.class);
     }
-*/
+
 }
+*/

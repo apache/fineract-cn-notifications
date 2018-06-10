@@ -17,14 +17,11 @@ package org.apache.fineract.cn.notification.service.listener;/*
  * under the License.
  */
 
-import org.apache.fineract.cn.individuallending.api.v1.events.IndividualLoanCommandEvent;
 import org.apache.fineract.cn.individuallending.api.v1.events.IndividualLoanEventConstants;
 import org.apache.fineract.cn.lang.config.TenantHeaderFilter;
-import org.apache.fineract.cn.reporting.api.v1.domain.Header;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
-import org.apache.fineract.cn.group.api.v1.EventConstants;
 import org.apache.fineract.cn.portfolio.api.v1.client.PortfolioManager;
 
 @SuppressWarnings("unused")

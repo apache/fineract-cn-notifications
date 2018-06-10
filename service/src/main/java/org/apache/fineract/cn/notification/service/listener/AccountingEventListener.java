@@ -16,7 +16,7 @@
          * specific language governing permissions and limitations
          * under the License.
          */
-
+/*
         package org.apache.fineract.cn.notification.service.listener;
 
         import org.apache.fineract.cn.lang.config.TenantHeaderFilter;
@@ -34,13 +34,6 @@
 @Component
 public class AccountingEventListener {
 
-    AccountService accountService;
-
-    @Autowired
-    SMSSender smsSender;
-
-    @Autowired
-    EmailSender emailSender;
 
     @Autowired
     public AccountingEventListener( final AccountService accountingManager) {
@@ -60,7 +53,7 @@ public class AccountingEventListener {
         emailSender.sendEmail(receiver,"Hello", "You account has been created");
     }
 
-     /*
+
     @JmsListener(
             destination = EventConstants.DESTINATION,
             selector = EventConstants.SELECTOR_PUT_ACCOUNT,
@@ -126,5 +119,6 @@ public class AccountingEventListener {
         this.logger.debug("Account deleted.");
         this.eventRecorder.event(tenant, EventConstants.DELETE_ACCOUNT, payload, String.class);
     }
- */
+
 }
+ */
