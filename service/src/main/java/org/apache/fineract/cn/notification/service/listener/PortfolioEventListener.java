@@ -16,7 +16,7 @@ package org.apache.fineract.cn.notification.service.listener;/*
  * specific language governing permissions and limitations
  * under the License.
  */
-
+    /*
 import org.apache.fineract.cn.individuallending.api.v1.events.IndividualLoanEventConstants;
 import org.apache.fineract.cn.lang.config.TenantHeaderFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,7 +113,7 @@ public class PortfolioEventListener {
                         final String payload) {
     }
 
-    /*
+
 
         @JmsListener(
                 subscription = EventConstants.DESTINATION,
@@ -144,5 +144,6 @@ public class PortfolioEventListener {
                                    final String payload) {
             this.eventRecorder.event(tenant, EventConstants.PUT_GROUP, payload, String.class);
         }
-         */
+
     }
+ */
