@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface NotificationManager {
 
   @RequestMapping(
-          value = "/sample",
+          value = "/notification",
           method = RequestMethod.GET,
           produces = MediaType.ALL_VALUE,
           consumes = MediaType.APPLICATION_JSON_VALUE
@@ -42,14 +42,14 @@ public interface NotificationManager {
   List<Sample> findAllEntities();
 
   @RequestMapping(
-          value = "/sample/{identifier}",
+          value = "/notification/{identifier}",
           method = RequestMethod.GET,
           produces = MediaType.ALL_VALUE,
           consumes = MediaType.APPLICATION_JSON_VALUE)
   Sample getEntity(@PathVariable("identifier") final String identifier);
 
   @RequestMapping(
-      value = "/sample",
+      value = "/notification",
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE

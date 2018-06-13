@@ -21,7 +21,7 @@ package org.apache.fineract.cn.notification;
 import org.apache.fineract.cn.notification.api.v1.client.NotificationManager;
 import org.apache.fineract.cn.notification.api.v1.domain.Sample;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
-import org.apache.fineract.cn.notification.service.NotificationConfiguration;
+import com.amazonaws.services.autoscaling.model.NotificationConfiguration;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.fineract.cn.anubis.test.v1.TenantApplicationSecurityEnvironmentTestRule;
