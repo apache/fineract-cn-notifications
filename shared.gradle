@@ -16,7 +16,7 @@
  */
 
 group 'org.apache.fineract.cn.notification'
-version '0.1.0.BUILD-SNAPSHOT'
+version '0.1.0-BUILD-SNAPSHOT'
 
 ext.versions = [
         fineractcnidentity      : '0.1.0-BUILD-SNAPSHOT',
