@@ -75,4 +75,7 @@ fineract:
     accountclosed:
       message: Dear Valued Customer, Your account has been successfully closed.
 
-
+smssender:
+  accountSID: AC1fde2c6f26f367b93231c5fdb944c908
+  authtoken: bc9a53e41745b8471e0ecafc859d86aa
+  senderNumber: +1 510-944-1898

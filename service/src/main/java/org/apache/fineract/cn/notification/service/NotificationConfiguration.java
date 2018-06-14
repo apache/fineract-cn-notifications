@@ -79,6 +79,8 @@ public class NotificationConfiguration extends WebMvcConfigurerAdapter {
     configurer.setUseSuffixPatternMatch(Boolean.FALSE);
   }
 
+
+
   @Bean
   @Qualifier("gmail")
   public JavaMailSender getJavaMailSender() {

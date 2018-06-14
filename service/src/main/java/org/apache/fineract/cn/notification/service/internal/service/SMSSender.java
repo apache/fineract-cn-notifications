@@ -23,23 +23,27 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import com.twilio.rest.api.v2010.account.MessageCreator;
 import org.springframework.stereotype.Service;
 
 @Service
+@ConfigurationProperties(prefix ="smssender")
 public class SMSSender {
 
-    @Value(value = "${smssender.accountSID}")
-    public static String ACCOUNT_SID;
+    //@Value(value = "${smssender.accountSID}")
+    public String ACCOUNT_SID = "AC1fde2c6f26f367b93231c5fdb944c908";
 
-    @Value("${smssender.authToken}")
-    public static String AUTH_TOKEN;
+    //@Value("${smssender.authToken}")
+    public String AUTH_TOKEN = "bc9a53e41745b8471e0ecafc859d86aa";
 
-    @Value("${mfi.senderNumber}")
-    public static String sender;
+    //@Value("${smssender.senderNumber}")
+    public String sender = "+1 510-944-1898";
 
-    @Value("${fineract.customer.accountcreated}")
-    public String template;
+    //@Value("${fineract.customer.accountcreated}")
+
+    public String template = "Test from the demo-server";
 
     public void sendSMS(String receiver, String template) {
 

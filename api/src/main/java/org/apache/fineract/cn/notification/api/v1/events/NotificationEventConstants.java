@@ -28,8 +28,4 @@ public interface NotificationEventConstants {
     String SELECTOR_INITIALIZE = SELECTOR_NAME + " = '" + INITIALIZE + "'";
     String SELECTOR_POST_SAMPLE = SELECTOR_NAME + " = '" + POST_SAMPLE + "'";
 
-    //Customer constants;
-    String CUSTOMER_DESTINATION = "customer-v1";
-    String SELECTOR_POST_CUSTOMER = SELECTOR_NAME + " = 'post-customer'";
-
 }
