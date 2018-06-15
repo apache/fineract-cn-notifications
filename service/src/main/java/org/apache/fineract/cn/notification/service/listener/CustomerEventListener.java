@@ -31,7 +31,7 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
-
+@SuppressWarnings("unused")
 @Component
 public class CustomerEventListener {
 
@@ -40,11 +40,11 @@ public class CustomerEventListener {
         private EmailSender emailSender;
 
         @Autowired
-        public CustomerEventListener( final CustomerManager customerManager, SMSSender smsSender,
-                                 final EmailSender emailSender ) {
+        public CustomerEventListener( final CustomerManager customerManager, SMSSender smsSender, EmailSender emailSender ) {
             this.customerManager = customerManager;
             this.smsSender = smsSender;
             this.emailSender = emailSender;
+            smsSender.sendSMS("+23058409206","just to be sure listen has been instantiated");
         }
 
         @JmsListener(
@@ -53,8 +53,9 @@ public class CustomerEventListener {
         )
         public void customerCreatedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                          final String payload) {
-
+            System.out.println(payload);
             Customer customer = customerManager.findCustomer(payload);
+            System.out.println("This is the customer created: " + customer.getGivenName());
             if (customer.getContactDetails().size() > 0) {
                 customer.getContactDetails().forEach(contactDetail -> {
                     if (contactDetail.getType().equals(ContactDetail.Type.PHONE)) {
@@ -174,27 +175,4 @@ public class CustomerEventListener {
             });
         }
     }
-    
-/*
-
-    @JmsListener(
-            destination = CustomerEventConstants.DESTINATION,
-            selector = CustomerEventConstants.SELECTOR_PUT_ADDRESS
-    )
-    public void addressChangedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                                    final String payload) {
-        this.eventRecorder.event(tenant, CustomerEventConstants.PUT_ADDRESS, payload, String.class);
-    }
-
-    @JmsListener(
-            destination = CustomerEventConstants.DESTINATION,
-            selector = CustomerEventConstants.SELECTOR_PUT_IDENTIFICATION_CARD
-    )
-    public void identificationCardChangedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                                               final String payload) {
-        this.eventRecorder.event(tenant, CustomerEventConstants.PUT_IDENTIFICATION_CARD, payload, String.class);
-    }
-
-
-*/
 }

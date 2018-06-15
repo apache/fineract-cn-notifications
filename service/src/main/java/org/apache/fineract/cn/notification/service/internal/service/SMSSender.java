@@ -54,5 +54,4 @@ public class SMSSender {
         System.out.println(message.getSid());
         System.out.println(message.getStatus());
     }
-
     }
