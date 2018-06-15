@@ -16,12 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-/*
+
 package org.apache.fineract.cn.notification.service.listener;
 
-import org.apache.fineract.cn.accounting.api.v1.EventConstants;
+import org.apache.fineract.cn.notification.service.internal.service.EmailSender;
+import org.apache.fineract.cn.notification.service.internal.service.SMSSender;
+import org.apache.fineract.cn.office.api.v1.EventConstants;
 import org.apache.fineract.cn.lang.config.TenantHeaderFilter;
-import org.apache.fineract.cn.test.listener.EventRecorder;
+import org.apache.fineract.cn.office.api.v1.client.OrganizationManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.Header;
@@ -30,15 +32,35 @@ import org.springframework.stereotype.Component;
 @Component
 public class OfficeEventListener {
 
-    private final EventRecorder eventRecorder;
+	private OrganizationManager organizationManager;
+	private SMSSender smsSender;
+	private EmailSender emailSender;
 
-    @Autowired
-    public OfficeEventListener(final EventRecorder eventRecorder) {
-        super();
-        this.eventRecorder = eventRecorder;
-    }
+	@Autowired
+	public OfficeEventListener(final OrganizationManager organizationManager, SMSSender smsSender,
+	                           final EmailSender emailSender) {
+		this.organizationManager = organizationManager;
+		this.smsSender = smsSender;
+		this.emailSender = emailSender;
+	}
 
-    @JmsListener(
+	@JmsListener(
+			subscription = EventConstants.DESTINATION,
+			destination = EventConstants.DESTINATION,
+			selector = EventConstants.SELECTOR_POST_OFFICE
+	)
+	public void onCreateOffice(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                           final String payload) {
+		//for testing purposes
+		String office = this.organizationManager.findOfficeByIdentifier(payload).getName();
+		if (office.equalsIgnoreCase("Head Office")) {
+			smsSender.sendSMS("+23058409206", "Test From Demo");
+		}
+	}
+}
+
+/*
+	@JmsListener(
             subscription = EventConstants.DESTINATION,
             destination = EventConstants.DESTINATION,
             selector = EventConstants.SELECTOR_POST_EMPLOYEE
@@ -86,12 +108,6 @@ public class OfficeEventListener {
     public void onDeleteContactDetail(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                       final String eventPayload) throws Exception {
         this.eventRecorder.event(tenant, EventConstants.OPERATION_DELETE_CONTACT_DETAIL, eventPayload, String.class);
-    }
-
-    public void onCreateOffice(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                               final String payload)
-            throws Exception {
-        this.eventRecorder.event(tenant, EventConstants.OPERATION_POST_OFFICE, payload, String.class);
     }
 
     @JmsListener(
