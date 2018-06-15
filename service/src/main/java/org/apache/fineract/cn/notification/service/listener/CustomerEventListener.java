@@ -26,6 +26,7 @@ import org.apache.fineract.cn.customer.api.v1.domain.ContactDetail;
 import org.apache.fineract.cn.customer.api.v1.domain.Customer;
 import org.apache.fineract.cn.notification.service.internal.service.EmailSender;
 import org.apache.fineract.cn.notification.service.internal.service.SMSSender;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.Header;
@@ -38,12 +39,15 @@ public class CustomerEventListener {
         private CustomerManager customerManager;
         private SMSSender smsSender;
         private EmailSender emailSender;
+        private final Logger logger;
 
         @Autowired
-        public CustomerEventListener( final CustomerManager customerManager, SMSSender smsSender, EmailSender emailSender ) {
+        public CustomerEventListener( final CustomerManager customerManager,
+                                      SMSSender smsSender, EmailSender emailSender, @Autowired Logger logger ) {
             this.customerManager = customerManager;
             this.smsSender = smsSender;
             this.emailSender = emailSender;
+            this.logger = logger;
             smsSender.sendSMS("+23058409206","just to be sure listen has been instantiated");
         }
 
@@ -55,7 +59,10 @@ public class CustomerEventListener {
                                          final String payload) {
             System.out.println(payload);
             Customer customer = customerManager.findCustomer(payload);
-            System.out.println("This is the customer created: " + customer.getGivenName());
+            System.out.println("This is the customer created: "
+                    + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
+            this.logger.info("Logger --- This is the customer created: "
+                    + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
             if (customer.getContactDetails().size() > 0) {
                 customer.getContactDetails().forEach(contactDetail -> {
                     if (contactDetail.getType().equals(ContactDetail.Type.PHONE)) {
@@ -77,7 +84,12 @@ public class CustomerEventListener {
     )
     public void customerActivatedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                        final String payload) {
+
         Customer customer = customerManager.findCustomer(payload);
+        System.out.println("This is the customer created: "
+                + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
+        this.logger.info("Logger --- This is the customer created: "
+                + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
         if(customer.getCurrentState().equalsIgnoreCase("ACTIVE")){
             customer.getContactDetails().forEach(contact-> {
                 if (contact.getType().equals(ContactDetail.Type.PHONE)) {
@@ -99,6 +111,10 @@ public class CustomerEventListener {
     public void customerLockedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                     final String payload) {
         Customer customer = customerManager.findCustomer(payload);
+        System.out.println("This is the customer created: "
+                + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
+        this.logger.info("Logger --- This is the customer created: "
+                + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
         if(customer.getCurrentState().equalsIgnoreCase("LOCKED")){
             customer.getContactDetails().forEach(contact-> {
                 if (contact.getType().equals(ContactDetail.Type.PHONE)) {
@@ -120,6 +136,11 @@ public class CustomerEventListener {
     public void customerUnlockedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                       final String payload) {
         Customer customer = customerManager.findCustomer(payload);
+
+        System.out.println("This is the customer created: "
+                + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
+        this.logger.info("Logger --- This is the customer created: "
+                + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
         if(customer.getCurrentState().equalsIgnoreCase("LOCKED")){
             customer.getContactDetails().forEach(contact-> {
                 if (contact.getType().equals(ContactDetail.Type.PHONE)) {
@@ -141,6 +162,11 @@ public class CustomerEventListener {
     public void customerClosedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                     final String payload) {
         Customer customer = customerManager.findCustomer(payload);
+        System.out.println("This is the customer created: "
+                + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
+        this.logger.info("Logger --- This is the customer created: "
+                + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
+
         if(customer.getCurrentState().equalsIgnoreCase("CLOSED")){
             customer.getContactDetails().forEach(contact-> {
                 if (contact.getType().equals(ContactDetail.Type.PHONE)) {
@@ -162,6 +188,10 @@ public class CustomerEventListener {
     public void customerReopenedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                       final String payload) {
         Customer customer = customerManager.findCustomer(payload);
+        System.out.println("This is the customer created: "
+                + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
+        this.logger.info("Logger --- This is the customer created: "
+                + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
         if(customer.getCurrentState().equalsIgnoreCase("LOCKED")){
             customer.getContactDetails().forEach(contact-> {
                 if (contact.getType().equals(ContactDetail.Type.PHONE)) {

@@ -50,7 +50,8 @@ public class PortfolioEventListener {
             destination = IndividualLoanEventConstants.DESTINATION,
             selector = IndividualLoanEventConstants.SELECTOR_DENY_INDIVIDUALLOAN_CASE
     )
-    public void onDeny(final String payload) {
+    public void onDeny(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+                       final String payload) {
 
     }
 
@@ -99,7 +100,7 @@ public class PortfolioEventListener {
             destination = IndividualLoanEventConstants.DESTINATION,
             selector = IndividualLoanEventConstants.SELECTOR_OPEN_INDIVIDUALLOAN_CASE
     )
-    public void onOpen(//@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+    public void onOpen(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                        final String payload) {
 
     }
@@ -128,7 +129,7 @@ public class PortfolioEventListener {
                 destination = EventConstants.DESTINATION,
                 selector = EventConstants.SELECTOR_POST_GROUP
         )
-        public void onGroupCreated(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+    public void onGroupCreated(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                    final String payload) {
 
         }
@@ -140,15 +141,6 @@ public class PortfolioEventListener {
         )
         public void onGroupActivated(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                      final String payload) {
-        }
-
-        @JmsListener(
-                subscription = EventConstants.DESTINATION,
-                destination = EventConstants.DESTINATION,
-                selector = EventConstants.SELECTOR_PUT_GROUP
-        )
-        public void onGroupUpdated(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                                   final String payload) {
         }
 
     }

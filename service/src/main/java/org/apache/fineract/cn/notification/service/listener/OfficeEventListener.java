@@ -30,6 +30,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 @Component
+@SuppressWarnings("unused")
 public class OfficeEventListener {
 
 	private OrganizationManager organizationManager;
