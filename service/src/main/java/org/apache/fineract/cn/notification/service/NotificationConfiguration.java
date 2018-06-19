@@ -35,6 +35,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jms.annotation.EnableJms;
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
@@ -53,7 +55,7 @@ import java.util.Properties;
 @EnableCommandProcessing
 @EnableAnubis
 @EnableServiceException
-@ConfigurationProperties(locations = {"details"})
+@EnableJms
 @ComponentScan({
     "org.apache.fineract.cn.notification.service.rest",
     "org.apache.fineract.cn.notification.service.internal.service",
@@ -74,6 +76,11 @@ public class NotificationConfiguration extends WebMvcConfigurerAdapter {
     return LoggerFactory.getLogger(ServiceConstants.LOGGER_NAME);
   }
 
+//  @Bean
+//  public DefaultJmsListenerContainerFactory myJmsListenerContainerFactory() {
+//    DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+//    return factory;
+//  }
   @Override
   public void configurePathMatch(final PathMatchConfigurer configurer) {
     configurer.setUseSuffixPatternMatch(Boolean.FALSE);
