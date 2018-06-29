@@ -16,27 +16,49 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.service.internal.command;
+package org.apache.fineract.cn.notification.service.internal.repository;
 
-import org.apache.fineract.cn.notification.api.v1.domain.Sample;
+import javax.persistence.*;
 
-public class SampleCommand {
+@SuppressWarnings("unused")
+@Entity
+@Table(name = "template_samples")
+public class TemplateEntity {
 
-  private final Sample sample;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
+  @Column(name = "identifier")
+  private String identifier;
+  @Column(name = "payload")
+  private String payload;
 
-  public SampleCommand(final Sample sample) {
+  public TemplateEntity() {
     super();
-    this.sample = sample;
   }
 
-  public Sample sample() {
-    return this.sample;
+  public Long getId() {
+    return id;
   }
 
-  @Override
-  public String toString() {
-    return "SampleCommand{" +
-        "sample=" + sample.getIdentifier() +
-        '}';
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getIdentifier() {
+    return this.identifier;
+  }
+
+  public void setIdentifier(final String identifier) {
+    this.identifier = identifier;
+  }
+
+  public String getPayload() {
+    return payload;
+  }
+
+  public void setPayload(String payload) {
+    this.payload = payload;
   }
 }

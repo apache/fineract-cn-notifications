@@ -49,16 +49,13 @@ dependencies {
             [group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.4.3.RELEASE'],
 
             [group: 'org.apache.fineract.cn.customer', name: 'api', version: versions.fineractcncustomer],
-            [group: 'org.apache.fineract.cn.office', name: 'api', version: versions.fineractcnoffice],
             [group: 'org.apache.fineract.cn.portfolio', name: 'api', version: versions.fineractcnportfolio],
-            [group: 'org.apache.fineract.cn.group', name: 'api', version: versions.fineractcngroup],
-
+            [group: 'org.apache.fineract.cn.office', name: 'api', version: versions.fineractcnoffice],
             //[group: 'org.apache.fineract.cn.deposit-account-management', name: 'api', version: versions.fineractcndeposit],
             //[group: 'org.apache.fineract.cn.teller', name: 'api', version: versions.fineractcnteller],
             //[group: 'org.apache.fineract.cn.reporting', name: 'api', version: versions.fineractcnreporting],
             //[group: 'org.apache.fineract.cn.cheques', name: 'api', version: versions.kuelapcheques],
             //[group: 'org.apache.fineract.cn.payroll', name: 'api', version: versions.fineractcnpayroll],
-            //[group: 'org.apache.fineract.cn.notification', name: 'api', version: versions.fineractcnnotification],
 
             [group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'],
             [group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka'],
@@ -71,7 +68,8 @@ dependencies {
             [group: 'org.apache.fineract.cn', name: 'cassandra', version: versions.frameworkcassandra],
             [group: 'org.apache.fineract.cn', name: 'mariadb', version: versions.frameworkmariadb],
             [group: 'org.apache.fineract.cn', name: 'command', version: versions.frameworkcommand],
-            [group: 'org.hibernate', name: 'hibernate-validator', version: versions.validator]
+            [group: 'org.hibernate', name: 'hibernate-validator', version: versions.validator],
+            [group: 'org.flywaydb', name: 'flyway-core', version: '4.0.1']
     )
 }
 

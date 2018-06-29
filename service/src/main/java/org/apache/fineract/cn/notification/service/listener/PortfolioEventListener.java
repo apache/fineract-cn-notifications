@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/*
 package org.apache.fineract.cn.notification.service.listener;
 
 import org.apache.fineract.cn.group.api.v1.EventConstants;
@@ -144,3 +145,4 @@ public class PortfolioEventListener {
         }
 
     }
+*/

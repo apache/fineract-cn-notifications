@@ -20,15 +20,11 @@ version '0.1.0-BUILD-SNAPSHOT'
 
 ext.versions = [
         fineractcnidentity      : '0.1.0-BUILD-SNAPSHOT',
-        fineractcnprovisioner   : '0.1.0-BUILD-SNAPSHOT',
-        fineractcnrhythm        : '0.1.0-BUILD-SNAPSHOT',
         fineractcnoffice        : '0.1.0-BUILD-SNAPSHOT',
         fineractcncustomer      : '0.1.0-BUILD-SNAPSHOT',
         fineractcnaccounting    : '0.1.0-BUILD-SNAPSHOT',
         fineractcnportfolio     : '0.1.0-BUILD-SNAPSHOT',
-        fineractcndeposit       : '0.1.0-BUILD-SNAPSHOT',
         fineractcnteller        : '0.1.0-BUILD-SNAPSHOT',
-        kuelapcheques           : '0.1.0-BUILD-SNAPSHOT',
         fineractcnpayroll       : '0.1.0-BUILD-SNAPSHOT',
         fineractcngroup         : '0.1.0-BUILD-SNAPSHOT',
         frameworkapi            : '0.1.0-BUILD-SNAPSHOT',

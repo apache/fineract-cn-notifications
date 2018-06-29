@@ -22,8 +22,8 @@ import javax.persistence.*;
 
 @SuppressWarnings("unused")
 @Entity
-@Table(name = "sms_gateway_configuration")
-public class SMSGatewayConfiguration {
+@Table(name = "sms_gateway_configurations")
+public class SMSGatewayConfigurationEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,16 +31,18 @@ public class SMSGatewayConfiguration {
   private Long id;
   @Column(name = "identifier")
   private String identifier;
-  @Column(name = "organisation")
-  private String organisation;
+  @Column(name = "account")
+  private String account;
   @Column(name = "auth_token")
   private String auth_token;
-  @Column(name = "accountid")
-  private String accountid;
-  @Column(name = "option")
-  private String option;
+  @Column(name = "account_sid")
+  private String accountSid;
+  @Column(name = "sender_number")
+  private String sender_number;
+  @Column(name = "state")
+  private String state;
 
-  public SMSGatewayConfiguration() {
+  public SMSGatewayConfigurationEntity() {
     super();
   }
 
@@ -60,12 +62,12 @@ public class SMSGatewayConfiguration {
     this.identifier = identifier;
   }
 
-  public String getOrganisation() {
-    return organisation;
+  public String getAccount() {
+    return account;
   }
 
-  public void setOrganisation(String organisation) {
-    this.organisation = organisation;
+  public void setAccount(String account) {
+    this.account = account;
   }
 
   public String getAuth_token() {
@@ -76,19 +78,21 @@ public class SMSGatewayConfiguration {
     this.auth_token = auth_token;
   }
 
-  public String getAccountid() {
-    return accountid;
+  public String getAccountSid() {
+    return accountSid;
   }
 
-  public void setAccountid(String accountid) {
-    this.accountid = accountid;
+  public void setAccountSid(String accountSid) {
+    this.accountSid = accountSid;
   }
 
-  public String getOption() {
-    return option;
+  public String getState() { return state; }
+
+  public void setState(String state) {
+    this.state = state;
   }
 
-  public void setOption(String option) {
-    this.option = option;
-  }
+  public String getSender_number() { return sender_number; }
+
+  public void setSender_number(String sender_number) { this.sender_number = sender_number; }
 }

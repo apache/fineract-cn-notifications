@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
+/*
 package org.apache.fineract.cn.notification.service.listener;
 
 import org.apache.fineract.cn.notification.service.internal.service.EmailSender;
@@ -60,7 +60,7 @@ public class OfficeEventListener {
 	}
 }
 
-/*
+
 	@JmsListener(
             subscription = EventConstants.DESTINATION,
             destination = EventConstants.DESTINATION,

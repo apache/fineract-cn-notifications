@@ -18,10 +18,10 @@
  */
 package org.apache.fineract.cn.notification.api.v1.client;
 
-import org.apache.fineract.cn.notification.api.v1.domain.Sample;
 import java.util.List;
 import org.apache.fineract.cn.api.annotation.ThrowsException;
 import org.apache.fineract.cn.api.util.CustomFeignClientsConfiguration;
+import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,14 +39,14 @@ public interface NotificationManager {
           produces = MediaType.ALL_VALUE,
           consumes = MediaType.APPLICATION_JSON_VALUE
   )
-  List<Sample> findAllEntities();
+  List<SMSConfiguration> findAllEntities();
 
   @RequestMapping(
           value = "/notification/{identifier}",
           method = RequestMethod.GET,
           produces = MediaType.ALL_VALUE,
           consumes = MediaType.APPLICATION_JSON_VALUE)
-  Sample getEntity(@PathVariable("identifier") final String identifier);
+  SMSConfiguration getEntity(@PathVariable("identifier") final String identifier);
 
   @RequestMapping(
       value = "/notification",
@@ -55,5 +55,5 @@ public interface NotificationManager {
       consumes = MediaType.APPLICATION_JSON_VALUE
   )
   @ThrowsException(status = HttpStatus.I_AM_A_TEAPOT, exception = IamATeapotException.class)
-  void createEntity(final Sample sample);
+  void createEntity(final SMSConfiguration smsConfiguration);
 }

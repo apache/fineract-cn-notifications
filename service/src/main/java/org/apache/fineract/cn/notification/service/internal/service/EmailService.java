@@ -19,28 +19,25 @@
 package org.apache.fineract.cn.notification.service.internal.service;
 
 
-import org.apache.fineract.cn.notification.service.internal.mapper.EmailConfigurationMapper;
-import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfiguration;
-import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationRepository;
+import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
-public class EmailSender {
+public class EmailService {
 
     @Autowired
     @Qualifier("gmail")
     private JavaMailSender sender;
 
-    private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
+    private final EmailGatewayConfigurationEntityRepository emailGatewayConfigurationRepository;
 
     @Autowired
-    public EmailSender(final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository) {
+    public EmailService(final EmailGatewayConfigurationEntityRepository emailGatewayConfigurationRepository) {
         super();
         this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
     }

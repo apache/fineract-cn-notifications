@@ -24,6 +24,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface EmailGatewayConfigurationRepository extends JpaRepository<EmailGatewayConfiguration, Long> {
+public interface EmailGatewayConfigurationEntityRepository extends JpaRepository<EmailGatewayConfiguration, Long> {
   Optional<EmailGatewayConfiguration> findByIdentifier(String identifier);
 }

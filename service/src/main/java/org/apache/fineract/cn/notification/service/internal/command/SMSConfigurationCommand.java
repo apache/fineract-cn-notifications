@@ -16,8 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.service;
+package org.apache.fineract.cn.notification.service.internal.command;
 
-public interface ServiceConstants {
-  String LOGGER_NAME = "notification-logger";
+import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
+
+public class SMSConfigurationCommand {
+
+  private final SMSConfiguration smsConfiguration;
+
+  public SMSConfigurationCommand(final SMSConfiguration smsConfiguration) {
+    super();
+    this.smsConfiguration = smsConfiguration;
+  }
+
+  public SMSConfiguration getSMSConfiguration() {
+    return this.smsConfiguration;
+  }
+
+  @Override
+  public String toString() {
+    return "SMSConfigurationCommand{"
+            + "SMSConfiguration=" + smsConfiguration.getIdentifier()
+            + '}';
+  }
 }

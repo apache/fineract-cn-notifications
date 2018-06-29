@@ -18,47 +18,12 @@
  */
 package org.apache.fineract.cn.notification.service.internal.repository;
 
-import javax.persistence.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@SuppressWarnings("unused")
-@Entity
-@Table(name = "template_samples")
-public class SampleJpaEntity {
+import java.util.Optional;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
-  @Column(name = "identifier")
-  private String identifier;
-  @Column(name = "payload")
-  private String payload;
-
-  public SampleJpaEntity() {
-    super();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getIdentifier() {
-    return this.identifier;
-  }
-
-  public void setIdentifier(final String identifier) {
-    this.identifier = identifier;
-  }
-
-  public String getPayload() {
-    return payload;
-  }
-
-  public void setPayload(String payload) {
-    this.payload = payload;
-  }
+@Repository
+public interface TemplateEntityRepository extends JpaRepository<TemplateEntity, Long> {
+  Optional<TemplateEntity> findByIdentifier(String identifier);
 }

@@ -24,6 +24,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface SMSGatewayConfigurationRepository extends JpaRepository<SMSGatewayConfiguration, Long> {
-  Optional<SMSGatewayConfiguration> findByIdentifier(String identifier);
+public interface SMSGatewayConfigurationEntityRepository extends JpaRepository<SMSGatewayConfigurationEntity, Long> {
+  Optional<SMSGatewayConfigurationEntity> findByIdentifier(String identifier);
 }

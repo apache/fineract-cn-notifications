@@ -19,11 +19,12 @@
 package org.apache.fineract.cn.notification.service.rest;
 
 import org.apache.fineract.cn.notification.api.v1.PermittableGroupIds;
-import org.apache.fineract.cn.notification.api.v1.domain.Sample;
+import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.apache.fineract.cn.notification.service.internal.command.InitializeServiceCommand;
-import org.apache.fineract.cn.notification.service.internal.command.SampleCommand;
-import org.apache.fineract.cn.notification.service.internal.service.SampleService;
+import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationEntity;
+import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
+
 import java.util.List;
 import javax.validation.Valid;
 import org.apache.fineract.cn.anubis.annotation.AcceptedTokenType;
@@ -49,16 +50,16 @@ public class NotificationRestController {
 
   private final Logger logger;
   private final CommandGateway commandGateway;
-  private final SampleService sampleService;
+  private final NotificationService notificationService;
 
   @Autowired
   public NotificationRestController(@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger,
                               final CommandGateway commandGateway,
-                              final SampleService sampleService) {
+                              final NotificationService notificationService) {
     super();
     this.logger = logger;
     this.commandGateway = commandGateway;
-    this.sampleService = sampleService;
+    this.notificationService = notificationService;
   }
 
   @Permittable(value = AcceptedTokenType.SYSTEM)
@@ -77,15 +78,15 @@ public class NotificationRestController {
 
   @Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SAMPLE_MANAGEMENT)
   @RequestMapping(
-          value = "/sample",
+          value = "/notification",
           method = RequestMethod.GET,
           consumes = MediaType.ALL_VALUE,
           produces = MediaType.APPLICATION_JSON_VALUE
   )
   public
   @ResponseBody
-  List<Sample> findAllEntities() {
-    return this.sampleService.findAllEntities();
+  List<SMSConfiguration> findAllActiveSMSConfigurationEntities() {
+    return this.notificationService.findAllActiveSMSConfigurationEntities();
   }
 
   @Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SAMPLE_MANAGEMENT)
@@ -97,23 +98,23 @@ public class NotificationRestController {
   )
   public
   @ResponseBody
-  ResponseEntity<Sample> getEntity(@PathVariable("identifier") final String identifier) {
-    return this.sampleService.findByIdentifier(identifier)
+  ResponseEntity<SMSConfiguration> getEntity(@PathVariable("identifier") final String identifier) {
+    return this.notificationService.findByIdentifier(identifier)
             .map(ResponseEntity::ok)
             .orElseThrow(() -> ServiceException.notFound("Instance with identifier " + identifier + " doesn't exist."));
   }
 
   @Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SAMPLE_MANAGEMENT)
   @RequestMapping(
-      value = "/sample",
+      value = "/notification",
       method = RequestMethod.POST,
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE
   )
   public
   @ResponseBody
-  ResponseEntity<Void> createEntity(@RequestBody @Valid final Sample instance) throws InterruptedException {
-    this.commandGateway.process(new SampleCommand(instance));
+  ResponseEntity<Void> createEntity(@RequestBody @Valid final SMSGatewayConfigurationEntity instance) throws InterruptedException {
+    this.commandGateway.process(new SMSConfiguration());
     return ResponseEntity.accepted().build();
   }
 }

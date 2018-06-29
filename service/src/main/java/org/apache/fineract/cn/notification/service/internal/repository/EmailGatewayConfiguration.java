@@ -43,8 +43,8 @@ public class EmailGatewayConfiguration {
   private String smtp_auth;
   @Column(name = "start_tls")
   private String start_tls;
-  @Column(name = "option")
-  private String option;
+  @Column(name = "state")
+  private String state;
 
   public EmailGatewayConfiguration() {
     super();
@@ -114,11 +114,11 @@ public class EmailGatewayConfiguration {
     this.start_tls = start_tls;
   }
 
-  public String getOption() {
-    return option;
+  public String getState() {
+    return state;
   }
 
-  public void setOption(String option) {
-    this.option = option;
+  public void setState(String state) {
+    this.state = state;
   }
 }

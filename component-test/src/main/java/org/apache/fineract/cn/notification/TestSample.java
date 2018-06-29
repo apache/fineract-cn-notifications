@@ -19,7 +19,6 @@
 package org.apache.fineract.cn.notification;
 
 import org.apache.fineract.cn.notification.api.v1.client.NotificationManager;
-import org.apache.fineract.cn.notification.api.v1.domain.Sample;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -116,22 +115,22 @@ public class TestSample extends SuiteTestEnvironment {
     }
   }
 
-  @Test
-  public void shouldCreateSample() throws InterruptedException {
-    logger.info("Running test shouldCreateSample.");
-    final Sample sample = Sample.create(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(512));
-    this.testSubject.createEntity(sample);
+//  @Test
+//  public void shouldCreateSample() throws InterruptedException {
+//    logger.info("Running test shouldCreateSample.");
+//    final Sample sample = Sample.create(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(512));
+//    this.testSubject.createEntity(sample);
+//
+//    Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.POST_SAMPLE, sample.getIdentifier()));
+//
+//    final Sample createdSample = this.testSubject.getEntity(sample.getIdentifier());
+//    Assert.assertEquals(sample, createdSample);
+//  }
 
-    Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.POST_SAMPLE, sample.getIdentifier()));
-
-    final Sample createdSample = this.testSubject.getEntity(sample.getIdentifier());
-    Assert.assertEquals(sample, createdSample);
-  }
-
-  @Test
-  public void shouldListSamples() {
-    logger.info("Running test shouldListSamples.");
-    final List<Sample> allEntities = this.testSubject.findAllEntities();
-    Assert.assertNotNull(allEntities);
-  }
+//  @Test
+//  public void shouldListSamples() {
+//    logger.info("Running test shouldListSamples.");
+//    final List<Sample> allEntities = this.testSubject.findAllEntities();
+//    Assert.assertNotNull(allEntities);
+//  }
 }
