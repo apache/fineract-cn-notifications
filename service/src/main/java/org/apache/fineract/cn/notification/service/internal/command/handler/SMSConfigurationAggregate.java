@@ -25,7 +25,7 @@ import org.apache.fineract.cn.command.annotation.EventEmitter;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
 import org.apache.fineract.cn.notification.service.internal.command.SMSConfigurationCommand;
 import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationEntity;
-import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationEntityRepository;
+import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,12 +33,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Aggregate
 public class SMSConfigurationAggregate {
 
-  private final SMSGatewayConfigurationEntityRepository smsGatewayConfigurationEntityRepository;
+  private final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository;
 
   @Autowired
-  public SMSConfigurationAggregate(SMSGatewayConfigurationEntityRepository smsGatewayConfigurationEntityRepository) {
+  public SMSConfigurationAggregate(SMSGatewayConfigurationRepository smsGatewayConfigurationRepository) {
     super();
-    this.smsGatewayConfigurationEntityRepository = smsGatewayConfigurationEntityRepository;
+    this.smsGatewayConfigurationRepository = smsGatewayConfigurationRepository;
   }
 
   @CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
@@ -50,7 +50,7 @@ public class SMSConfigurationAggregate {
     entity.setAccountSid(smsConfigurationCommand.getSMSConfiguration().getAccountSid());
     entity.setAuth_token(smsConfigurationCommand.getSMSConfiguration().getAuth_token());
     entity.setSender_number(smsConfigurationCommand.getSMSConfiguration().getSender_number());
-    this.smsGatewayConfigurationEntityRepository.save(entity);
+    this.smsGatewayConfigurationRepository.save(entity);
 
     return smsConfigurationCommand.getSMSConfiguration().getIdentifier();
   }

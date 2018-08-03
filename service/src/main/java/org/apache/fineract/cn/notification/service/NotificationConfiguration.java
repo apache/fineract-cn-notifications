@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
@@ -47,9 +48,11 @@ import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.ui.velocity.VelocityEngineFactory;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.io.IOException;
 import java.util.Properties;
 
 @SuppressWarnings("WeakerAccess")
@@ -67,27 +70,27 @@ import java.util.Properties;
 @EnableFeignClients(
         clients = {
                 CustomerManager.class,
-        },
-        basePackages = "org.apache.fineract.cn.customer.api.v1.client"
+        }
 )
 @ComponentScan({
         "org.apache.fineract.cn.notification.service.rest",
         "org.apache.fineract.cn.notification.service.listener",
         "org.apache.fineract.cn.notification.service.internal.service",
         "org.apache.fineract.cn.notification.service.internal.repository",
-        "org.apache.fineract.cn.notification.service.internal.command.handler"
+        "org.apache.fineract.cn.notification.service.internal.command.handler",
 }
 )
 @EnableJpaRepositories({
 	    "org.apache.fineract.cn.notification.service.internal.repository"
 })
-
+@EntityScan(basePackages = "org.apache.fineract.cn.notification.service.internal.repository")
 public class NotificationConfiguration extends WebMvcConfigurerAdapter {
 
   private final Environment environment;
   public NotificationConfiguration(Environment environment) {
     super();
     this.environment = environment;
+    loggerBean().info(environment.getProperty("user"));
   }
 
   @Override
@@ -127,21 +130,23 @@ public class NotificationConfiguration extends WebMvcConfigurerAdapter {
   }
 
   @Bean
-  @Qualifier("gmail")
   public JavaMailSender getJavaMailSender() {
 
     JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
     mailSender.setHost("smtp.gmail.com");
     mailSender.setPort(587);
 
-    mailSender.setUsername("ebenezergraham69@gmail.com");
-    mailSender.setPassword("fdzmzbhbmtkafzvq");
+    mailSender.setUsername("akyencorp@gmail.com");
+    mailSender.setPassword("pswatggsoiyjvmck");
 
-    Properties props = mailSender.getJavaMailProperties();
-    props.put("mail.transport.protocol", "smtp");
-    props.put("mail.smtp.auth", "true");
-    props.put("mail.smtp.starttls.enable", "true");
-    props.put("mail.debug", "true");
+    Properties properties = mailSender.getJavaMailProperties();
+    properties.put(ServiceConstants.MAIL_TRANSPORT_PROTOCOL_PROPERTY,
+            ServiceConstants.MAIL_TRANSPORT_PROTOCOL_VALUE);
+    properties.put(ServiceConstants.MAIL_SMTP_AUTH_PROPERTY,
+            ServiceConstants.MAIL_SMTP_AUTH_VALUE);
+    properties.put(ServiceConstants.MAIL_SMTP_STARTTLS_ENABLE_PROPERTY,
+            ServiceConstants.MAIL_SMTP_STARTTLS_ENABLE_VALUE);
+    mailSender.setJavaMailProperties(properties);
 
     return mailSender;
   }

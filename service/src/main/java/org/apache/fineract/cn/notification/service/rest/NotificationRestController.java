@@ -18,6 +18,7 @@
  */
 package org.apache.fineract.cn.notification.service.rest;
 
+import org.apache.fineract.cn.customer.api.v1.domain.Customer;
 import org.apache.fineract.cn.notification.api.v1.PermittableGroupIds;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
@@ -76,6 +77,8 @@ public class NotificationRestController {
       return ResponseEntity.accepted().build();
   }
 
+
+
   @Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SAMPLE_MANAGEMENT)
   @RequestMapping(
           value = "/notification",
@@ -91,7 +94,7 @@ public class NotificationRestController {
 
   @Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SAMPLE_MANAGEMENT)
   @RequestMapping(
-          value = "/sample/{identifier}",
+          value = "/notification/{identifier}",
           method = RequestMethod.GET,
           consumes = MediaType.ALL_VALUE,
           produces = MediaType.APPLICATION_JSON_VALUE
@@ -117,4 +120,8 @@ public class NotificationRestController {
     this.commandGateway.process(new SMSConfiguration());
     return ResponseEntity.accepted().build();
   }
+
+
+
+
 }

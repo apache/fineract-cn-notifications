@@ -18,10 +18,17 @@
  */
 package org.apache.fineract.cn.notification.service.internal.service;
 
+import org.apache.fineract.cn.anubis.security.TenantAuthenticator;
+import org.apache.fineract.cn.api.context.AutoUserContext;
+import org.apache.fineract.cn.api.util.UserContext;
+import org.apache.fineract.cn.api.util.UserContextHolder;
+import org.apache.fineract.cn.customer.api.v1.domain.Customer;
+import org.apache.fineract.cn.lang.TenantContextHolder;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.service.internal.mapper.SMSConfigurationMapper;
-import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationEntityRepository;
-import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationEntityRepository;
+import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationRepository;
+import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationRepository;
+import org.apache.fineract.cn.notification.service.internal.service.helperservice.CustomerAdaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,23 +37,56 @@ import java.util.Optional;
 
 @Service
 public class NotificationService {
+  private final SMSService smsService;
+  private final EmailService emailService;
 
-  private final SMSGatewayConfigurationEntityRepository smsGatewayConfigurationEntityRepository;
-  private final EmailGatewayConfigurationEntityRepository emailGatewayConfigurationRepository;
+  private final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository;
+  private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
+  private final CustomerAdaptor customerAdaptor;
+  private final TenantAuthenticator tenantAuthenticator;
+
   @Autowired
-  public NotificationService(final SMSGatewayConfigurationEntityRepository smsGatewayConfigurationEntityRepository,
-                             final EmailGatewayConfigurationEntityRepository emailGatewayConfigurationRepository) {
+  public NotificationService(final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository,
+                             final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository,
+                             final CustomerAdaptor customerAdaptor,
+                             final SMSService smsService,
+                             final EmailService emailService,
+                             final TenantAuthenticator tenantAuthenticator
+                             ) {
     super();
-    this.smsGatewayConfigurationEntityRepository = smsGatewayConfigurationEntityRepository;
+    this.smsGatewayConfigurationRepository = smsGatewayConfigurationRepository;
     this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
+    this.customerAdaptor = customerAdaptor;
+    this.smsService = smsService;
+    this.emailService = emailService;
+    this.tenantAuthenticator = tenantAuthenticator;
   }
 
   public List<SMSConfiguration> findAllActiveSMSConfigurationEntities() {
-    return SMSConfigurationMapper.map(this.smsGatewayConfigurationEntityRepository.findAll());
+    return SMSConfigurationMapper.map(this.smsGatewayConfigurationRepository.findAll());
   }
 
   public Optional<SMSConfiguration> findByIdentifier(final String identifier) {
-    return this.smsGatewayConfigurationEntityRepository.findByIdentifier(identifier).map(SMSConfigurationMapper::map);
+    return this.smsGatewayConfigurationRepository.findByIdentifier(identifier).map(SMSConfigurationMapper::map);
   }
+
+  public Optional<Customer> findCustomer(final String customerIdentifier)
+  {
+    return this.customerAdaptor.findCustomer(customerIdentifier);
+  }
+
+  public void sendSMS(String receiver,String template)
+  {
+    smsService.sendSMS(receiver, template);
+  }
+
+  public void sendEmail(String from ,String to, String subject, String message)
+  {
+    emailService.sendEmail(from,
+            to,
+            subject,
+            message);
+  }
+
 
 }

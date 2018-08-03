@@ -20,14 +20,14 @@
 package org.apache.fineract.cn.notification.service.listener;
 
 import org.apache.fineract.cn.customer.api.v1.CustomerEventConstants;
-import org.apache.fineract.cn.customer.api.v1.client.CustomerManager;
+import org.apache.fineract.cn.lang.AutoTenantContext;
+import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
 import org.apache.fineract.cn.lang.config.TenantHeaderFilter;
 import org.apache.fineract.cn.customer.api.v1.domain.ContactDetail;
 import org.apache.fineract.cn.customer.api.v1.domain.Customer;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.apache.fineract.cn.notification.service.internal.service.EmailService;
 import org.apache.fineract.cn.notification.service.internal.service.SMSService;
-import org.apache.fineract.cn.notification.service.internal.service.helperservice.CustomerAdaptor;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,22 +38,17 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @Component
 public class CustomerEventListener {
-    private final CustomerManager customerAdaptor;
-        private final SMSService smsService;
-        private final EmailService emailService;
-        private final Logger logger;
-
+    private final NotificationService notificationService;
+    private final Logger logger;
+    private AutoTenantContext autoTenantContext;
 
         @Autowired
-        public CustomerEventListener(final CustomerManager customerAdaptor,
-                                     final SMSService smsService,
-                                     final EmailService emailService,
-                                     @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger ) {
-            this.smsService = smsService;
-            this.emailService = emailService;
+        public CustomerEventListener(final NotificationService notificationService,
+                                     @Qualifier(ServiceConstants.LOGGER_NAME)
+                                     final Logger logger ) {
             this.logger = logger;
-            this.customerAdaptor = customerAdaptor;
-            smsService.sendSMS("+230 58409206","Listener instantiated. --CM: " + customerAdaptor.hashCode());
+            this.notificationService = notificationService;
+
         }
 
         @JmsListener(
@@ -62,20 +57,23 @@ public class CustomerEventListener {
         )
         public void customerCreatedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                          final String payload) {
-            Customer customer = this.customerAdaptor.findCustomer(payload);
-            smsService.sendSMS("+230 58409206","manager worked: "+customer.getCurrentState());
-            this.logger.info("Logger --- This is the customer created: "
-                    + customer.getGivenName() +"--payload " + payload +"--tenant "+ tenant);
+
+
+            this.autoTenantContext = new AutoTenantContext(tenant);
+            Customer customer = this.notificationService.findCustomer(payload).get();
+	        this.logger.info("This is the customer created: " + customer.hashCode());
+
+
             if (customer.getContactDetails().size() > 0) {
                 customer.getContactDetails().forEach(contactDetail -> {
                     if (contactDetail.getType().equals(ContactDetail.Type.PHONE)) {
                         String receiverNumber = customer.getContactDetails().get(0).getValue();
                         // TODO: pass receiver number for templating and localization.
-                        smsService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been created");
+                        notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been created");
                     } else if (contactDetail.getType().equals(ContactDetail.Type.EMAIL)) {
                         String emailAddress = customer.getContactDetails().get(0).getValue();
                         // TODO: pass email address for templating and localization.
-                        emailService.sendEmail(emailAddress, "Account created", "Dear Valued Customer, Your account has been created");
+                        notificationService.sendEmail("akyencorp@gmail.com",emailAddress, "Account created", "Dear Valued Customer, Your account has been created");
                     }
                 });
             }
@@ -88,19 +86,19 @@ public class CustomerEventListener {
     )
     public void customerActivatedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                        final String payload) {
-        Customer customer = this.customerAdaptor.findCustomer(payload);
-        smsService.sendSMS("+230 58409206","manager worked: "+customer.getCurrentState());
-        this.logger.info("Logger --- This is the customer created: "
-                + customer.getGivenName() +"--payload " + payload +"--tenant "+ tenant);
+        Customer customer = this.notificationService.findCustomer(payload).get();
+        notificationService.sendSMS("+230 58409206","manager worked: "+customer.getCurrentState());
+        this.logger.debug("This is the customer created: "+ customer.hashCode());
+
         if(customer.getCurrentState().equalsIgnoreCase("ACTIVE")){
             customer.getContactDetails().forEach(contact -> {
                 if (contact.getType().equals(ContactDetail.Type.PHONE)) {
                 String receiverNumber = customer.getContactDetails().get(0).getValue();
-                smsService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Activated");
+                notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Activated");
             } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
                 String emailAddress = customer.getContactDetails().get(0).getValue();
                 // TODO: pass email address for templating and localization.
-                emailService.sendEmail(emailAddress, "Account created", "Dear Valued Customer, Your account has been Activated");
+                notificationService.sendEmail("akyencorp@gmail.com",emailAddress, "Account created", "Dear Valued Customer, Your account has been Activated");
             }
             });
         }
@@ -112,18 +110,18 @@ public class CustomerEventListener {
     )
     public void customerLockedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                     final String payload) {
-        Customer customer = this.customerAdaptor.findCustomer(payload);
-        this.logger.info("Logger --- This is the customer created: "
-                + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
+        Customer customer = this.notificationService.findCustomer(payload).get();
+        this.logger.info("This is the customer created: "+ customer.hashCode());
+
         if(customer.getCurrentState().equalsIgnoreCase("LOCKED")){
             customer.getContactDetails().forEach(contact-> {
                 if (contact.getType().equals(ContactDetail.Type.PHONE)) {
                     String receiverNumber = customer.getContactDetails().get(0).getValue();
-                    smsService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Locked");
+                    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Locked");
                 } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
                     String emailAddress = customer.getContactDetails().get(0).getValue();
                     // TODO: pass email address for templating and localization.
-                    emailService.sendEmail(emailAddress, "Account created", "Dear Valued Customer, Your account has been Locked");
+                    notificationService.sendEmail("akyencorp@gmail.com",emailAddress, "Account created", "Dear Valued Customer, Your account has been Locked");
                 }
             });
         }
@@ -135,18 +133,18 @@ public class CustomerEventListener {
     )
     public void customerUnlockedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                       final String payload) {
-        Customer customer = this.customerAdaptor.findCustomer(payload);
-        this.logger.info("Logger --- This is the customer created: "
-                + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
+        Customer customer = this.notificationService.findCustomer(payload).get();
+        this.logger.info("This is the customer created: "+ customer.hashCode());
+
         if(customer.getCurrentState().equalsIgnoreCase("LOCKED")){
             customer.getContactDetails().forEach(contact-> {
                 if (contact.getType().equals(ContactDetail.Type.PHONE)) {
                     String receiverNumber = customer.getContactDetails().get(0).getValue();
-                    smsService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Unlocked");
+                    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Unlocked");
                 } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
                     String emailAddress = customer.getContactDetails().get(0).getValue();
                     // TODO: pass email address for templating and localization.
-                    emailService.sendEmail(emailAddress, "Account created", "Dear Valued Customer, Your account has been Unlocked");
+                    notificationService.sendEmail("akyencorp@gmail.com",emailAddress, "Account created", "Dear Valued Customer, Your account has been Unlocked");
                 }
             });
         }
@@ -158,19 +156,19 @@ public class CustomerEventListener {
     )
     public void customerClosedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                     final String payload) {
-        Customer customer = this.customerAdaptor.findCustomer(payload);
-        this.logger.info("Logger --- This is the customer created: "
-                + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
+        Customer customer = this.notificationService.findCustomer(payload).get();
+        this.logger.info("This is the customer created: "+ customer.hashCode());
+
 
         if(customer.getCurrentState().equalsIgnoreCase("CLOSED")){
             customer.getContactDetails().forEach(contact-> {
                 if (contact.getType().equals(ContactDetail.Type.PHONE)) {
                     String receiverNumber = customer.getContactDetails().get(0).getValue();
-                    smsService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Closed");
+                    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Closed");
                 } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
                     String emailAddress = customer.getContactDetails().get(0).getValue();
                     // TODO: pass email address for templating and localization.
-                    emailService.sendEmail(emailAddress, "Account created", "Dear Valued Customer, Your account has been Closed");
+                    notificationService.sendEmail("akyencorp@gmail.com",emailAddress, "Account created", "Dear Valued Customer, Your account has been Closed");
                 }
             });
         }
@@ -182,18 +180,17 @@ public class CustomerEventListener {
     )
     public void customerReopenedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
                                       final String payload) {
-        Customer customer = this.customerAdaptor.findCustomer(payload);
-        this.logger.info("Logger --- This is the customer created: "
-                + customer.getGivenName() +"--payload" + payload +"--tenant"+ tenant);
+        Customer customer = this.notificationService.findCustomer(payload).get();
+        this.logger.info("This is the customer created: "+ customer.hashCode());
         if(customer.getCurrentState().equalsIgnoreCase("LOCKED")){
             customer.getContactDetails().forEach(contact-> {
                 if (contact.getType().equals(ContactDetail.Type.PHONE)) {
                     String receiverNumber = customer.getContactDetails().get(0).getValue();
-                    smsService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been reopened");
+                    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been reopened");
                 } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
                     String emailAddress = customer.getContactDetails().get(0).getValue();
                     // TODO: pass email address for templating and localization.
-                    emailService.sendEmail(emailAddress, "Account Reopened", "Dear Valued Customer, Your account has been reopened");
+                    notificationService.sendEmail("akyencorp@gmail.com",emailAddress, "Account Reopened", "Dear Valued Customer, Your account has been reopened");
                 }
             });
         }

@@ -18,13 +18,19 @@
  */
 package org.apache.fineract.cn.notification.service.internal.service.helperservice;
 
+import org.apache.fineract.cn.anubis.security.IsisAuthenticatedAuthenticationProvider;
+import org.apache.fineract.cn.anubis.security.TenantAuthenticator;
 import org.apache.fineract.cn.customer.api.v1.client.CustomerManager;
 import org.apache.fineract.cn.customer.api.v1.client.CustomerNotFoundException;
 import org.apache.fineract.cn.customer.api.v1.domain.Customer;
+import org.apache.fineract.cn.lang.TenantContextHolder;
+import org.apache.fineract.cn.mariadb.domain.Tenant;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
+import org.apache.fineract.cn.notification.service.internal.service.SMSService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -45,11 +51,14 @@ public class CustomerAdaptor {
 
   }
 
+  @Autowired
+  SMSService sms;
   public Optional<Customer> findCustomer(final String customerIdentifier) {
     try {
-      final Customer customer = this.customerManager.findCustomer(customerIdentifier);
+
+      final Customer customer = this.customerManager.findCustomer(customerIdentifier.replaceAll("^\"|\"$", ""));
         return Optional.of(customer);
-    } catch (final CustomerNotFoundException ex) {
+    } catch (final CustomerNotFoundException cnfex) {
       this.logger.warn("Customer {} not found.", customerIdentifier);
     }
     return Optional.empty();

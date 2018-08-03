@@ -23,7 +23,7 @@ import org.hibernate.validator.constraints.Length;
 import java.util.Objects;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class SMSConfiguration {
+public class SMSConfiguration extends GatewayConfiguration {
   @ValidIdentifier
   private String identifier;
   @Length(max = 512)

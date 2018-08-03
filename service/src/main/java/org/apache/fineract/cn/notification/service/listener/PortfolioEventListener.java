@@ -16,133 +16,153 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-/*
 package org.apache.fineract.cn.notification.service.listener;
 
-import org.apache.fineract.cn.group.api.v1.EventConstants;
 import org.apache.fineract.cn.individuallending.api.v1.events.IndividualLoanEventConstants;
 import org.apache.fineract.cn.lang.config.TenantHeaderFilter;
-import org.apache.fineract.cn.notification.service.internal.service.EmailSender;
-import org.apache.fineract.cn.notification.service.internal.service.SMSSender;
+import org.apache.fineract.cn.notification.service.ServiceConstants;
+import org.apache.fineract.cn.notification.service.internal.service.EmailService;
+import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
+import org.apache.fineract.cn.notification.service.internal.service.SMSService;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
-import org.apache.fineract.cn.portfolio.api.v1.client.PortfolioManager;
 
+/**
+ * @author Ebenezer Graham
+ */
 @SuppressWarnings("unused")
 @Component
 public class PortfolioEventListener {
 
-    private PortfolioManager portfolioManager;
-    private SMSSender smsSender;
-    private EmailSender emailSender;
+	private final NotificationService notificationService;
+	private final SMSService smsService;
+	private final EmailService emailService;
+	private final Logger logger;
 
-    @Autowired
-    public PortfolioEventListener(PortfolioManager portfolioManager, SMSSender smsSender, EmailSender emailSender) {
-        super();
-        this.portfolioManager = portfolioManager;
-        this.smsSender = smsSender;
-        this.emailSender = emailSender;
-    }
+	@Autowired
+	public PortfolioEventListener(
+			final NotificationService notificationService,
+			final SMSService smsService,
+			final EmailService emailService,
+			@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger ) {
+		super();
+		this.smsService = smsService;
+		this.emailService = emailService;
+		this.logger = logger;
+		this.notificationService = notificationService;
+		logger.info("Porfolio initiated");
 
-    @JmsListener(
-            subscription = IndividualLoanEventConstants.DESTINATION,
-            destination = IndividualLoanEventConstants.DESTINATION,
-            selector = IndividualLoanEventConstants.SELECTOR_DENY_INDIVIDUALLOAN_CASE
-    )
-    public void onDeny(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                       final String payload) {
+	}
 
-    }
+	@JmsListener(
+			subscription = IndividualLoanEventConstants.DESTINATION,
+			destination = IndividualLoanEventConstants.DESTINATION,
+			selector = IndividualLoanEventConstants.SELECTOR_OPEN_INDIVIDUALLOAN_CASE
+	)
+	public void onOpen(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                   final String payload) {
+	}
 
-    @JmsListener(
-            subscription = IndividualLoanEventConstants.DESTINATION,
-            destination = IndividualLoanEventConstants.DESTINATION,
-            selector = IndividualLoanEventConstants.SELECTOR_APPROVE_INDIVIDUALLOAN_CASE
-    )
-    public void onApprove(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                          final String payload) {
+	@JmsListener(
+			subscription = IndividualLoanEventConstants.DESTINATION,
+			destination = IndividualLoanEventConstants.DESTINATION,
+			selector = IndividualLoanEventConstants.SELECTOR_DENY_INDIVIDUALLOAN_CASE
+	)
+	public void onDeny(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                   final String payload) {
+	}
 
-    }
+	@JmsListener(
+			subscription = IndividualLoanEventConstants.DESTINATION,
+			destination = IndividualLoanEventConstants.DESTINATION,
+			selector = IndividualLoanEventConstants.SELECTOR_APPROVE_INDIVIDUALLOAN_CASE
+	)
+	public void onApprove(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                      final String payload) {
+	}
 
-    @JmsListener(
-            subscription = IndividualLoanEventConstants.DESTINATION,
-            destination = IndividualLoanEventConstants.DESTINATION,
-            selector = IndividualLoanEventConstants.SELECTOR_ACCEPT_PAYMENT_INDIVIDUALLOAN_CASE
-    )
-    public void onAcceptPayment(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                                final String payload) {
-    }
+	@JmsListener(
+			subscription = IndividualLoanEventConstants.DESTINATION,
+			destination = IndividualLoanEventConstants.DESTINATION,
+			selector = IndividualLoanEventConstants.SELECTOR_DISBURSE_INDIVIDUALLOAN_CASE
+	)
+	public void onDisburse(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                       final String payload) {
+	}
 
+	@JmsListener(
+			subscription = IndividualLoanEventConstants.DESTINATION,
+			destination = IndividualLoanEventConstants.DESTINATION,
+			selector = IndividualLoanEventConstants.SELECTOR_APPLY_INTEREST_INDIVIDUALLOAN_CASE
+	)
+	public void onApplyInterest(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                            final String payload) {
+	}
 
-    @JmsListener(
-            subscription = IndividualLoanEventConstants.DESTINATION,
-            destination = IndividualLoanEventConstants.DESTINATION,
-            selector = IndividualLoanEventConstants.SELECTOR_DISBURSE_INDIVIDUALLOAN_CASE
-    )
-    public void onDisburse(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                           final String payload) {
+	@JmsListener(
+			subscription = IndividualLoanEventConstants.DESTINATION,
+			destination = IndividualLoanEventConstants.DESTINATION,
+			selector = IndividualLoanEventConstants.SELECTOR_ACCEPT_PAYMENT_INDIVIDUALLOAN_CASE
+	)
+	public void onAcceptPayment(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                            final String payload) {
+	}
 
-    }
+	@JmsListener(
+			subscription = IndividualLoanEventConstants.DESTINATION,
+			destination = IndividualLoanEventConstants.DESTINATION,
+			selector = IndividualLoanEventConstants.SELECTOR_CHECK_LATE_INDIVIDUALLOAN_CASE
+	)
+	public void onCheckLate(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                        final String payload) {
+	}
 
-    @JmsListener(
-            subscription = IndividualLoanEventConstants.DESTINATION,
-            destination = IndividualLoanEventConstants.DESTINATION,
-            selector = IndividualLoanEventConstants.SELECTOR_CHECK_LATE_INDIVIDUALLOAN_CASE
-    )
-    public void onCheckLate(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                            final String payload) {
+	@JmsListener(
+			subscription = IndividualLoanEventConstants.DESTINATION,
+			destination = IndividualLoanEventConstants.DESTINATION,
+			selector = IndividualLoanEventConstants.SELECTOR_MARK_LATE_INDIVIDUALLOAN_CASE
+	)
+	public void onMarkLate(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                       final String payload) {
+	}
 
-    }
+	@JmsListener(
+			subscription = IndividualLoanEventConstants.DESTINATION,
+			destination = IndividualLoanEventConstants.DESTINATION,
+			selector = IndividualLoanEventConstants.SELECTOR_MARK_IN_ARREARS_INDIVIDUALLOAN_CASE
+	)
+	public void onMarkInArrears(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                            final String payload) {
+	}
 
-    @JmsListener(
-            subscription = IndividualLoanEventConstants.DESTINATION,
-            destination = IndividualLoanEventConstants.DESTINATION,
-            selector = IndividualLoanEventConstants.SELECTOR_OPEN_INDIVIDUALLOAN_CASE
-    )
-    public void onOpen(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                       final String payload) {
+	@JmsListener(
+			subscription = IndividualLoanEventConstants.DESTINATION,
+			destination = IndividualLoanEventConstants.DESTINATION,
+			selector = IndividualLoanEventConstants.SELECTOR_WRITE_OFF_INDIVIDUALLOAN_CASE
+	)
+	public void onWriteOff(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                       final String payload) {
+	}
 
-    }
+	@JmsListener(
+			subscription = IndividualLoanEventConstants.DESTINATION,
+			destination = IndividualLoanEventConstants.DESTINATION,
+			selector = IndividualLoanEventConstants.SELECTOR_CLOSE_INDIVIDUALLOAN_CASE
+	)
+	public void onClose(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                    final String payload) {
+	}
 
-    @JmsListener(
-            subscription = IndividualLoanEventConstants.DESTINATION,
-            destination = IndividualLoanEventConstants.DESTINATION,
-            selector = IndividualLoanEventConstants.SELECTOR_MARK_LATE_INDIVIDUALLOAN_CASE
-    )
-    public void onMarkLate(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                           final String payload) {
-
-    }
-
-    @JmsListener(
-            subscription = IndividualLoanEventConstants.DESTINATION,
-            destination = IndividualLoanEventConstants.DESTINATION,
-            selector = IndividualLoanEventConstants.SELECTOR_CLOSE_INDIVIDUALLOAN_CASE
-    )
-    public void onClose(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                        final String payload) {
-    }
-
-    @JmsListener(
-                subscription = EventConstants.DESTINATION,
-                destination = EventConstants.DESTINATION,
-                selector = EventConstants.SELECTOR_POST_GROUP
-        )
-    public void onGroupCreated(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                                   final String payload) {
-
-        }
-
-        @JmsListener(
-                subscription = EventConstants.DESTINATION,
-                destination = EventConstants.DESTINATION,
-                selector = EventConstants.SELECTOR_ACTIVATE_GROUP
-        )
-        public void onGroupActivated(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                                     final String payload) {
-        }
-
-    }
-*/
+	@JmsListener(
+			subscription = IndividualLoanEventConstants.DESTINATION,
+			destination = IndividualLoanEventConstants.DESTINATION,
+			selector = IndividualLoanEventConstants.SELECTOR_RECOVER_INDIVIDUALLOAN_CASE
+	)
+	public void onRecover(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                      final String payload) {
+	}
+}

@@ -20,4 +20,14 @@ package org.apache.fineract.cn.notification.service;
 
 public interface ServiceConstants {
   String LOGGER_NAME = "notification-logger";
+
+  String MAIL_TRANSPORT_PROTOCOL_PROPERTY = "mail.transport.protocol";
+  String MAIL_TRANSPORT_PROTOCOL_VALUE = "smtp";
+  String MAIL_SMTP_AUTH_PROPERTY = "mail.smtp.auth";
+  String MAIL_SMTP_AUTH_VALUE = "true";
+  String MAIL_SMTP_STARTTLS_ENABLE_PROPERTY = "mail.smtp.starttls.enable";
+  String MAIL_SMTP_STARTTLS_ENABLE_VALUE =  "true";
+
+
+
 }
