@@ -23,11 +23,9 @@ import org.hibernate.validator.constraints.Length;
 import java.util.Objects;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class SMSConfiguration extends GatewayConfiguration {
+public class SMSConfiguration{
   @ValidIdentifier
   private String identifier;
-  @Length(max = 512)
-  private String organisation;
   @Length(max = 512)
   private String auth_token;
   @Length(max = 512)
@@ -36,32 +34,19 @@ public class SMSConfiguration extends GatewayConfiguration {
   private String sender_number;
   @Length(max = 256)
   private String state;
-  @Length(max = 256)
-  private String type;
 
   private enum State {
     ACTIVE,
     DEACTIVATED;
     State() {
     }
-
-  }
-
-  private enum Type {
-    EMAILSERVER,
-    SMSGATEWAY;
-
-    Type() {
-    }
   }
 
   public SMSConfiguration() {
     super();
-
   }
 
   public static SMSConfiguration create(String identifier,
-                                        String payload,
                                         String organisation,
                                         String auth_token,
                                         String accountSID,
@@ -69,7 +54,7 @@ public class SMSConfiguration extends GatewayConfiguration {
                                         String type) {
     SMSConfiguration smsconfiguration = new SMSConfiguration();
     smsconfiguration.setIdentifier(identifier);
-    smsconfiguration.setOrganisation(organisation);
+    smsconfiguration.setIdentifier(identifier);
     smsconfiguration.setAuth_token(auth_token);
     smsconfiguration.setAccountSid(accountSID);
     smsconfiguration.setState(state);
@@ -83,14 +68,6 @@ public class SMSConfiguration extends GatewayConfiguration {
 
   public void setIdentifier(String identifier) {
     this.identifier = identifier;
-  }
-
-  public String getOrganisation() {
-    return organisation;
-  }
-
-  public void setOrganisation(String organisation) {
-    this.organisation = organisation;
   }
 
   public String getAuth_token() {
@@ -140,7 +117,6 @@ public class SMSConfiguration extends GatewayConfiguration {
     if (o == null || getClass() != o.getClass()) return false;
     SMSConfiguration that = (SMSConfiguration) o;
     return Objects.equals(identifier, that.identifier) &&
-            Objects.equals(organisation, that.organisation) &&
             Objects.equals(auth_token, that.auth_token) &&
             Objects.equals(accountSid, that.accountSid) &&
             Objects.equals(state, that.state);
@@ -148,6 +124,6 @@ public class SMSConfiguration extends GatewayConfiguration {
 
   @Override
   public int hashCode() {
-    return Objects.hash(identifier, auth_token, organisation, auth_token, accountSid, state);
+    return Objects.hash(identifier, auth_token, auth_token, accountSid, state);
   }
 }

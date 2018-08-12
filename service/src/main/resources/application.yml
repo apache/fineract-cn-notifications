@@ -23,6 +23,17 @@ spring:
       enabled: false
     config:
       enabled: false
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: akyencorp@gmail.com
+      password: pswatggsoiyjvmck
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
 
 eureka:
   client:

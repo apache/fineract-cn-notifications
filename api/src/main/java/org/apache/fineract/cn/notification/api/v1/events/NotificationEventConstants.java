@@ -28,4 +28,6 @@ public interface NotificationEventConstants {
     String SELECTOR_INITIALIZE = SELECTOR_NAME + " = '" + INITIALIZE + "'";
     String SELECTOR_POST_SAMPLE = SELECTOR_NAME + " = '" + POST_SAMPLE + "'";
 
+    String POST_SAVE_SMS_CONGIGURATION = "post-save-sms-configuration";
+    String SELECTOR_POST_SAVE_SMS_CONGIGURATION = SELECTOR_NAME + " = '" + POST_SAVE_SMS_CONGIGURATION + "'";
 }

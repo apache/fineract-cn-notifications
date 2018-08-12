@@ -43,7 +43,7 @@ public class SMSConfigurationAggregate {
 
   @CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
   @Transactional
-  @EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_SAMPLE)
+  @EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_SAVE_SMS_CONGIGURATION)
   public String saveSMSServiceConfiguration(final SMSConfigurationCommand smsConfigurationCommand) {
 
     final SMSGatewayConfigurationEntity entity = new SMSGatewayConfigurationEntity();

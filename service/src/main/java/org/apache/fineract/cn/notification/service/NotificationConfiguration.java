@@ -21,6 +21,7 @@ package org.apache.fineract.cn.notification.service;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.apache.activemq.jms.pool.PooledConnectionFactory;
 import org.apache.activemq.spring.ActiveMQConnectionFactory;
+import org.apache.fineract.cn.identity.api.v1.client.IdentityManager;
 import org.apache.fineract.cn.anubis.config.EnableAnubis;
 import org.apache.fineract.cn.async.config.EnableAsync;
 import org.apache.fineract.cn.cassandra.config.EnableCassandra;
@@ -32,7 +33,6 @@ import org.apache.fineract.cn.lang.config.EnableTenantContext;
 import org.apache.fineract.cn.mariadb.config.EnableMariaDB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -46,14 +46,8 @@ import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.ui.velocity.VelocityEngineFactory;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
-import java.io.IOException;
-import java.util.Properties;
 
 @SuppressWarnings("WeakerAccess")
 @Configuration
@@ -70,6 +64,7 @@ import java.util.Properties;
 @EnableFeignClients(
         clients = {
                 CustomerManager.class,
+                IdentityManager.class
         }
 )
 @ComponentScan({
@@ -90,7 +85,6 @@ public class NotificationConfiguration extends WebMvcConfigurerAdapter {
   public NotificationConfiguration(Environment environment) {
     super();
     this.environment = environment;
-    loggerBean().info(environment.getProperty("user"));
   }
 
   @Override
@@ -113,7 +107,7 @@ public class NotificationConfiguration extends WebMvcConfigurerAdapter {
     factory.setPubSubDomain(true);
     factory.setConnectionFactory(jmsFactory);
     factory.setErrorHandler(ex -> {
-      loggerBean().error("Error: ", ex.getCause());
+      loggerBean().error(ex.getCause().toString());
     });
     factory.setConcurrency(this.environment.getProperty("activemq.concurrency", "3-10"));
     return factory;
@@ -127,28 +121,6 @@ public class NotificationConfiguration extends WebMvcConfigurerAdapter {
     jmsTemplate.setConnectionFactory(jmsFactory);
     jmsTemplate.setDefaultDestination(activeMQTopic);
     return jmsTemplate;
-  }
-
-  @Bean
-  public JavaMailSender getJavaMailSender() {
-
-    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-    mailSender.setHost("smtp.gmail.com");
-    mailSender.setPort(587);
-
-    mailSender.setUsername("akyencorp@gmail.com");
-    mailSender.setPassword("pswatggsoiyjvmck");
-
-    Properties properties = mailSender.getJavaMailProperties();
-    properties.put(ServiceConstants.MAIL_TRANSPORT_PROTOCOL_PROPERTY,
-            ServiceConstants.MAIL_TRANSPORT_PROTOCOL_VALUE);
-    properties.put(ServiceConstants.MAIL_SMTP_AUTH_PROPERTY,
-            ServiceConstants.MAIL_SMTP_AUTH_VALUE);
-    properties.put(ServiceConstants.MAIL_SMTP_STARTTLS_ENABLE_PROPERTY,
-            ServiceConstants.MAIL_SMTP_STARTTLS_ENABLE_VALUE);
-    mailSender.setJavaMailProperties(properties);
-
-    return mailSender;
   }
 
   @Bean(

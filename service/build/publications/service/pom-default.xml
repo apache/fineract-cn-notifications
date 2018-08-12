@@ -41,6 +41,18 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
+      <groupId>org.apache.fineract.cn.identity</groupId>
+      <artifactId>api</artifactId>
+      <version>0.1.0-BUILD-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.fineract.cn.accounting</groupId>
+      <artifactId>api</artifactId>
+      <version>0.1.0-BUILD-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-config</artifactId>
       <scope>runtime</scope>

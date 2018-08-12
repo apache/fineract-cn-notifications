@@ -19,35 +19,68 @@
 package org.apache.fineract.cn.notification.service.internal.service;
 
 
+import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationRepository;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.stereotype.Component;
+
+import java.util.Properties;
 
 
-@Service
+@Component
 public class EmailService {
 
-    @Autowired
-    private JavaMailSender sender;
+    private JavaMailSender sender = getJavaMailSender();
+    private Logger logger;
 
     private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
 
     @Autowired
-    public EmailService(final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository) {
+    public EmailService(final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository,
+                        @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger) {
         super();
         this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
+        this.logger = logger;
     }
 
     public void sendEmail(String from ,String to, String subject, String message) {
-        SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setFrom(from);
-        mail.setTo(to);
-        mail.setSubject(subject);
-        mail.setText(message);
-        sender.send(mail);
+        try {
+            SimpleMailMessage mail = new SimpleMailMessage();
+            mail.setFrom(from);
+            mail.setTo(to);
+            mail.setSubject(subject);
+            mail.setText(message);
+            sender.send(mail);
+        } catch (MailException exception) {
+            logger.debug("Caused by:" + exception.getCause().toString());
+        }
+    }
+
+    public JavaMailSender getJavaMailSender() {
+
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+
+        mailSender.setUsername("akyencorp@gmail.com");
+        mailSender.setPassword("pswatggsoiyjvmck");
+
+        Properties properties = mailSender.getJavaMailProperties();
+        properties.put(ServiceConstants.MAIL_TRANSPORT_PROTOCOL_PROPERTY,
+                ServiceConstants.MAIL_TRANSPORT_PROTOCOL_VALUE);
+        properties.put(ServiceConstants.MAIL_SMTP_AUTH_PROPERTY,
+                ServiceConstants.MAIL_SMTP_AUTH_VALUE);
+        properties.put(ServiceConstants.MAIL_SMTP_STARTTLS_ENABLE_PROPERTY,
+                ServiceConstants.MAIL_SMTP_STARTTLS_ENABLE_VALUE);
+        mailSender.setJavaMailProperties(properties);
+
+        return mailSender;
     }
 
 }

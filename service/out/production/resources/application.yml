@@ -23,6 +23,17 @@ spring:
       enabled: false
     config:
       enabled: false
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: akyencorp@gmail.com
+      password: pswatggsoiyjvmck
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
 
 eureka:
   client:
@@ -68,11 +79,4 @@ async:
 flyway:
   enabled: false
 
-fineract:
-  customer:
-    accountcreated:
-      message: Dear Valued Customer, Your account has been created.
-    accountclosed:
-      message: Dear Valued Customer, Your account has been successfully closed.
-
-
+User: operator

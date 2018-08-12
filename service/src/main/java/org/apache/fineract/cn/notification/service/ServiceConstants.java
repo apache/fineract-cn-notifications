@@ -27,7 +27,4 @@ public interface ServiceConstants {
   String MAIL_SMTP_AUTH_VALUE = "true";
   String MAIL_SMTP_STARTTLS_ENABLE_PROPERTY = "mail.smtp.starttls.enable";
   String MAIL_SMTP_STARTTLS_ENABLE_VALUE =  "true";
-
-
-
 }

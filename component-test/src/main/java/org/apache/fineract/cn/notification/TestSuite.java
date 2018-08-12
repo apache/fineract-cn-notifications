@@ -23,8 +23,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    TestSample.class,
-    //TODO: when you create a new component test, add it here so you can run it with the suite.
+        TestNotification.class,
+		TestNotificationGateways.class,
 })
 public class TestSuite extends SuiteTestEnvironment {
 }

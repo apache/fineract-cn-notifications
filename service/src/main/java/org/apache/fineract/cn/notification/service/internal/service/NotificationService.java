@@ -18,18 +18,17 @@
  */
 package org.apache.fineract.cn.notification.service.internal.service;
 
-import org.apache.fineract.cn.anubis.security.TenantAuthenticator;
-import org.apache.fineract.cn.api.context.AutoUserContext;
-import org.apache.fineract.cn.api.util.UserContext;
-import org.apache.fineract.cn.api.util.UserContextHolder;
 import org.apache.fineract.cn.customer.api.v1.domain.Customer;
-import org.apache.fineract.cn.lang.TenantContextHolder;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
+import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.apache.fineract.cn.notification.service.internal.mapper.SMSConfigurationMapper;
 import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationRepository;
 import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationRepository;
 import org.apache.fineract.cn.notification.service.internal.service.helperservice.CustomerAdaptor;
+import org.apache.fineract.cn.notification.service.internal.service.helperservice.NotificationAuthentication;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,8 +41,10 @@ public class NotificationService {
 
   private final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository;
   private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
+
+  private final NotificationAuthentication notificationAuthentication;
   private final CustomerAdaptor customerAdaptor;
-  private final TenantAuthenticator tenantAuthenticator;
+  private final Logger logger;
 
   @Autowired
   public NotificationService(final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository,
@@ -51,7 +52,8 @@ public class NotificationService {
                              final CustomerAdaptor customerAdaptor,
                              final SMSService smsService,
                              final EmailService emailService,
-                             final TenantAuthenticator tenantAuthenticator
+                             final NotificationAuthentication notificationAuthentication,
+                             @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger
                              ) {
     super();
     this.smsGatewayConfigurationRepository = smsGatewayConfigurationRepository;
@@ -59,7 +61,8 @@ public class NotificationService {
     this.customerAdaptor = customerAdaptor;
     this.smsService = smsService;
     this.emailService = emailService;
-    this.tenantAuthenticator = tenantAuthenticator;
+    this. notificationAuthentication = notificationAuthentication;
+    this.logger = logger;
   }
 
   public List<SMSConfiguration> findAllActiveSMSConfigurationEntities() {
@@ -70,23 +73,18 @@ public class NotificationService {
     return this.smsGatewayConfigurationRepository.findByIdentifier(identifier).map(SMSConfigurationMapper::map);
   }
 
-  public Optional<Customer> findCustomer(final String customerIdentifier)
+  public Optional<Customer> findCustomer(final String customerIdentifier,String tenant)
   {
+    notificationAuthentication.authenticate(tenant);
     return this.customerAdaptor.findCustomer(customerIdentifier);
   }
 
   public void sendSMS(String receiver,String template)
   {
-    smsService.sendSMS(receiver, template);
+    this.smsService.sendSMS(receiver, template);
   }
 
-  public void sendEmail(String from ,String to, String subject, String message)
-  {
-    emailService.sendEmail(from,
-            to,
-            subject,
-            message);
+  public void sendEmail(String from ,String to, String subject, String message) {
+    this.emailService.sendEmail(from,to,subject,message);
   }
-
-
 }
