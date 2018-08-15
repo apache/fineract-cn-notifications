@@ -23,7 +23,6 @@
 CREATE TABLE sms_gateway_configurations (
   id INT(11) NOT NULL AUTO_INCREMENT,
   identifier VARCHAR(45) NULL DEFAULT NULL,
-  account VARCHAR(255) NOT NULL,
   account_sid VARCHAR(255) NOT NULL,
   auth_token VARCHAR(255) NOT NULL,
   sender_number VARCHAR(255) NOT NULL,

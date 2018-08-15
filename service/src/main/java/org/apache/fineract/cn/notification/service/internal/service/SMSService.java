@@ -21,19 +21,15 @@ package org.apache.fineract.cn.notification.service.internal.service;
 
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.rest.api.v2010.account.MessageCreator;
 import com.twilio.type.PhoneNumber;
-import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
-import org.apache.fineract.cn.notification.service.internal.mapper.SMSConfigurationMapper;
 import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import com.twilio.rest.api.v2010.account.MessageCreator;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class SMSService {
@@ -53,21 +49,22 @@ public class SMSService {
 
     @Autowired
     public SMSService(SMSGatewayConfigurationRepository configurationRepository,
-                      @Qualifier(ServiceConstants.LOGGER_NAME) Logger logger){
+                      @Qualifier(ServiceConstants.LOGGER_NAME) Logger logger
+    ){
 
         super();
         this.configurationRepository = configurationRepository;
         this.logger = logger;
     }
 
-    public void configure (String accountName){
+   /* public void configure (String accountName){
         SMSConfiguration smsConfiguration = SMSConfigurationMapper
                 .map(configurationRepository.findByIdentifier(accountName).get());
         String ACCOUNT_SID = smsConfiguration.getAccountSid();
         String AUTH_TOKEN = smsConfiguration.getAuth_token();
         String SENDERNUMBER = smsConfiguration.getSender_number();
         this.logger.info("Configure worked: ",ACCOUNT_SID+" : "+AUTH_TOKEN +" : "+SENDERNUMBER);
-    }
+    }*/
 
     public void sendSMS(String receiver, String template) {
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);

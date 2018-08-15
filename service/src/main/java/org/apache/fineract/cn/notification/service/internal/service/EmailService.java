@@ -36,7 +36,6 @@ import java.util.Properties;
 @Component
 public class EmailService {
 
-    private JavaMailSender sender = getJavaMailSender();
     private Logger logger;
 
     private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
@@ -48,8 +47,8 @@ public class EmailService {
         this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
         this.logger = logger;
     }
-
     public void sendEmail(String from ,String to, String subject, String message) {
+        JavaMailSender sender = getJavaMailSender();
         try {
             SimpleMailMessage mail = new SimpleMailMessage();
             mail.setFrom(from);
@@ -82,5 +81,12 @@ public class EmailService {
 
         return mailSender;
     }
+
+   /* public static void main (String [] args){
+        EmailService email = new EmailService();
+        SMSService sms = new SMSService();
+        email.sendEmail("akyencorp@gmail.com","egraham15@alustudent.com", "test","text");
+	    sms.sendSMS("+23058409206","test");
+    }*/
 
 }

@@ -23,7 +23,7 @@ import java.util.Collections;
 
 @Component
 public class NotificationAuthentication {
-	private final String ADMIN_PASSWORD = "shingi";
+	private final String USER_PASSWORD = "shingi";
 	private final String NOTIFICATION_ROLE = "notificationAdmin";
 	private final String USER_IDENTIFIER = "wadaadmin";
 
@@ -50,24 +50,39 @@ public class NotificationAuthentication {
 	public UserWithPassword createUser() {
 		Authentication adminAuthentication;
 
-		try (final AutoUserContext ignored = new AutoGuest()) {
-			adminAuthentication  = identityManager.login(USER_IDENTIFIER, ADMIN_PASSWORD
-			);
+		try (final AutoUserContext ignored = new AutoUserContext(USER_IDENTIFIER, USER_PASSWORD)) {
+
+			try (final AutoUserContext ignored1 = new AutoGuest()) {
+				adminAuthentication = this.identityManager.login(USER_IDENTIFIER, USER_PASSWORD);
+			}
+
+			try (final AutoUserContext ignored2 = new AutoUserContext(USER_IDENTIFIER, adminAuthentication.getAccessToken())) {
+				final Role notificationRole = defineNotificationRole();
+				identityManager.createRole(notificationRole);
+
+				final UserWithPassword notificationUser = new UserWithPassword();
+				notificationUser.setIdentifier(USER_IDENTIFIER);
+				notificationUser.setPassword(Base64Utils.encodeToString(USER_PASSWORD.getBytes()));
+				notificationUser.setRole(notificationRole.getIdentifier());
+				identityManager.createUser(notificationUser);
+
+				this.identityManager.createUser(notificationUser);
+
+				this.identityManager.logout();
+					enableUser(notificationUser);
+				return notificationUser;
+			}
 		}
+	}
 
-		try (final AutoUserContext ignored = new AutoUserContext(USER_IDENTIFIER, adminAuthentication.getAccessToken())) {
-			final Role notificationRole = defineNotificationRole();
-			identityManager.createRole(notificationRole);
-
-			final UserWithPassword notificationUser = new UserWithPassword();
-			notificationUser.setIdentifier(USER_IDENTIFIER);
-			notificationUser.setPassword(Base64Utils.encodeToString(ADMIN_PASSWORD.getBytes()));
-			notificationUser.setRole(notificationRole.getIdentifier());
-			identityManager.createUser(notificationUser);
-
-			identityManager.changeUserPassword(notificationUser.getIdentifier(), new Password(notificationUser.getPassword()));
-
-			return notificationUser;
+	private void enableUser(final UserWithPassword userWithPassword) {
+		final Authentication passwordOnlyAuthentication
+				= identityManager.login(userWithPassword.getIdentifier(), userWithPassword.getPassword());
+		try (final AutoUserContext ignored
+				     = new AutoUserContext(userWithPassword.getIdentifier(), passwordOnlyAuthentication.getAccessToken()))
+		{
+			this.identityManager.changeUserPassword(
+					userWithPassword.getIdentifier(), new Password(userWithPassword.getPassword()));
 		}
 	}
 

@@ -151,7 +151,6 @@
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		    this.logger.info("This is the customer created: " + customer.hashCode());
 
-
 		    if (customer.getCurrentState().equalsIgnoreCase("CLOSED")) {
 			    customer.getContactDetails().forEach(contact -> {
 				    if (contact.getType().equals(ContactDetail.Type.PHONE)) {

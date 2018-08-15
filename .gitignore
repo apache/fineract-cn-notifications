@@ -3,6 +3,12 @@
 build/
 target/
 detail
+service/build/
+service/out/
+service/.gradle/
+component-test/.gradle/
+api/out/
+api/.gradle
 
 # Ignore Gradle GUI config
 gradle-app.setting
