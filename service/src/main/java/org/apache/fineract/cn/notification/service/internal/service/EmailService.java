@@ -35,58 +35,50 @@ import java.util.Properties;
 
 @Component
 public class EmailService {
-
-    private Logger logger;
-
-    private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
-
-    @Autowired
-    public EmailService(final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository,
-                        @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger) {
-        super();
-        this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
-        this.logger = logger;
-    }
-    public void sendEmail(String from ,String to, String subject, String message) {
-        JavaMailSender sender = getJavaMailSender();
-        try {
-            SimpleMailMessage mail = new SimpleMailMessage();
-            mail.setFrom(from);
-            mail.setTo(to);
-            mail.setSubject(subject);
-            mail.setText(message);
-            sender.send(mail);
-        } catch (MailException exception) {
-            logger.debug("Caused by:" + exception.getCause().toString());
-        }
-    }
-
-    public JavaMailSender getJavaMailSender() {
-
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-
-        mailSender.setUsername("akyencorp@gmail.com");
-        mailSender.setPassword("pswatggsoiyjvmck");
-
-        Properties properties = mailSender.getJavaMailProperties();
-        properties.put(ServiceConstants.MAIL_TRANSPORT_PROTOCOL_PROPERTY,
-                ServiceConstants.MAIL_TRANSPORT_PROTOCOL_VALUE);
-        properties.put(ServiceConstants.MAIL_SMTP_AUTH_PROPERTY,
-                ServiceConstants.MAIL_SMTP_AUTH_VALUE);
-        properties.put(ServiceConstants.MAIL_SMTP_STARTTLS_ENABLE_PROPERTY,
-                ServiceConstants.MAIL_SMTP_STARTTLS_ENABLE_VALUE);
-        mailSender.setJavaMailProperties(properties);
-
-        return mailSender;
-    }
-
-   /* public static void main (String [] args){
-        EmailService email = new EmailService();
-        SMSService sms = new SMSService();
-        email.sendEmail("akyencorp@gmail.com","egraham15@alustudent.com", "test","text");
-	    sms.sendSMS("+23058409206","test");
-    }*/
-
+	
+	private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
+	private Logger logger;
+	
+	@Autowired
+	public EmailService(final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository,
+	                    @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger) {
+		super();
+		this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
+		this.logger = logger;
+	}
+	
+	public void sendEmail(String from, String to, String subject, String message) {
+		JavaMailSender sender = getJavaMailSender();
+		try {
+			SimpleMailMessage mail = new SimpleMailMessage();
+			mail.setFrom(from);
+			mail.setTo(to);
+			mail.setSubject(subject);
+			mail.setText(message);
+			sender.send(mail);
+		} catch (MailException exception) {
+			logger.debug("Caused by:" + exception.getCause().toString());
+		}
+	}
+	
+	public JavaMailSender getJavaMailSender() {
+		
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+		mailSender.setHost("smtp.gmail.com");
+		mailSender.setPort(587);
+		
+		mailSender.setUsername("akyencorp@gmail.com");
+		mailSender.setPassword("pswatggsoiyjvmck");
+		
+		Properties properties = mailSender.getJavaMailProperties();
+		properties.put(ServiceConstants.MAIL_TRANSPORT_PROTOCOL_PROPERTY,
+				ServiceConstants.MAIL_TRANSPORT_PROTOCOL_VALUE);
+		properties.put(ServiceConstants.MAIL_SMTP_AUTH_PROPERTY,
+				ServiceConstants.MAIL_SMTP_AUTH_VALUE);
+		properties.put(ServiceConstants.MAIL_SMTP_STARTTLS_ENABLE_PROPERTY,
+				ServiceConstants.MAIL_SMTP_STARTTLS_ENABLE_VALUE);
+		mailSender.setJavaMailProperties(properties);
+		
+		return mailSender;
+	}
 }

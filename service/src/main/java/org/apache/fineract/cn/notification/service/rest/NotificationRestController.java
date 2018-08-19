@@ -18,31 +18,25 @@
  */
 package org.apache.fineract.cn.notification.service.rest;
 
-import org.apache.fineract.cn.customer.api.v1.domain.Customer;
+import org.apache.fineract.cn.anubis.annotation.AcceptedTokenType;
+import org.apache.fineract.cn.anubis.annotation.Permittable;
+import org.apache.fineract.cn.command.gateway.CommandGateway;
+import org.apache.fineract.cn.lang.ServiceException;
 import org.apache.fineract.cn.notification.api.v1.PermittableGroupIds;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.apache.fineract.cn.notification.service.internal.command.InitializeServiceCommand;
 import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationEntity;
 import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
-
-import java.util.List;
-import javax.validation.Valid;
-import org.apache.fineract.cn.anubis.annotation.AcceptedTokenType;
-import org.apache.fineract.cn.anubis.annotation.Permittable;
-import org.apache.fineract.cn.command.gateway.CommandGateway;
-import org.apache.fineract.cn.lang.ServiceException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @SuppressWarnings("unused")
 @RestController
@@ -102,7 +96,7 @@ public class NotificationRestController {
   public
   @ResponseBody
   ResponseEntity<SMSConfiguration> getEntity(@PathVariable("identifier") final String identifier) {
-    return this.notificationService.findByIdentifier(identifier)
+    return this.notificationService.findSMSConfigurationByIdentifier(identifier)
             .map(ResponseEntity::ok)
             .orElseThrow(() -> ServiceException.notFound("Instance with identifier " + identifier + " doesn't exist."));
   }
@@ -120,8 +114,5 @@ public class NotificationRestController {
     this.commandGateway.process(new SMSConfiguration());
     return ResponseEntity.accepted().build();
   }
-
-
-
 
 }

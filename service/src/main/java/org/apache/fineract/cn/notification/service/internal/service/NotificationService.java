@@ -36,55 +36,57 @@ import java.util.Optional;
 
 @Service
 public class NotificationService {
-  private final SMSService smsService;
-  private final EmailService emailService;
-
-  private final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository;
-  private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
-
-  private final NotificationAuthentication notificationAuthentication;
-  private final CustomerAdaptor customerAdaptor;
-  private final Logger logger;
-
-  @Autowired
-  public NotificationService(final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository,
-                             final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository,
-                             final CustomerAdaptor customerAdaptor,
-                             final SMSService smsService,
-                             final EmailService emailService,
-                             final NotificationAuthentication notificationAuthentication,
-                             @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger
-                             ) {
-    super();
-    this.smsGatewayConfigurationRepository = smsGatewayConfigurationRepository;
-    this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
-    this.customerAdaptor = customerAdaptor;
-    this.smsService = smsService;
-    this.emailService = emailService;
-    this. notificationAuthentication = notificationAuthentication;
-    this.logger = logger;
-  }
-
-  public List<SMSConfiguration> findAllActiveSMSConfigurationEntities() {
-    return SMSConfigurationMapper.map(this.smsGatewayConfigurationRepository.findAll());
-  }
-
-  public Optional<SMSConfiguration> findByIdentifier(final String identifier) {
-    return this.smsGatewayConfigurationRepository.findByIdentifier(identifier).map(SMSConfigurationMapper::map);
-  }
-
-  public Optional<Customer> findCustomer(final String customerIdentifier,String tenant)
-  {
-    notificationAuthentication.authenticate(tenant);
-    return this.customerAdaptor.findCustomer(customerIdentifier);
-  }
-
-  public void sendSMS(String receiver,String template)
-  {
-    this.smsService.sendSMS(receiver, template);
-  }
-
-  public void sendEmail(String from ,String to, String subject, String message) {
-    this.emailService.sendEmail(from,to,subject,message);
-  }
+	private final SMSService smsService;
+	private final EmailService emailService;
+	
+	private final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository;
+	private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
+	
+	private final NotificationAuthentication notificationAuthentication;
+	private final CustomerAdaptor customerAdaptor;
+	private final Logger logger;
+	
+	@Autowired
+	public NotificationService(final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository,
+	                           final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository,
+	                           final CustomerAdaptor customerAdaptor,
+	                           final SMSService smsService,
+	                           final EmailService emailService,
+	                           final NotificationAuthentication notificationAuthentication,
+	                           @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger
+	) {
+		super();
+		
+		this.smsGatewayConfigurationRepository = smsGatewayConfigurationRepository;
+		this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
+		
+		this.customerAdaptor = customerAdaptor;
+		this.smsService = smsService;
+		this.emailService = emailService;
+		this.notificationAuthentication = notificationAuthentication;
+		this.logger = logger;
+		this.logger.info("{} has been initiated",this.getClass());
+	}
+	
+	
+	public List<SMSConfiguration> findAllActiveSMSConfigurationEntities() {
+		return SMSConfigurationMapper.map(this.smsGatewayConfigurationRepository.findAll());
+	}
+	
+	public Optional<SMSConfiguration> findSMSConfigurationByIdentifier(final String identifier) {
+		return this.smsGatewayConfigurationRepository.findByIdentifier(identifier).map(SMSConfigurationMapper::map);
+	}
+	
+	public Optional<Customer> findCustomer(final String customerIdentifier, String tenant) {
+		notificationAuthentication.authenticate(tenant);
+		return this.customerAdaptor.findCustomer(customerIdentifier);
+	}
+	
+	public void sendSMS(String receiver, String template) {
+		this.smsService.sendSMS(receiver, template);
+	}
+	
+	public void sendEmail(String from, String to, String subject, String message) {
+		this.emailService.sendEmail(from, to, subject, message);
+	}
 }

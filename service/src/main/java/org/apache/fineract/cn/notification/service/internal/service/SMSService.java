@@ -55,20 +55,13 @@ public class SMSService {
         super();
         this.configurationRepository = configurationRepository;
         this.logger = logger;
+        this.logger.info("{} has been initiated",this.getClass());
     }
-
-   /* public void configure (String accountName){
-        SMSConfiguration smsConfiguration = SMSConfigurationMapper
-                .map(configurationRepository.findByIdentifier(accountName).get());
-        String ACCOUNT_SID = smsConfiguration.getAccountSid();
-        String AUTH_TOKEN = smsConfiguration.getAuth_token();
-        String SENDERNUMBER = smsConfiguration.getSender_number();
-        this.logger.info("Configure worked: ",ACCOUNT_SID+" : "+AUTH_TOKEN +" : "+SENDERNUMBER);
-    }*/
 
     public void sendSMS(String receiver, String template) {
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-        MessageCreator messageCreator = Message.creator(ACCOUNT_SID,new PhoneNumber(receiver), new PhoneNumber(SENDERNUMBER), template);
+        MessageCreator messageCreator
+            = Message.creator(ACCOUNT_SID,new PhoneNumber(receiver), new PhoneNumber(SENDERNUMBER), template);
         Message message = messageCreator.create();
         System.out.println(message.getSid());
     }

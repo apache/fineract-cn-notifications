@@ -52,12 +52,7 @@ dependencies {
             [group: 'org.apache.fineract.cn.portfolio', name: 'api', version: versions.fineractcnportfolio],
             [group: 'org.apache.fineract.cn.office', name: 'api', version: versions.fineractcnoffice],
             [group: 'org.apache.fineract.cn.identity', name: 'api', version: versions.fineractcnidentity],
-            //[group: 'org.apache.fineract.cn.provisioner', name: 'api', version: versions.fineractprovisioner],
             [group: 'org.apache.fineract.cn.accounting', name: 'api', version: versions.fineractcnaccounting],
-            //[group: 'org.apache.fineract.cn.teller', name: 'api', version: versions.fineractcnteller],
-            //[group: 'org.apache.fineract.cn.reporting', name: 'api', version: versions.fineractcnreporting],
-            //[group: 'org.apache.fineract.cn.cheques', name: 'api', version: versions.kuelapcheques],
-            //[group: 'org.apache.fineract.cn.payroll', name: 'api', version: versions.fineractcnpayroll],
 
             [group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'],
             [group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka'],

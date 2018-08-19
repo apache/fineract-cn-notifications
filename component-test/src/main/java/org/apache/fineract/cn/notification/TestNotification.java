@@ -117,10 +117,10 @@ public class TestNotification extends SuiteTestEnvironment {
 
 /*
   @Test
-  public void shouldCreateSample() throws InterruptedException {
-    logger.info("Running test shouldCreateSample.");
-    final Sample sample = Sample.create(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(512));
-    this.testSubject.createEntity(sample);
+  public void shouldCreateSMSConfiguration() throws InterruptedException {
+    logger.info("Running test shouldCreateSMSConfiguration.");
+    final SMSConfiguration smsConfiguration = SMSConfiguration.create(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(512));
+    this.testSubject.createEntity();
 
     Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.POST_SAMPLE, sample.getIdentifier()));
     final Sample createdSample = this.testSubject.getEntity(sample.getIdentifier());
@@ -134,6 +134,6 @@ public class TestNotification extends SuiteTestEnvironment {
     final List<Sample> allEntities = this.testSubject.findAllEntities();
     Assert.assertNotNull(allEntities);
   }
-*/
 
+*/
 }
