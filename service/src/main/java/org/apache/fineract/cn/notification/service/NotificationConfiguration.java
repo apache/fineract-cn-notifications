@@ -87,6 +87,7 @@ public class NotificationConfiguration extends WebMvcConfigurerAdapter {
     this.environment = environment;
   }
 
+
   @Override
   public void configurePathMatch(final PathMatchConfigurer configurer) {
     configurer.setUseSuffixPatternMatch(Boolean.FALSE);
