@@ -95,6 +95,7 @@ public interface NotificationManager {
   
   @RequestMapping(
       value = "/notification/email/create",
+
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE
