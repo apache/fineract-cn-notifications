@@ -38,5 +38,6 @@ public class NotificationAuthentication {
 				this.identityManager.login(USER_IDENTIFIER, Base64Utils.encodeToString(USER_PASSWORD.getBytes()));
 		UserContextHolder.clear();
 		UserContextHolder.setAccessToken(USER_IDENTIFIER, authentication.getAccessToken());
+		this.logger.debug("{} Authenticated Successfully", UserContextHolder.getUserContext().get().getUser());
 	}
 }

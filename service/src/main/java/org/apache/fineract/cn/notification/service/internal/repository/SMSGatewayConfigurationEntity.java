@@ -31,12 +31,10 @@ public class SMSGatewayConfigurationEntity {
   private Long id;
   @Column(name = "identifier")
   private String identifier;
-  @Column(name = "account")
-  private String account;
-  @Column(name = "auth_token")
-  private String auth_token;
   @Column(name = "account_sid")
   private String accountSid;
+  @Column(name = "auth_token")
+  private String auth_token;
   @Column(name = "sender_number")
   private String sender_number;
   @Column(name = "state")
@@ -61,15 +59,7 @@ public class SMSGatewayConfigurationEntity {
   public void setIdentifier(final String identifier) {
     this.identifier = identifier;
   }
-
-  public String getAccount() {
-    return account;
-  }
-
-  public void setAccount(String account) {
-    this.account = account;
-  }
-
+  
   public String getAuth_token() {
     return auth_token;
   }

@@ -19,7 +19,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-mail</artifactId>
-      <version>1.4.3.RELEASE</version>
+      <version>1.4.1.RELEASE</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -42,12 +42,6 @@
     </dependency>
     <dependency>
       <groupId>org.apache.fineract.cn.identity</groupId>
-      <artifactId>api</artifactId>
-      <version>0.1.0-BUILD-SNAPSHOT</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.fineract.cn.accounting</groupId>
       <artifactId>api</artifactId>
       <version>0.1.0-BUILD-SNAPSHOT</version>
       <scope>runtime</scope>
@@ -118,12 +112,6 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-validator</artifactId>
       <version>5.3.0.Final</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.flywaydb</groupId>
-      <artifactId>flyway-core</artifactId>
-      <version>4.0.1</version>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

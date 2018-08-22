@@ -19,8 +19,10 @@
 package org.apache.fineract.cn.notification.service.internal.service;
 
 import org.apache.fineract.cn.customer.api.v1.domain.Customer;
+import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
+import org.apache.fineract.cn.notification.service.internal.mapper.EmailConfigurationMapper;
 import org.apache.fineract.cn.notification.service.internal.mapper.SMSConfigurationMapper;
 import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationRepository;
 import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationRepository;
@@ -46,6 +48,8 @@ public class NotificationService {
 	private final CustomerAdaptor customerAdaptor;
 	private final Logger logger;
 	
+	private final String configureIdentifier = "Twilio";
+	
 	@Autowired
 	public NotificationService(final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository,
 	                           final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository,
@@ -56,16 +60,14 @@ public class NotificationService {
 	                           @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger
 	) {
 		super();
-		
 		this.smsGatewayConfigurationRepository = smsGatewayConfigurationRepository;
 		this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
-		
 		this.customerAdaptor = customerAdaptor;
 		this.smsService = smsService;
 		this.emailService = emailService;
 		this.notificationAuthentication = notificationAuthentication;
 		this.logger = logger;
-		this.logger.info("{} has been initiated",this.getClass());
+		this.logger.debug("{} has been initiated", this.getClass());
 	}
 	
 	
@@ -77,9 +79,29 @@ public class NotificationService {
 		return this.smsGatewayConfigurationRepository.findByIdentifier(identifier).map(SMSConfigurationMapper::map);
 	}
 	
+	
+	public Optional<EmailConfiguration> findEmailConfigurationByIdentifier(final String identifier) {
+		return this.emailGatewayConfigurationRepository.findByIdentifier(identifier).map(EmailConfigurationMapper::map);
+	}
+	
 	public Optional<Customer> findCustomer(final String customerIdentifier, String tenant) {
 		notificationAuthentication.authenticate(tenant);
 		return this.customerAdaptor.findCustomer(customerIdentifier);
+	}
+	
+	public Boolean smsConfigurationExists(final String identifier) {
+		return this.smsGatewayConfigurationRepository.existsByIdentifier(identifier);
+	}
+	
+	public Boolean emailConfigurationExists(final String identifier) {
+		return this.emailGatewayConfigurationRepository.existsByIdentifier(identifier);
+	}
+	
+	public void configureSMSSender() {
+		SMSConfiguration configuration = findSMSConfigurationByIdentifier(configureIdentifier).get();
+		smsService.configure(configuration.getAccountSid(),
+				configuration.getAuth_token(),
+				configuration.getSender_number());
 	}
 	
 	public void sendSMS(String receiver, String template) {

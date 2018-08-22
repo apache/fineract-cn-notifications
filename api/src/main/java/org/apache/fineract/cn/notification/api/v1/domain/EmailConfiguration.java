@@ -46,7 +46,7 @@ public class EmailConfiguration {
     super();
   }
 
-  public static EmailConfiguration create (String identifier, String payload,
+  public static EmailConfiguration create (String identifier,
                             String host, String port,
                             String username, String app_id,
                             String smtp_auth, String start_tls,

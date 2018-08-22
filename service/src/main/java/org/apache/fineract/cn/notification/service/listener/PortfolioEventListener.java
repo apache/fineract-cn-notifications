@@ -21,9 +21,7 @@ package org.apache.fineract.cn.notification.service.listener;
 import org.apache.fineract.cn.individuallending.api.v1.events.IndividualLoanEventConstants;
 import org.apache.fineract.cn.lang.config.TenantHeaderFilter;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
-import org.apache.fineract.cn.notification.service.internal.service.EmailService;
 import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
-import org.apache.fineract.cn.notification.service.internal.service.SMSService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,27 +35,20 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @Component
 public class PortfolioEventListener {
-
+	
 	private final NotificationService notificationService;
-	private final SMSService smsService;
-	private final EmailService emailService;
 	private final Logger logger;
-
+	
 	@Autowired
 	public PortfolioEventListener(
 			final NotificationService notificationService,
-			final SMSService smsService,
-			final EmailService emailService,
-			@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger ) {
+			@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger) {
 		super();
-		this.smsService = smsService;
-		this.emailService = emailService;
 		this.logger = logger;
 		this.notificationService = notificationService;
 		logger.info("Porfolio initiated");
-
 	}
-
+	
 	@JmsListener(
 			subscription = IndividualLoanEventConstants.DESTINATION,
 			destination = IndividualLoanEventConstants.DESTINATION,
@@ -66,7 +57,7 @@ public class PortfolioEventListener {
 	public void onOpen(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                   final String payload) {
 	}
-
+	
 	@JmsListener(
 			subscription = IndividualLoanEventConstants.DESTINATION,
 			destination = IndividualLoanEventConstants.DESTINATION,
@@ -75,7 +66,7 @@ public class PortfolioEventListener {
 	public void onDeny(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                   final String payload) {
 	}
-
+	
 	@JmsListener(
 			subscription = IndividualLoanEventConstants.DESTINATION,
 			destination = IndividualLoanEventConstants.DESTINATION,
@@ -84,7 +75,7 @@ public class PortfolioEventListener {
 	public void onApprove(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                      final String payload) {
 	}
-
+	
 	@JmsListener(
 			subscription = IndividualLoanEventConstants.DESTINATION,
 			destination = IndividualLoanEventConstants.DESTINATION,
@@ -93,7 +84,7 @@ public class PortfolioEventListener {
 	public void onDisburse(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                       final String payload) {
 	}
-
+	
 	@JmsListener(
 			subscription = IndividualLoanEventConstants.DESTINATION,
 			destination = IndividualLoanEventConstants.DESTINATION,
@@ -102,7 +93,7 @@ public class PortfolioEventListener {
 	public void onApplyInterest(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                            final String payload) {
 	}
-
+	
 	@JmsListener(
 			subscription = IndividualLoanEventConstants.DESTINATION,
 			destination = IndividualLoanEventConstants.DESTINATION,
@@ -111,7 +102,7 @@ public class PortfolioEventListener {
 	public void onAcceptPayment(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                            final String payload) {
 	}
-
+	
 	@JmsListener(
 			subscription = IndividualLoanEventConstants.DESTINATION,
 			destination = IndividualLoanEventConstants.DESTINATION,
@@ -120,7 +111,7 @@ public class PortfolioEventListener {
 	public void onCheckLate(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                        final String payload) {
 	}
-
+	
 	@JmsListener(
 			subscription = IndividualLoanEventConstants.DESTINATION,
 			destination = IndividualLoanEventConstants.DESTINATION,
@@ -129,7 +120,7 @@ public class PortfolioEventListener {
 	public void onMarkLate(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                       final String payload) {
 	}
-
+	
 	@JmsListener(
 			subscription = IndividualLoanEventConstants.DESTINATION,
 			destination = IndividualLoanEventConstants.DESTINATION,
@@ -138,7 +129,7 @@ public class PortfolioEventListener {
 	public void onMarkInArrears(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                            final String payload) {
 	}
-
+	
 	@JmsListener(
 			subscription = IndividualLoanEventConstants.DESTINATION,
 			destination = IndividualLoanEventConstants.DESTINATION,
@@ -147,7 +138,7 @@ public class PortfolioEventListener {
 	public void onWriteOff(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                       final String payload) {
 	}
-
+	
 	@JmsListener(
 			subscription = IndividualLoanEventConstants.DESTINATION,
 			destination = IndividualLoanEventConstants.DESTINATION,
@@ -156,7 +147,7 @@ public class PortfolioEventListener {
 	public void onClose(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                    final String payload) {
 	}
-
+	
 	@JmsListener(
 			subscription = IndividualLoanEventConstants.DESTINATION,
 			destination = IndividualLoanEventConstants.DESTINATION,

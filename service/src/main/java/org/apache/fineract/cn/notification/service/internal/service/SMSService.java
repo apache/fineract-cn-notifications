@@ -57,8 +57,17 @@ public class SMSService {
         this.logger = logger;
         this.logger.info("{} has been initiated",this.getClass());
     }
+    
+    public void configure(String accountSID,
+                          String authToken,
+                          String senderNumber){
+        ACCOUNT_SID = accountSID;
+        AUTH_TOKEN = authToken;
+        SENDERNUMBER = senderNumber;
+    }
 
     public void sendSMS(String receiver, String template) {
+        this.logger.debug("sendSMS invoked");
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
         MessageCreator messageCreator
             = Message.creator(ACCOUNT_SID,new PhoneNumber(receiver), new PhoneNumber(SENDERNUMBER), template);

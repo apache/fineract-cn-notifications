@@ -17,4 +17,4 @@
 -- under the License.
 --
 
-INSERT INTO email_gateway_configurations VALUES ('1', 'GMail', 'smtp.gmail.com', '587','akyencorp@gmail.com', 'pswatggsoiyjvmck', 'smtp', 'true', 'true', 'ACTIVE');
+INSERT INTO email_gateway_configurations VALUES ('1', 'Gmail', 'smtp.gmail.com', '587','fineractcnnotificationdemo@gmail.com', 'pnuugpwmcibipdpw', 'smtp', 'true', 'true', 'ACTIVE');

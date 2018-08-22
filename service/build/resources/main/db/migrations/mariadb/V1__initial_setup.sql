@@ -36,14 +36,14 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 CREATE TABLE email_gateway_configurations (
   id INT(11) NOT NULL AUTO_INCREMENT,
-  identifer VARCHAR(45) NULL DEFAULT NULL,
+  identifier VARCHAR(45) NULL DEFAULT NULL,
   host VARCHAR(45) NOT NULL,
   port VARCHAR(45) NOT NULL,
   username VARCHAR(45) NOT NULL,
   app_password VARCHAR(45) NOT NULL,
-  protocol VARCHAR(45) NOT NULL,
-  auth VARCHAR (45),
-  starttls VARCHAR (45),
+  protocol VARCHAR(45),
+  smtp_auth VARCHAR (45),
+  start_tls VARCHAR (45),
   state VARCHAR(45),
   PRIMARY KEY (id))
 ENGINE = InnoDB

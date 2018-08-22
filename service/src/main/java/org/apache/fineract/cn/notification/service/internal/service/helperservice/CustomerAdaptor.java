@@ -41,13 +41,12 @@ public class CustomerAdaptor {
     super();
     this.logger = logger;
     this.customerManager = customerManager;
-
   }
 
   public Optional<Customer> findCustomer(final String customerIdentifier) {
     try {
       final Customer customer = this.customerManager.findCustomer(customerIdentifier.replaceAll("\"",""));
-        return Optional.of(customer);
+      return Optional.of(customer);
     } catch (final CustomerNotFoundException cnfex) {
       this.logger.warn("Customer {} not found.", customerIdentifier.replaceAll("\"",""));
     }

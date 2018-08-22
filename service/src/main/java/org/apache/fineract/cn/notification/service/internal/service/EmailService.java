@@ -48,6 +48,7 @@ public class EmailService {
 	}
 	
 	public void sendEmail(String from, String to, String subject, String message) {
+		this.logger.debug("sendSMS invoked");
 		JavaMailSender sender = getJavaMailSender();
 		try {
 			SimpleMailMessage mail = new SimpleMailMessage();
@@ -67,8 +68,8 @@ public class EmailService {
 		mailSender.setHost("smtp.gmail.com");
 		mailSender.setPort(587);
 		
-		mailSender.setUsername("akyencorp@gmail.com");
-		mailSender.setPassword("pswatggsoiyjvmck");
+		mailSender.setUsername("fineractcnnotificationdemo@gmail.com");
+		mailSender.setPassword("pnuugpwmcibipdpw");
 		
 		Properties properties = mailSender.getJavaMailProperties();
 		properties.put(ServiceConstants.MAIL_TRANSPORT_PROTOCOL_PROPERTY,

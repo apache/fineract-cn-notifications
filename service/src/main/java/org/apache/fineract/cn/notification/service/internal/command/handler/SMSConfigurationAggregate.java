@@ -22,6 +22,7 @@ import org.apache.fineract.cn.command.annotation.Aggregate;
 import org.apache.fineract.cn.command.annotation.CommandHandler;
 import org.apache.fineract.cn.command.annotation.CommandLogLevel;
 import org.apache.fineract.cn.command.annotation.EventEmitter;
+import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
 import org.apache.fineract.cn.notification.service.internal.command.SMSConfigurationCommand;
 import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationEntity;
@@ -43,15 +44,17 @@ public class SMSConfigurationAggregate {
 
   @CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
   @Transactional
-  @EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_SAVE_SMS_CONGIGURATION)
-  public String saveSMSServiceConfiguration(final SMSConfigurationCommand smsConfigurationCommand) {
-
+  @EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_SMS_CONFIGURATION)
+  public String createSMSConfiguration(final SMSConfigurationCommand smsConfigurationCommand) {
+    SMSConfiguration smsConfiguration = smsConfigurationCommand.getSMSConfiguration();
     final SMSGatewayConfigurationEntity entity = new SMSGatewayConfigurationEntity();
-    entity.setAccountSid(smsConfigurationCommand.getSMSConfiguration().getAccountSid());
-    entity.setAuth_token(smsConfigurationCommand.getSMSConfiguration().getAuth_token());
-    entity.setSender_number(smsConfigurationCommand.getSMSConfiguration().getSender_number());
+    entity.setIdentifier(smsConfiguration.getIdentifier());
+    entity.setAccountSid(smsConfiguration.getAccountSid());
+    entity.setAuth_token(smsConfiguration.getAuth_token());
+    entity.setSender_number(smsConfiguration.getSender_number());
+    entity.setState(smsConfiguration.getSate());
     this.smsGatewayConfigurationRepository.save(entity);
 
-    return smsConfigurationCommand.getSMSConfiguration().getIdentifier();
+    return smsConfiguration.getIdentifier();
   }
 }

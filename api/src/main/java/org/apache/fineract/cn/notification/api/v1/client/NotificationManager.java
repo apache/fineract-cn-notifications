@@ -18,9 +18,9 @@
  */
 package org.apache.fineract.cn.notification.api.v1.client;
 
-import java.util.List;
 import org.apache.fineract.cn.api.annotation.ThrowsException;
 import org.apache.fineract.cn.api.util.CustomFeignClientsConfiguration;
+import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.HttpStatus;
@@ -28,6 +28,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 @SuppressWarnings("unused")
 @FeignClient(value="notification-v1", path="/notification/v1", configuration = CustomFeignClientsConfiguration.class)
@@ -40,20 +42,63 @@ public interface NotificationManager {
           consumes = MediaType.APPLICATION_JSON_VALUE
   )
   List<SMSConfiguration> findAllEntities();
-
+  
   @RequestMapping(
-          value = "/notification/{identifier}",
-          method = RequestMethod.GET,
-          produces = MediaType.ALL_VALUE,
-          consumes = MediaType.APPLICATION_JSON_VALUE)
-  SMSConfiguration getEntity(@PathVariable("identifier") final String identifier);
-
-  @RequestMapping(
-      value = "/notification",
+      value = "/notification/",
       method = RequestMethod.POST,
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = MediaType.APPLICATION_JSON_VALUE
   )
   @ThrowsException(status = HttpStatus.I_AM_A_TEAPOT, exception = IamATeapotException.class)
   void createEntity(final SMSConfiguration smsConfiguration);
+
+  @RequestMapping(
+          value = "/notification/sms/{identifier}",
+          method = RequestMethod.GET,
+          produces = MediaType.ALL_VALUE,
+          consumes = MediaType.APPLICATION_JSON_VALUE)
+  SMSConfiguration findAllActiveSMSConfigurationEntities(@PathVariable("identifier") final String identifier);
+  
+  @RequestMapping(
+      value = "/notification/email/active/{identifier}",
+      method = RequestMethod.GET,
+      produces = MediaType.ALL_VALUE,
+      consumes = MediaType.APPLICATION_JSON_VALUE)
+  EmailConfiguration findAllActiveEmailConfigurationEntities(@PathVariable("identifier") final String identifier);
+  
+  @RequestMapping(
+      value = "/notification/sms/create",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE,
+      consumes = MediaType.APPLICATION_JSON_VALUE
+  )
+  @ThrowsException(status = HttpStatus.I_AM_A_TEAPOT, exception = IamATeapotException.class)
+  void createSMSConfiguration(final SMSConfiguration smsConfiguration);
+  
+  @RequestMapping(
+      value = "/notification/sms/{identifier}",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE,
+      consumes = MediaType.APPLICATION_JSON_VALUE
+  )
+  @ThrowsException(status = HttpStatus.I_AM_A_TEAPOT, exception = IamATeapotException.class)
+  SMSConfiguration findSMSConfigurationByIdentifier(@PathVariable("identifier") final String identifier);
+  
+  @RequestMapping(
+      value = "/notification/email/{identifier}",
+      method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE,
+      consumes = MediaType.APPLICATION_JSON_VALUE
+  )
+  @ThrowsException(status = HttpStatus.I_AM_A_TEAPOT, exception = IamATeapotException.class)
+  EmailConfiguration findEmailConfigurationByIdentifier(@PathVariable("identifier") final String identifier);
+  
+  @RequestMapping(
+      value = "/notification/email/create",
+      method = RequestMethod.POST,
+      produces = MediaType.APPLICATION_JSON_VALUE,
+      consumes = MediaType.APPLICATION_JSON_VALUE
+  )
+  @ThrowsException(status = HttpStatus.I_AM_A_TEAPOT, exception = IamATeapotException.class)
+  void createEmailConfiguration(final EmailConfiguration emailConfiguration);
 }

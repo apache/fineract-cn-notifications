@@ -37,7 +37,18 @@ public class SMSConfigurationMapper {
     smsConfiguration.setAccountSid(smsGatewayConfigurationEntity.getAccountSid());
     smsConfiguration.setAuth_token(smsGatewayConfigurationEntity.getAuth_token());
     smsConfiguration.setSender_number(smsGatewayConfigurationEntity.getSender_number());
+    smsConfiguration.setState(smsGatewayConfigurationEntity.getState());
     return smsConfiguration;
+  }
+  
+  public static SMSGatewayConfigurationEntity map(final SMSConfiguration smsConfiguration) {
+    final SMSGatewayConfigurationEntity smsGatewayConfigurationEntity = new SMSGatewayConfigurationEntity();
+    smsGatewayConfigurationEntity.setIdentifier(smsConfiguration.getIdentifier());
+    smsGatewayConfigurationEntity.setAccountSid(smsConfiguration.getAccountSid());
+    smsGatewayConfigurationEntity.setAuth_token(smsConfiguration.getAuth_token());
+    smsGatewayConfigurationEntity.setSender_number(smsConfiguration.getSender_number());
+    smsGatewayConfigurationEntity.setState(smsConfiguration.getSate());
+    return smsGatewayConfigurationEntity;
   }
 
   public static List<SMSConfiguration> map(final List<SMSGatewayConfigurationEntity> smsGatewayConfigurationEntity) {

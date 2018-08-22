@@ -47,13 +47,11 @@ public class SMSConfiguration{
   }
 
   public static SMSConfiguration create(String identifier,
-                                        String organisation,
                                         String auth_token,
                                         String accountSID,
                                         String state,
                                         String type) {
     SMSConfiguration smsconfiguration = new SMSConfiguration();
-    smsconfiguration.setIdentifier(identifier);
     smsconfiguration.setIdentifier(identifier);
     smsconfiguration.setAuth_token(auth_token);
     smsconfiguration.setAccountSid(accountSID);

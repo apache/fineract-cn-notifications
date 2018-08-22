@@ -23,8 +23,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestNotification.class,
-		TestNotificationGateways.class,
+		TestEmailService.class,
+		TestSMSService.class,
 })
 public class TestSuite extends SuiteTestEnvironment {
 }

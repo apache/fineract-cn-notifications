@@ -23,6 +23,7 @@ import org.apache.fineract.cn.api.context.AutoUserContext;
 import org.apache.fineract.cn.notification.api.v1.client.NotificationManager;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
 import org.apache.fineract.cn.notification.service.NotificationConfiguration;
+import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
 import org.apache.fineract.cn.test.fixture.TenantDataStoreContextTestRule;
 import org.apache.fineract.cn.test.listener.EnableEventRecording;
 import org.apache.fineract.cn.test.listener.EventRecorder;
@@ -47,93 +48,74 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.security.interfaces.RSAPrivateKey;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
+		classes = {TestNotification.TestConfiguration.class})
 public class TestNotification extends SuiteTestEnvironment {
-  private static final String LOGGER_NAME = "test-logger";
-  private static final String TEST_USER = "homer";
-
-
-  @Configuration
-  @EnableEventRecording
-  @EnableFeignClients(basePackages = {"org.apache.fineract.cn.notification.api.v1.client"})
-  @RibbonClient(name = APP_NAME)
-  @Import({NotificationConfiguration.class})
-  @ComponentScan("org.apache.fineract.cn.notification.listener")
-  public static class TestConfiguration {
-    public TestConfiguration() {
-      super();
-    }
-
-    @Bean(name = LOGGER_NAME)
-    public Logger logger() {
-      return LoggerFactory.getLogger(LOGGER_NAME);
-    }
-  }
-
-  @ClassRule
-  public final static TenantDataStoreContextTestRule tenantDataStoreContext = TenantDataStoreContextTestRule.forRandomTenantName(cassandraInitializer, mariaDBInitializer);
-
-  @Rule
-  public final TenantApplicationSecurityEnvironmentTestRule tenantApplicationSecurityEnvironment
-          = new TenantApplicationSecurityEnvironmentTestRule(testEnvironment, this::waitForInitialize);
-
-  private AutoUserContext userContext;
-
-  @Autowired
-  private NotificationManager testSubject;
-
-  @Autowired
-  private EventRecorder eventRecorder;
-
-  @SuppressWarnings("WeakerAccess")
-  @Autowired
-  @Qualifier(LOGGER_NAME)
-  Logger logger;
-
-  public TestNotification() {
-    super();
-  }
-
-  @Before
-  public void prepTest() {
-    userContext = tenantApplicationSecurityEnvironment.createAutoUserContext(TestNotification.TEST_USER);
-    final RSAPrivateKey tenantPrivateKey = tenantApplicationSecurityEnvironment.getSystemSecurityEnvironment().tenantPrivateKey();
-    logger.info("tenantPrivateKey = {}", tenantPrivateKey);
-  }
-
-  @After
-  public void cleanTest() {
-    userContext.close();
-    eventRecorder.clear();
-  }
-
-  public boolean waitForInitialize() {
-    try {
-      return this.eventRecorder.wait(NotificationEventConstants.INITIALIZE, APP_VERSION);
-    } catch (final InterruptedException e) {
-      throw new IllegalStateException(e);
-    }
-  }
-
-/*
-  @Test
-  public void shouldCreateSMSConfiguration() throws InterruptedException {
-    logger.info("Running test shouldCreateSMSConfiguration.");
-    final SMSConfiguration smsConfiguration = SMSConfiguration.create(RandomStringUtils.randomAlphanumeric(8), RandomStringUtils.randomAlphanumeric(512));
-    this.testSubject.createEntity();
-
-    Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.POST_SAMPLE, sample.getIdentifier()));
-    final Sample createdSample = this.testSubject.getEntity(sample.getIdentifier());
-
-    Assert.assertEquals(sample, createdSample);
-  }
-
-  @Test
-  public void shouldListSamples() {
-    logger.info("Running test shouldListSamples.");
-    final List<Sample> allEntities = this.testSubject.findAllEntities();
-    Assert.assertNotNull(allEntities);
-  }
-
-*/
+	
+	@Configuration
+	@EnableEventRecording
+	@EnableFeignClients(basePackages = {"org.apache.fineract.cn.notification.api.v1.client"})
+	@RibbonClient(name = APP_NAME)
+	@ComponentScan({"org.apache.fineract.cn.notification.listener",
+	})
+	@Import({NotificationConfiguration.class})
+	public static class TestConfiguration {
+		public TestConfiguration() {
+			super();
+		}
+		
+		@Bean(name = LOGGER_NAME)
+		public Logger logger() {
+			return LoggerFactory.getLogger(LOGGER_NAME);
+		}
+	}
+	
+	@ClassRule
+	public final static TenantDataStoreContextTestRule tenantDataStoreContext = TenantDataStoreContextTestRule.forRandomTenantName(cassandraInitializer, mariaDBInitializer);
+	private static final String LOGGER_NAME = "test-logger";
+	private static final String TEST_USER = "homer";
+	@SuppressWarnings("WeakerAccess")
+	@Autowired
+	@Qualifier(LOGGER_NAME)
+	Logger logger;
+	
+	private AutoUserContext userContext;
+	
+	@Autowired
+	private NotificationManager testSubject;
+	
+	@Autowired
+	private NotificationService notificationService;
+	
+	@Autowired
+	private EventRecorder eventRecorder;
+	
+	@Rule
+	public final TenantApplicationSecurityEnvironmentTestRule tenantApplicationSecurityEnvironment
+			= new TenantApplicationSecurityEnvironmentTestRule(testEnvironment, this::waitForInitialize);
+	
+	public TestNotification() {
+		super();
+	}
+	
+	@Before
+	public void prepTest() {
+		userContext = tenantApplicationSecurityEnvironment.createAutoUserContext(TestNotification.TEST_USER);
+		final RSAPrivateKey tenantPrivateKey = tenantApplicationSecurityEnvironment.getSystemSecurityEnvironment().tenantPrivateKey();
+		logger.info("tenantPrivateKey = {}", tenantPrivateKey);
+	}
+	
+	@After
+	public void cleanTest() {
+		userContext.close();
+		eventRecorder.clear();
+	}
+	
+	public boolean waitForInitialize() {
+		try {
+			return this.eventRecorder.wait(NotificationEventConstants.INITIALIZE, APP_VERSION);
+		} catch (final InterruptedException e) {
+			throw new IllegalStateException(e);
+		}
+	}
 }
