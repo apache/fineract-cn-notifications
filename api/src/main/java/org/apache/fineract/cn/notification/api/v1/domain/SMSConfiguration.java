@@ -20,36 +20,43 @@ package org.apache.fineract.cn.notification.api.v1.domain;
 
 import org.apache.fineract.cn.lang.validation.constraints.ValidIdentifier;
 import org.hibernate.validator.constraints.Length;
-
 import java.util.Objects;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class SMSConfiguration {
+public class SMSConfiguration{
   @ValidIdentifier
   private String identifier;
   @Length(max = 512)
-  private String payload;
-  @Length(max = 512)
-  private String organisation;
-  @Length(max = 512)
   private String auth_token;
   @Length(max = 512)
-  private String accountid;
+  private String accountSid;
   @Length(max = 256)
-  private String option;
+  private String sender_number;
+  @Length(max = 256)
+  private String state;
+
+  private enum State {
+    ACTIVE,
+    DEACTIVATED;
+    State() {
+    }
+  }
 
   public SMSConfiguration() {
     super();
   }
 
-  public static SMSConfiguration create(String identifier, String payload, String organisation, String auth_token, String accountid, String option) {
+  public static SMSConfiguration create(String identifier,
+                                        String auth_token,
+                                        String accountSID,
+                                        String state,
+                                        String type) {
     SMSConfiguration smsconfiguration = new SMSConfiguration();
     smsconfiguration.setIdentifier(identifier);
-    smsconfiguration.setPayload(payload);
-    smsconfiguration.setOrganisation(organisation);
     smsconfiguration.setAuth_token(auth_token);
-    smsconfiguration.setAccountid(accountid);
-    smsconfiguration.setOption(option);
+    smsconfiguration.setAccountSid(accountSID);
+    smsconfiguration.setState(state);
+    smsconfiguration.setType(type);
     return smsconfiguration;
   }
 
@@ -61,22 +68,6 @@ public class SMSConfiguration {
     this.identifier = identifier;
   }
 
-  public String getPayload() {
-    return payload;
-  }
-
-  public void setPayload(String payload) {
-    this.payload = payload;
-  }
-
-  public String getOrganisation() {
-    return organisation;
-  }
-
-  public void setOrganisation(String organisation) {
-    this.organisation = organisation;
-  }
-
   public String getAuth_token() {
     return auth_token;
   }
@@ -85,21 +76,38 @@ public class SMSConfiguration {
     this.auth_token = auth_token;
   }
 
-  public String getAccountid() {
-    return accountid;
+  public String getAccountSid() {
+    return accountSid;
   }
 
-  public void setAccountid(String accountid) {
-    this.accountid = accountid;
+  public void setAccountSid(String accountid) {
+    this.accountSid = accountid;
   }
 
-  public String getOption() {
-    return option;
+  public String getSender_number() {
+    return sender_number;
   }
 
-  public void setOption(String option) {
-    this.option = option;
+  public void setSender_number(String sender_number) {
+    this.sender_number = sender_number;
   }
+
+  public String getSate() {
+    return state;
+  }
+
+  public void setState(String state) {
+    this.state = state;
+  }
+
+  public String getType() {
+    return null;
+  }
+
+  public void setType(String type) {
+
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -107,16 +115,13 @@ public class SMSConfiguration {
     if (o == null || getClass() != o.getClass()) return false;
     SMSConfiguration that = (SMSConfiguration) o;
     return Objects.equals(identifier, that.identifier) &&
-            Objects.equals(payload, that.payload) &&
-            Objects.equals(organisation, that.organisation) &&
             Objects.equals(auth_token, that.auth_token) &&
-            Objects.equals(accountid, that.accountid) &&
-            Objects.equals(option, that.option);
+            Objects.equals(accountSid, that.accountSid) &&
+            Objects.equals(state, that.state);
   }
 
   @Override
   public int hashCode() {
-
-    return Objects.hash(identifier, payload, organisation, auth_token, accountid, option);
+    return Objects.hash(identifier, auth_token, auth_token, accountSid, state);
   }
 }
