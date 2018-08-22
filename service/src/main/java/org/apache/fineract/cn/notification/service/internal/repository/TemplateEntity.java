@@ -16,11 +16,49 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.api.v1;
+package org.apache.fineract.cn.notification.service.internal.repository;
+
+import javax.persistence.*;
 
 @SuppressWarnings("unused")
-public interface PermittableGroupIds {
-  String SMS_MANAGEMENT = "notification__v1__sms";
-  String EMAIL_MANAGEMENT = "notification__v1__email";
-  String SELF_MANAGEMENT = "notification__v1__self";
+@Entity
+@Table(name = "template_samples")
+public class TemplateEntity {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
+  @Column(name = "identifier")
+  private String identifier;
+  @Column(name = "payload")
+  private String payload;
+
+  public TemplateEntity() {
+    super();
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getIdentifier() {
+    return this.identifier;
+  }
+
+  public void setIdentifier(final String identifier) {
+    this.identifier = identifier;
+  }
+
+  public String getPayload() {
+    return payload;
+  }
+
+  public void setPayload(String payload) {
+    this.payload = payload;
+  }
 }
