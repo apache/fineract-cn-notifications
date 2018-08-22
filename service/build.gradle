@@ -1,0 +1,89 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+buildscript {
+    ext {
+        springBootVersion = '1.4.1.RELEASE'
+    }
+
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath ("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+    id "com.github.hierynomus.license" version "0.13.1"
+    id("org.nosphere.apache.rat") version "0.3.1"
+}
+
+apply from: '../shared.gradle'
+
+apply plugin: 'spring-boot'
+
+springBoot {
+    executable = true
+    classifier = 'boot'
+}
+
+dependencies {
+    compile(
+            [group: 'com.twilio.sdk', name: 'twilio', version: versions.twilioapi],
+            [group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: versions.springjavamail],
+
+            [group: 'org.apache.fineract.cn.customer', name: 'api', version: versions.fineractcncustomer],
+            [group: 'org.apache.fineract.cn.portfolio', name: 'api', version: versions.fineractcnportfolio],
+            [group: 'org.apache.fineract.cn.office', name: 'api', version: versions.fineractcnoffice],
+            [group: 'org.apache.fineract.cn.identity', name: 'api', version: versions.fineractcnidentity],
+
+            [group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'],
+            [group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka'],
+            [group: 'org.springframework.boot', name: 'spring-boot-starter-jetty'],
+            [group: 'org.apache.fineract.cn.notification', name: 'api', version: project.version],
+            [group: 'org.apache.fineract.cn.anubis', name: 'library', version: versions.frameworkanubis],
+            [group: 'com.google.code.gson', name: 'gson'],
+            [group: 'org.apache.fineract.cn', name: 'lang', version: versions.frameworklang],
+            [group: 'org.apache.fineract.cn', name: 'async', version: versions.frameworkasync],
+            [group: 'org.apache.fineract.cn', name: 'cassandra', version: versions.frameworkcassandra],
+            [group: 'org.apache.fineract.cn', name: 'mariadb', version: versions.frameworkmariadb],
+            [group: 'org.apache.fineract.cn', name: 'command', version: versions.frameworkcommand],
+            [group: 'org.hibernate', name: 'hibernate-validator', version: versions.validator]
+    )
+}
+
+publishToMavenLocal.dependsOn bootRepackage
+
+publishing {
+    publications {
+        service(MavenPublication) {
+            from components.java
+            groupId project.group
+            artifactId project.name
+            version project.version
+        }
+        bootService(MavenPublication) {
+            // "boot" jar
+            artifact ("$buildDir/libs/$project.name-$version-boot.jar")
+            groupId project.group
+            artifactId ("$project.name-boot")
+            version project.version
+        }
+    }
+}
