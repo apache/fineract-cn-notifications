@@ -28,8 +28,6 @@ public class EmailConfiguration {
   @ValidIdentifier
   private String identifier;
   @Length(max = 512)
-  private String payload;
-  @Length(max = 512)
   private String host;
   @Length(max = 512)
   private String port;
@@ -42,27 +40,26 @@ public class EmailConfiguration {
   @Length(max = 512)
   private String start_tls;
   @Length(max = 512)
-  private String option;
+  private String state;
 
   public EmailConfiguration(){
     super();
   }
 
-  public static EmailConfiguration create (String identifier, String payload,
+  public static EmailConfiguration create (String identifier,
                             String host, String port,
                             String username, String app_id,
                             String smtp_auth, String start_tls,
-                            String option) {
+                            String state) {
     EmailConfiguration emailConfiguration = new EmailConfiguration();
     emailConfiguration.setIdentifier(identifier);
-    emailConfiguration.setPayload(payload);
     emailConfiguration.setHost(host);
     emailConfiguration.setPort(port);
     emailConfiguration.setUsername(username);
     emailConfiguration.setApp_id(app_id);
     emailConfiguration.setSmtp_auth(smtp_auth);
     emailConfiguration.setStart_tls(start_tls);
-    emailConfiguration.setOption(option);
+    emailConfiguration.setState(state);
     return emailConfiguration;
   }
 
@@ -72,14 +69,6 @@ public class EmailConfiguration {
 
   public void setIdentifier(String identifier) {
     this.identifier = identifier;
-  }
-
-  public String getPayload() {
-    return payload;
-  }
-
-  public void setPayload(String payload) {
-    this.payload = payload;
   }
 
   public String getHost() {
@@ -130,12 +119,12 @@ public class EmailConfiguration {
     this.start_tls = start_tls;
   }
 
-  public String getOption() {
-    return option;
+  public String getState() {
+    return state;
   }
 
-  public void setOption(String option) {
-    this.option = option;
+  public void setState(String state) {
+    this.state = state;
   }
 
   @Override
@@ -144,19 +133,18 @@ public class EmailConfiguration {
     if (o == null || getClass() != o.getClass()) return false;
     EmailConfiguration that = (EmailConfiguration) o;
     return Objects.equals(identifier, that.identifier) &&
-            Objects.equals(payload, that.payload) &&
             Objects.equals(host, that.host) &&
             Objects.equals(port, that.port) &&
             Objects.equals(username, that.username) &&
             Objects.equals(app_id, that.app_id) &&
             Objects.equals(smtp_auth, that.smtp_auth) &&
             Objects.equals(start_tls, that.start_tls) &&
-            Objects.equals(option, that.option);
+            Objects.equals(state, that.state);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(identifier, payload, host, port, username,
-            app_id, smtp_auth, start_tls, option);
+    return Objects.hash(identifier, state, host, port, username,
+            app_id, smtp_auth, start_tls, state);
   }
 }

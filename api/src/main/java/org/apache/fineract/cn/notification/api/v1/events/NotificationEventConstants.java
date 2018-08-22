@@ -25,7 +25,22 @@ public interface NotificationEventConstants {
     String SELECTOR_NAME = "action";
     String INITIALIZE = "initialize";
     String POST_SAMPLE = "post-sample";
+    String POST_SMS_CONFIGURATION = "post-sms-configuration";
+    String POST_EMAIL_CONFIGURATION = "post-email-configuration";
+    String POST_SMS_NOTIFICATION = "post-sms-notification";
+    String POST_EMAIL_NOTIFICATION = "post-email-notification";
+    
+    String POST_ENABLE_CUSTOMER_CREATED_EVENT = "post-enable-customer-created-event";
+    String POST_ENABLE_CUSTOMER_UPDATED_EVENT = "post-enable-customer-updated-event";
+    String POST_ENABLE_CUSTOMER_CLOSED_EVENT = "post-enable-customer-closed-event";
+    String POST_ENABLE_CUSTOMER_LOCKED_EVENT = "post-enable-customer-locked-event";
+    String POST_ENABLE_CUSTOMER_ACTIVATED_EVENT = "post-enable-customer-activated-event";
+    String POST_ENABLE_CUSTOMER__EVENT = "post-enable-customer--event";
+    
     String SELECTOR_INITIALIZE = SELECTOR_NAME + " = '" + INITIALIZE + "'";
     String SELECTOR_POST_SAMPLE = SELECTOR_NAME + " = '" + POST_SAMPLE + "'";
-
+    String SELECTOR_POST_SMS_CONFIGURATION = SELECTOR_NAME + " = '" + POST_SMS_CONFIGURATION + "'";
+    String SELECTOR_POST_EMAIL_CONFIGURATION = SELECTOR_NAME + " = '" + POST_EMAIL_CONFIGURATION + "'";
+    String SELECTOR_POST_SMS_NOTIFICATION = SELECTOR_NAME + " = '" + POST_SMS_NOTIFICATION + "'";
+    String SELECTOR_POST_EMAIL_NOTIFICATION = SELECTOR_NAME + " = '" + POST_EMAIL_NOTIFICATION + "'";
 }

@@ -16,11 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.api.v1;
+package org.apache.fineract.cn.notification.service.internal.repository;
 
-@SuppressWarnings("unused")
-public interface PermittableGroupIds {
-  String SMS_MANAGEMENT = "notification__v1__sms";
-  String EMAIL_MANAGEMENT = "notification__v1__email";
-  String SELF_MANAGEMENT = "notification__v1__self";
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface TemplateRepository extends JpaRepository<TemplateEntity, Long> {
+  Optional<TemplateEntity> findByIdentifier(String identifier);
 }

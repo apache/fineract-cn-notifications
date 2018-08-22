@@ -23,6 +23,17 @@ spring:
       enabled: false
     config:
       enabled: false
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: akyencorp@gmail.com
+      password: pswatggsoiyjvmck
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
 
 eureka:
   client:
@@ -68,14 +79,7 @@ async:
 flyway:
   enabled: false
 
-fineract:
-  customer:
-    accountcreated:
-      message: Dear Valued Customer, Your account has been created.
-    accountclosed:
-      message: Dear Valued Customer, Your account has been successfully closed.
-
 smssender:
   accountSID: AC1fde2c6f26f367b93231c5fdb944c908
-  authtoken: bc9a53e41745b8471e0ecafc859d86aa
+  authToken: bc9a53e41745b8471e0ecafc859d86aa
   senderNumber: +1 510-944-1898

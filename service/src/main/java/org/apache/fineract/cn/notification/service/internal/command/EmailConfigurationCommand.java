@@ -16,11 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.api.v1;
+package org.apache.fineract.cn.notification.service.internal.command;
 
-@SuppressWarnings("unused")
-public interface PermittableGroupIds {
-  String SMS_MANAGEMENT = "notification__v1__sms";
-  String EMAIL_MANAGEMENT = "notification__v1__email";
-  String SELF_MANAGEMENT = "notification__v1__self";
+import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
+
+public class EmailConfigurationCommand {
+
+  private final EmailConfiguration emailConfiguration;
+
+  public EmailConfigurationCommand(final EmailConfiguration emailConfiguration) {
+    super();
+    this.emailConfiguration = emailConfiguration;
+  }
+
+  public EmailConfiguration getEmailConfiguration() {
+    return this.emailConfiguration;
+  }
+
+  @Override
+  public String toString() {
+    return "EmailConfigurationCommand{"
+            + "EmailConfiguration=" + emailConfiguration.getIdentifier()
+            + '}';
+  }
 }
