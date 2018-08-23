@@ -19,46 +19,84 @@
 package org.apache.fineract.cn.notification.service.internal.repository;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 @Entity
-@Table(name = "template_samples")
+@Table(name = "wada_templates")
 public class TemplateEntity {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
-  @Column(name = "identifier")
-  private String identifier;
-  @Column(name = "payload")
-  private String payload;
-
-  public TemplateEntity() {
-    super();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getIdentifier() {
-    return this.identifier;
-  }
-
-  public void setIdentifier(final String identifier) {
-    this.identifier = identifier;
-  }
-
-  public String getPayload() {
-    return payload;
-  }
-
-  public void setPayload(String payload) {
-    this.payload = payload;
-  }
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
+	@Column(name = "identifier")
+	private String identifier;
+	@Column(name = "event")
+	private String event;
+	@Column(name = "url")
+	private String url;
+	
+	
+	public TemplateEntity() {
+		super();
+	}
+	
+	public Long getId() {
+		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public String getIdentifier() {
+		return this.identifier;
+	}
+	
+	public void setIdentifier(final String identifier) {
+		this.identifier = identifier;
+	}
+	
+	public String getEvent() {
+		return event;
+	}
+	
+	public void setEvent(String event) {
+		this.event = event;
+	}
+	
+	public String getUrl() {
+		return url;
+	}
+	
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		TemplateEntity that = (TemplateEntity) o;
+		return Objects.equals(id, that.id) &&
+				Objects.equals(identifier, that.identifier) &&
+				Objects.equals(event, that.event) &&
+				Objects.equals(url, that.url);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, identifier, event, url);
+	}
+	
+	@Override
+	public String toString() {
+		return "TemplateEntity{" +
+				"id=" + id +
+				", identifier='" + identifier + '\'' +
+				", event='" + event + '\'' +
+				", url='" + url + '\'' +
+				'}';
+	}
 }

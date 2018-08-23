@@ -20,7 +20,6 @@ package org.apache.fineract.cn.notification;
 
 import org.apache.fineract.cn.notification.api.v1.client.NotificationManager;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
-import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
 import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
 import org.apache.fineract.cn.notification.util.DomainObjectGenerator;
 import org.apache.fineract.cn.test.listener.EventRecorder;
@@ -40,7 +39,7 @@ public class TestSMSService extends TestNotification {
 	private EventRecorder eventRecorder;
 	
 	private String configIdentifier = "Twilio";
-
+	
 	public TestSMSService() {
 		super();
 	}
@@ -53,22 +52,20 @@ public class TestSMSService extends TestNotification {
 	}
 	
 	@Test
-  public void shouldCreateSMSConfigurationEntity() throws InterruptedException {
-    logger.info("Create and Retrieve SMS Gateway configuration");
-    final SMSConfiguration smsConfiguration = DomainObjectGenerator.smsConfiguration();
-    this.testSubject.createSMSConfiguration(smsConfiguration);
+	public void shouldCreateAndRetrieveSMSConfigurationEntity() {
+		logger.info("Create and Retrieve SMS Gateway configuration");
+		final SMSConfiguration smsConfiguration = DomainObjectGenerator.smsConfiguration();
+		this.testSubject.createSMSConfiguration(smsConfiguration);
 		
-		Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.POST_SMS_CONFIGURATION, smsConfiguration.getIdentifier()));
-		
-		final SMSConfiguration createdSample = this.testSubject.findSMSConfigurationByIdentifier(smsConfiguration.getIdentifier());
-		Assert.assertEquals(createdSample,smsConfiguration);
+		SMSConfiguration sampleRetrieved = this.testSubject.findSMSConfigurationByIdentifier(configIdentifier);
+		Assert.assertNotNull(sampleRetrieved);
+		Assert.assertEquals(sampleRetrieved.getIdentifier(), configIdentifier);
 	}
 	
 	@Test
-	public void retrieveSMSConfiguration(){
-		logger.info("Retrieving stored config from repositiory");
-		SMSConfiguration smsConfiguration = this.testSubject.findSMSConfigurationByIdentifier(configIdentifier);
-		Assert.assertNotNull(smsConfiguration);
-		Assert.assertEquals(smsConfiguration.getIdentifier(),configIdentifier);
+	public void checkSMSConfigurationEntityExist() {
+		logger.info("SMS Gateway configuration Exist");
+		Assert.assertTrue(this.notificationService.smsConfigurationExists(configIdentifier));
 	}
+	
 }

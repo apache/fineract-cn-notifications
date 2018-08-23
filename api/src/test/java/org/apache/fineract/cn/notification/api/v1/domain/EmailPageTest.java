@@ -18,48 +18,48 @@
  */
 package org.apache.fineract.cn.notification.api.v1.domain;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.fineract.cn.test.domain.ValidationTest;
 import org.apache.fineract.cn.test.domain.ValidationTestCase;
 import org.junit.runners.Parameterized;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
-public class SMSConfigurationTest extends ValidationTest<SMSConfiguration> {
+public class EmailPageTest extends ValidationTest<EmailPage> {
 	
-	public SMSConfigurationTest(ValidationTestCase<SMSConfiguration> testCase) {
+	EmailConfiguration emailConfiguration;
+	
+	public EmailPageTest(ValidationTestCase<EmailPage> testCase) {
 		super(testCase);
 	}
 	
 	@Parameterized.Parameters
 	public static Collection testCases() {
 		final Collection<ValidationTestCase> ret = new ArrayList<>();
-		ret.add(new ValidationTestCase<SMSConfiguration>("basicCase")
+		ret.add(new ValidationTestCase<EmailPage>("basicCase")
 				.adjustment(x -> {
 				})
-				.valid(false));
-		ret.add(new ValidationTestCase<SMSConfiguration>("nullIdentifier")
-				.adjustment(x -> x.setIdentifier(null))
-				.valid(false));
-		ret.add(new ValidationTestCase<SMSConfiguration>("tooShortIdentifier")
-				.adjustment(x -> x.setIdentifier("z"))
-				.valid(false));
-		ret.add(new ValidationTestCase<SMSConfiguration>("LongToken")
-				.adjustment(x -> x.getAccountSid())
-				.valid(false));
-		ret.add(new ValidationTestCase<SMSConfiguration>("tooLongSID")
-				.adjustment(x -> x.getAccountSid())
-				.valid(false));
+				.valid(true));
+		ret.add(new ValidationTestCase<EmailPage>("getEmailConfiguration")
+				.adjustment(x -> x.getEmailConfiguration())
+				.valid(true));
 		return ret;
 	}
 	
 	@Override
-	protected SMSConfiguration createValidTestSubject() {
-		return SMSConfiguration.create("test",
-				RandomStringUtils.randomAlphanumeric(300),
-				RandomStringUtils.randomAlphanumeric(300),
-				"ACTIVE",
-				"SMS");
+	protected EmailPage createValidTestSubject() {
+		EmailPage emailPage = new EmailPage();
+		emailConfiguration = new EmailConfiguration();
+		emailConfiguration.create("EmailTest",
+				"smtp.google.com",
+				"123",
+				"example",
+				"asdfaegw4t3rwg5w",
+				"true",
+				"true",
+				"ACTIVE");
+		emailPage.setEmailConfiguration(Arrays.asList(emailConfiguration));
+		return emailPage;
 	}
 }

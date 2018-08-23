@@ -31,25 +31,25 @@ import java.util.Optional;
 
 @Service
 public class CustomerAdaptor {
-
-  private final Logger logger;
-  private final CustomerManager customerManager;
-
-  @Autowired
-  public CustomerAdaptor(@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger,
-                         final CustomerManager customerManager) {
-    super();
-    this.logger = logger;
-    this.customerManager = customerManager;
-  }
-
-  public Optional<Customer> findCustomer(final String customerIdentifier) {
-    try {
-      final Customer customer = this.customerManager.findCustomer(customerIdentifier.replaceAll("\"",""));
-      return Optional.of(customer);
-    } catch (final CustomerNotFoundException cnfex) {
-      this.logger.warn("Customer {} not found.", customerIdentifier.replaceAll("\"",""));
-    }
-    return Optional.empty();
-  }
+	
+	private final Logger logger;
+	private final CustomerManager customerManager;
+	
+	@Autowired
+	public CustomerAdaptor(@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger,
+	                       final CustomerManager customerManager) {
+		super();
+		this.logger = logger;
+		this.customerManager = customerManager;
+	}
+	
+	public Optional<Customer> findCustomer(final String customerIdentifier) {
+		try {
+			final Customer customer = this.customerManager.findCustomer(customerIdentifier.replaceAll("\"", ""));
+			return Optional.of(customer);
+		} catch (final CustomerNotFoundException cnfex) {
+			this.logger.warn("Customer {} not found.", customerIdentifier.replaceAll("\"", ""));
+		}
+		return Optional.empty();
+	}
 }

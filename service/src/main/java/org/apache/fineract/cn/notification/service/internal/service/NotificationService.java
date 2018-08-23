@@ -75,6 +75,10 @@ public class NotificationService {
 		return SMSConfigurationMapper.map(this.smsGatewayConfigurationRepository.findAll());
 	}
 	
+	public List<EmailConfiguration> findAllActiveEmailConfigurationEntities() {
+		return EmailConfigurationMapper.map(this.emailGatewayConfigurationRepository.findAll());
+	}
+	
 	public Optional<SMSConfiguration> findSMSConfigurationByIdentifier(final String identifier) {
 		return this.smsGatewayConfigurationRepository.findByIdentifier(identifier).map(SMSConfigurationMapper::map);
 	}
@@ -99,7 +103,7 @@ public class NotificationService {
 	
 	public void configureSMSSender() {
 		SMSConfiguration configuration = findSMSConfigurationByIdentifier(configureIdentifier).get();
-		smsService.configure(configuration.getAccountSid(),
+		smsService.configure(configuration.getAccount_sid(),
 				configuration.getAuth_token(),
 				configuration.getSender_number());
 	}

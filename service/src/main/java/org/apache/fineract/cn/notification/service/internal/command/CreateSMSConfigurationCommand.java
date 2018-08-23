@@ -16,8 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.api.v1.client;
+package org.apache.fineract.cn.notification.service.internal.command;
 
-@SuppressWarnings("WeakerAccess")
-public class IamATeapotException extends RuntimeException {
+import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
+
+public class CreateSMSConfigurationCommand {
+	
+	private final SMSConfiguration smsConfiguration;
+	
+	public CreateSMSConfigurationCommand(final SMSConfiguration smsConfiguration) {
+		super();
+		this.smsConfiguration = smsConfiguration;
+	}
+	
+	public SMSConfiguration getSMSConfiguration() {
+		return this.smsConfiguration;
+	}
+	
+	@Override
+	public String toString() {
+		return "CreateSMSConfigurationCommand{"
+				+ "SMSConfiguration=" + smsConfiguration.getIdentifier()
+				+ '}';
+	}
 }

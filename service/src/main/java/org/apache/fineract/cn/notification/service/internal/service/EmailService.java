@@ -18,7 +18,6 @@
  */
 package org.apache.fineract.cn.notification.service.internal.service;
 
-
 import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,6 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.Properties;
-
 
 @Component
 public class EmailService {
@@ -44,7 +42,7 @@ public class EmailService {
 	}
 	
 	public void sendEmail(String from, String to, String subject, String message) {
-		this.logger.debug("sendSMS invoked");
+		
 		JavaMailSender sender = getJavaMailSender();
 		try {
 			SimpleMailMessage mail = new SimpleMailMessage();

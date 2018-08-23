@@ -29,32 +29,32 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @Component
 public class NotificationEventListener {
-
-  private final EventRecorder eventRecorder;
-
-  @Autowired
-  public NotificationEventListener(@SuppressWarnings("SpringJavaAutowiringInspection") final EventRecorder eventRecorder) {
-    super();
-    this.eventRecorder = eventRecorder;
-  }
-
-  @JmsListener(
-      subscription = NotificationEventConstants.DESTINATION,
-      destination = NotificationEventConstants.DESTINATION,
-      selector = NotificationEventConstants.SELECTOR_POST_SMS_NOTIFICATION
-  )
-  public void onPostSMS(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                             final String payload) {
-    this.eventRecorder.event(tenant, NotificationEventConstants.POST_SMS_NOTIFICATION, payload, String.class);
-  }
-  
-  @JmsListener(
-      subscription = NotificationEventConstants.DESTINATION,
-      destination = NotificationEventConstants.DESTINATION,
-      selector = NotificationEventConstants.SELECTOR_POST_SMS_CONFIGURATION
-  )
-  public void onCreateSMSConfiguration(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                        final String payload) {
-    this.eventRecorder.event(tenant, NotificationEventConstants.POST_SMS_NOTIFICATION, payload, String.class);
-  }
+	
+	private final EventRecorder eventRecorder;
+	
+	@Autowired
+	public NotificationEventListener(@SuppressWarnings("SpringJavaAutowiringInspection") final EventRecorder eventRecorder) {
+		super();
+		this.eventRecorder = eventRecorder;
+	}
+	
+	@JmsListener(
+			subscription = NotificationEventConstants.DESTINATION,
+			destination = NotificationEventConstants.DESTINATION,
+			selector = NotificationEventConstants.SELECTOR_POST_SMS_NOTIFICATION
+	)
+	public void onPostSMS(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                      final String payload) {
+		this.eventRecorder.event(tenant, NotificationEventConstants.POST_SMS_NOTIFICATION, payload, String.class);
+	}
+	
+	@JmsListener(
+			subscription = NotificationEventConstants.DESTINATION,
+			destination = NotificationEventConstants.DESTINATION,
+			selector = NotificationEventConstants.SELECTOR_POST_SMS_CONFIGURATION
+	)
+	public void onCreateSMSConfiguration(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                                     final String payload) {
+		this.eventRecorder.event(tenant, NotificationEventConstants.POST_SMS_NOTIFICATION, payload, String.class);
+	}
 }

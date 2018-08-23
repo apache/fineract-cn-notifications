@@ -27,8 +27,8 @@ import java.util.Optional;
 
 @Repository
 public interface EmailGatewayConfigurationRepository extends JpaRepository<EmailGatewayConfigurationEntity, Long> {
-  Optional<EmailGatewayConfigurationEntity> findByIdentifier(String identifier);
-  
-  @Query("SELECT CASE WHEN COUNT(c) > 0 THEN 'true' ELSE 'false' END FROM EmailGatewayConfigurationEntity c WHERE c.identifier = :identifier")
-  Boolean existsByIdentifier(@Param("identifier") final String identifier);
+	Optional<EmailGatewayConfigurationEntity> findByIdentifier(String identifier);
+	
+	@Query("SELECT CASE WHEN COUNT(c) > 0 THEN 'true' ELSE 'false' END FROM EmailGatewayConfigurationEntity c WHERE c.identifier = :identifier")
+	Boolean existsByIdentifier(@Param("identifier") final String identifier);
 }

@@ -24,7 +24,8 @@ import org.apache.fineract.cn.command.annotation.CommandLogLevel;
 import org.apache.fineract.cn.command.annotation.EventEmitter;
 import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
-import org.apache.fineract.cn.notification.service.internal.command.EmailConfigurationCommand;
+import org.apache.fineract.cn.notification.service.internal.command.CreateEmailConfigurationCommand;
+import org.apache.fineract.cn.notification.service.internal.mapper.EmailConfigurationMapper;
 import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationEntity;
 import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,30 +34,24 @@ import org.springframework.transaction.annotation.Transactional;
 @SuppressWarnings("unused")
 @Aggregate
 public class EmailConfigurationAggregate {
-
-  private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
-
-  @Autowired
-  public EmailConfigurationAggregate(EmailGatewayConfigurationRepository emailGatewayConfigurationRepository) {
-    super();
-    this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
-  }
-
-  @CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
-  @Transactional
-  @EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_EMAIL_CONFIGURATION)
-  public String createEmailConfiguration(final EmailConfigurationCommand emailConfigurationCommand) {
-    EmailConfiguration emailConfiguration = emailConfigurationCommand.getEmailConfiguration();
-    final EmailGatewayConfigurationEntity entity = new EmailGatewayConfigurationEntity();
-    entity.setIdentifier(emailConfiguration.getIdentifier());
-    entity.setHost(emailConfiguration.getHost());
-    entity.setPort(emailConfiguration.getPort());
-    entity.setApp_id(emailConfiguration.getApp_id());
-    entity.setUsername(emailConfiguration.getUsername());
-    entity.setSmtp_auth(emailConfiguration.getSmtp_auth());
-    entity.setStart_tls(emailConfiguration.getStart_tls());
-    entity.setState(emailConfiguration.getState());
-    this.emailGatewayConfigurationRepository.save(entity);
-    return emailConfiguration.getIdentifier();
-  }
+	
+	private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
+	
+	@Autowired
+	public EmailConfigurationAggregate(EmailGatewayConfigurationRepository emailGatewayConfigurationRepository) {
+		super();
+		this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
+	}
+	
+	@CommandHandler(logStart = CommandLogLevel.DEBUG, logFinish = CommandLogLevel.DEBUG)
+	@Transactional
+	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_EMAIL_CONFIGURATION)
+	public String createEmailConfiguration(final CreateEmailConfigurationCommand createEmailConfigurationCommand) {
+		
+		EmailConfiguration emailConfiguration = createEmailConfigurationCommand.getEmailConfiguration();
+		final EmailGatewayConfigurationEntity entity = EmailConfigurationMapper.map(emailConfiguration);
+		this.emailGatewayConfigurationRepository.save(entity);
+		
+		return emailConfiguration.getIdentifier();
+	}
 }

@@ -25,5 +25,5 @@ import java.util.Optional;
 
 @Repository
 public interface TemplateRepository extends JpaRepository<TemplateEntity, Long> {
-  Optional<TemplateEntity> findByIdentifier(String identifier);
+	Optional<TemplateEntity> findByIdentifier(String identifier);
 }

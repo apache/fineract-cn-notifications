@@ -16,10 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.service.internal.command;
+package org.apache.fineract.cn.notification.api.v1.domain;
 
-public class MigrateServiceCommand {
-  public MigrateServiceCommand() {
-    super();
-  }
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+		EmailConfigurationTest.class,
+		SMSConfigurationTest.class,
+		EmailPageTest.class,
+		EventTest.class,
+		SMSPageTest.class
+	
+})
+public class TestSuite {
 }

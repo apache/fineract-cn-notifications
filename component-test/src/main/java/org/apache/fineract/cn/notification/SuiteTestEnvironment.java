@@ -33,16 +33,16 @@ import org.junit.rules.TestRule;
  * initializing and de-initializing external resources.
  */
 public class SuiteTestEnvironment {
-  static final String APP_VERSION = "1";
-  static final String APP_NAME = "notification-v" + APP_VERSION;
-
-  static final TestEnvironment testEnvironment = new TestEnvironment(APP_NAME);
-  static final CassandraInitializer cassandraInitializer = new CassandraInitializer();
-  static final MariaDBInitializer mariaDBInitializer = new MariaDBInitializer();
-
-  @ClassRule
-  public static TestRule orderClassRules = RuleChain
-      .outerRule(new RunExternalResourceOnce(testEnvironment))
-      .around(new RunExternalResourceOnce(cassandraInitializer))
-      .around(new RunExternalResourceOnce(mariaDBInitializer));
+	static final String APP_VERSION = "1";
+	static final String APP_NAME = "notification-v" + APP_VERSION;
+	
+	static final TestEnvironment testEnvironment = new TestEnvironment(APP_NAME);
+	static final CassandraInitializer cassandraInitializer = new CassandraInitializer();
+	static final MariaDBInitializer mariaDBInitializer = new MariaDBInitializer();
+	
+	@ClassRule
+	public static TestRule orderClassRules = RuleChain
+			.outerRule(new RunExternalResourceOnce(testEnvironment))
+			.around(new RunExternalResourceOnce(cassandraInitializer))
+			.around(new RunExternalResourceOnce(mariaDBInitializer));
 }

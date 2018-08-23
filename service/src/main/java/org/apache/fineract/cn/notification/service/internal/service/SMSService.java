@@ -32,37 +32,37 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SMSService {
-
-    @Value("${smssender.accountSID}")
-    private String ACCOUNT_SID;
-
-    @Value("${smssender.authToken}")
-    private String AUTH_TOKEN;
-
-    @Value("${smssender.senderNumber}")
-    private String SENDERNUMBER;
-
-    private final Logger logger;
-
-    @Autowired
-    public SMSService(@Qualifier(ServiceConstants.LOGGER_NAME) Logger logger){
-        super();
-        this.logger = logger;
-    }
-    
-    public void configure(String accountSID,
-                          String authToken,
-                          String senderNumber){
-        ACCOUNT_SID = accountSID;
-        AUTH_TOKEN = authToken;
-        SENDERNUMBER = senderNumber;
-    }
-
-    public void sendSMS(String receiver, String template) {
-        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-        MessageCreator messageCreator
-            = Message.creator(ACCOUNT_SID,new PhoneNumber(receiver), new PhoneNumber(SENDERNUMBER), template);
-        Message message = messageCreator.create();
-        System.out.println(message.getSid());
-    }
+	
+	private final Logger logger;
+	@Value("${smssender.accountSID}")
+	private String ACCOUNT_SID;
+	@Value("${smssender.authToken}")
+	private String AUTH_TOKEN;
+	@Value("${smssender.senderNumber}")
+	private String SENDERNUMBER;
+	
+	@Autowired
+	public SMSService(@Qualifier(ServiceConstants.LOGGER_NAME) Logger logger) {
+		super();
+		this.logger = logger;
+	}
+	
+	public void configure(String accountSID,
+	                      String authToken,
+	                      String senderNumber) {
+		ACCOUNT_SID = accountSID;
+		AUTH_TOKEN = authToken;
+		SENDERNUMBER = senderNumber;
+	}
+	
+	public void sendSMS(String receiver, String template) {
+		this.logger.debug("sendSMS invoked");
+		Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+		MessageCreator messageCreator = Message.creator(ACCOUNT_SID,
+				new PhoneNumber(receiver),
+				new PhoneNumber(SENDERNUMBER),
+				template);
+		Message message = messageCreator.create();
+		System.out.println(message.getSid());
+	}
 }

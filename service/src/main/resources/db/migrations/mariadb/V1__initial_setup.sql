@@ -18,59 +18,39 @@
 --
 
 -- -----------------------------------------------------
--- Table sms_gateway_configurations
+-- Table wada_sms_gateway_configurations
 -- -----------------------------------------------------
-CREATE TABLE sms_gateway_configurations (
+CREATE TABLE wada_sms_gateway_configurations (
   id INT(11) NOT NULL AUTO_INCREMENT,
   identifier VARCHAR(45) NULL DEFAULT NULL,
   account_sid VARCHAR(255) NOT NULL,
   auth_token VARCHAR(255) NOT NULL,
-  sender_number VARCHAR(255) NOT NULL,
+  sender_number VARCHAR(45) NOT NULL,
   state VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (id))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+  PRIMARY KEY (id));
 
 -- -----------------------------------------------------
--- Table email_gateway_configurations
+-- Table wada_email_gateway_configurations
 -- -----------------------------------------------------
-CREATE TABLE email_gateway_configurations (
+CREATE TABLE wada_email_gateway_configurations (
   id INT(11) NOT NULL AUTO_INCREMENT,
   identifier VARCHAR(45) NULL DEFAULT NULL,
   host VARCHAR(45) NOT NULL,
   port VARCHAR(45) NOT NULL,
   username VARCHAR(45) NOT NULL,
-  app_password VARCHAR(45) NOT NULL,
-  protocol VARCHAR(45),
-  smtp_auth VARCHAR (45),
-  start_tls VARCHAR (45),
-  state VARCHAR(45),
-  PRIMARY KEY (id))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+  app_password VARCHAR(255) NOT NULL,
+  protocol VARCHAR(45)NOT NULL,
+  smtp_auth VARCHAR (45)NOT NULL,
+  start_tls VARCHAR (45)NOT NULL,
+  state VARCHAR(45)NOT NULL,
+  PRIMARY KEY (id));
 
 -- -----------------------------------------------------
--- Table sms_templates
+-- Table wada_templates
 -- -----------------------------------------------------
-CREATE TABLE sms_templates (
+CREATE TABLE wada_templates (
   id INT(11) NOT NULL AUTO_INCREMENT,
   identifier VARCHAR(45) NULL DEFAULT NULL,
   event VARCHAR(45) NULL DEFAULT NULL,
   url VARCHAR(255) NOT NULL,
-  created_on TIMESTAMP(3) null,
-  PRIMARY KEY (id))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
-
--- -----------------------------------------------------
--- Table email_templates
--- -----------------------------------------------------
-CREATE TABLE email_templates (
-  id INT(11) NOT NULL AUTO_INCREMENT,
-  identifier VARCHAR(45) NULL DEFAULT NULL,
-  service VARCHAR(45) NULL DEFAULT NULL,
-  url VARCHAR(255) NOT NULL,
-  created_on TIMESTAMP(3) null,
-  PRIMARY KEY (id))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
+  PRIMARY KEY (id));

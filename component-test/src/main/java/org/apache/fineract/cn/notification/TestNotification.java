@@ -52,24 +52,6 @@ import java.security.interfaces.RSAPrivateKey;
 		classes = {TestNotification.TestConfiguration.class})
 public class TestNotification extends SuiteTestEnvironment {
 	
-	@Configuration
-	@EnableEventRecording
-	@EnableFeignClients(basePackages = {"org.apache.fineract.cn.notification.api.v1.client"})
-	@RibbonClient(name = APP_NAME)
-	@ComponentScan({"org.apache.fineract.cn.notification.listener",
-	})
-	@Import({NotificationConfiguration.class})
-	public static class TestConfiguration {
-		public TestConfiguration() {
-			super();
-		}
-		
-		@Bean(name = LOGGER_NAME)
-		public Logger logger() {
-			return LoggerFactory.getLogger(LOGGER_NAME);
-		}
-	}
-	
 	@ClassRule
 	public final static TenantDataStoreContextTestRule tenantDataStoreContext = TenantDataStoreContextTestRule.forRandomTenantName(cassandraInitializer, mariaDBInitializer);
 	private static final String LOGGER_NAME = "test-logger";
@@ -78,18 +60,13 @@ public class TestNotification extends SuiteTestEnvironment {
 	@Autowired
 	@Qualifier(LOGGER_NAME)
 	Logger logger;
-	
 	private AutoUserContext userContext;
-	
 	@Autowired
 	private NotificationManager testSubject;
-	
 	@Autowired
 	private NotificationService notificationService;
-	
 	@Autowired
 	private EventRecorder eventRecorder;
-	
 	@Rule
 	public final TenantApplicationSecurityEnvironmentTestRule tenantApplicationSecurityEnvironment
 			= new TenantApplicationSecurityEnvironmentTestRule(testEnvironment, this::waitForInitialize);
@@ -116,6 +93,24 @@ public class TestNotification extends SuiteTestEnvironment {
 			return this.eventRecorder.wait(NotificationEventConstants.INITIALIZE, APP_VERSION);
 		} catch (final InterruptedException e) {
 			throw new IllegalStateException(e);
+		}
+	}
+	
+	@Configuration
+	@EnableEventRecording
+	@EnableFeignClients(basePackages = {"org.apache.fineract.cn.notification.api.v1.client"})
+	@RibbonClient(name = APP_NAME)
+	@ComponentScan({"org.apache.fineract.cn.notification.listener",
+	})
+	@Import({NotificationConfiguration.class})
+	public static class TestConfiguration {
+		public TestConfiguration() {
+			super();
+		}
+		
+		@Bean(name = LOGGER_NAME)
+		public Logger logger() {
+			return LoggerFactory.getLogger(LOGGER_NAME);
 		}
 	}
 }

@@ -16,21 +16,20 @@
      * specific language governing permissions and limitations
      * under the License.
      */
-
     package org.apache.fineract.cn.notification.service.listener;
 
     import org.apache.fineract.cn.customer.api.v1.CustomerEventConstants;
-import org.apache.fineract.cn.customer.api.v1.domain.ContactDetail;
-import org.apache.fineract.cn.customer.api.v1.domain.Customer;
-import org.apache.fineract.cn.lang.config.TenantHeaderFilter;
-import org.apache.fineract.cn.notification.service.ServiceConstants;
-import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jms.annotation.JmsListener;
-import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.stereotype.Component;
+    import org.apache.fineract.cn.customer.api.v1.domain.ContactDetail;
+    import org.apache.fineract.cn.customer.api.v1.domain.Customer;
+    import org.apache.fineract.cn.lang.config.TenantHeaderFilter;
+    import org.apache.fineract.cn.notification.service.ServiceConstants;
+    import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
+    import org.slf4j.Logger;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.beans.factory.annotation.Qualifier;
+    import org.springframework.jms.annotation.JmsListener;
+    import org.springframework.messaging.handler.annotation.Header;
+    import org.springframework.stereotype.Component;
 
     @SuppressWarnings("unused")
     @Component
@@ -51,24 +50,23 @@ import org.springframework.stereotype.Component;
 	    )
 	    public void customerCreatedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                                     final String payload) {
+		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		    this.logger.debug("{} has been invoked", "customerCreatedEvent");
 		
-		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
-		    this.logger.debug("This is the customer created: " + customer.getContactDetails().get(0));
-		
-		    if (customer.getContactDetails().size() > 0){
-			    customer.getContactDetails().forEach(contactDetail -> {
-				    if (contactDetail.getType().equals(ContactDetail.Type.PHONE)) {
-					    String receiverNumber = customer.getContactDetails().get(0).getValue();
-					    // TODO: pass receiver number for templating and localization.
-					    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been created");
-				    } else if (contactDetail.getType().equals(ContactDetail.Type.EMAIL)) {
-					    String emailAddress = customer.getContactDetails().get(0).getValue();
-					    // TODO: pass email address for templating and localization.
-					    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been created");
-				    }
-			    });
-		    }
+		    customer.getContactDetails().forEach(contact -> {
+			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
+				    String receiverNumber = contact.getValue();
+				    logger.debug("Recieved Number: " + receiverNumber + " Type: " + ContactDetail.Type.PHONE.toString());
+				    // TODO: Localize message
+				    // TODO: Pass message to template
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer :), Your account has been created");
+			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
+				    String emailAddress = contact.getValue();
+				    // TODO: Localize message
+				    // TODO: Pass message to template
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been created");
+			    }
+		    });
 	    }
 	
 	    @JmsListener(
@@ -79,15 +77,17 @@ import org.springframework.stereotype.Component;
 	                                      final String payload) {
 		    this.logger.debug("{} has been invoked", "customerUpdatedEvents");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
-				
+		
 		    customer.getContactDetails().forEach(contact -> {
-			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
-				    String receiverNumber = customer.getContactDetails().get(0).getValue();
-				    // TODO: templating and localization before sending.
+			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
+				    String receiverNumber = contact.getValue();
+				    // TODO: Localize message
+				    // TODO: Pass message to template
 				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Updated");
-			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
-				    String emailAddress = customer.getContactDetails().get(0).getValue();
-				    // TODO: pass email address for templating and localization.
+			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
+				    String emailAddress = contact.getValue();
+				    // TODO: Localize message
+				    // TODO: Pass message to template
 				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been Updated");
 			    }
 		    });
@@ -102,18 +102,17 @@ import org.springframework.stereotype.Component;
 		    this.logger.debug("{} has been invoked", "customerActivatedEvent");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		
-		    if (customer.getCurrentState().equalsIgnoreCase("ACTIVE")) {
-			    customer.getContactDetails().forEach(contact -> {
-				    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
-					    String receiverNumber = customer.getContactDetails().get(0).getValue();
-					    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Activated");
-				    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
-					    String emailAddress = customer.getContactDetails().get(0).getValue();
-					    // TODO: pass email address for templating and localization.
-					    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been Activated");
-				    }
-			    });
-		    }
+		    customer.getContactDetails().forEach(contact -> {
+			    if (contact.getType().equalsIgnoreCase(ContactDetail.Type.PHONE.toString())) {
+				    String receiverNumber = contact.getValue();
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Activated");
+			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
+				    String emailAddress = contact.getValue();
+				    // TODO: Localize message
+				    // TODO: Pass message to template
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been Activated");
+			    }
+		    });
 	    }
 	
 	    @JmsListener(
@@ -124,21 +123,20 @@ import org.springframework.stereotype.Component;
 	                                    final String payload) {
 		    this.logger.debug("{} has been invoked", "customerLockedEvent");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
-		    this.logger.debug("This is the customer created: " + customer.hashCode());
 		
-		    if (customer.getCurrentState().equalsIgnoreCase("LOCKED")) {
-			    customer.getContactDetails().forEach(contact -> {
-				    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
-					    String receiverNumber = customer.getContactDetails().get(0).getValue();
-					    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Locked");
-				    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
-					    String emailAddress = customer.getContactDetails().get(0).getValue();
-					    // TODO: pass email address for templating and localization.
-					    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been Locked");
-				    }
-			    });
-		    }
+		    customer.getContactDetails().forEach(contact -> {
+			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
+				    String receiverNumber = contact.getValue();
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Locked");
+			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
+				    String emailAddress = contact.getValue();
+				    // TODO: Localize message
+				    // TODO: Pass message to template
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been Locked");
+			    }
+		    });
 	    }
+	
 	
 	    @JmsListener(
 			    destination = CustomerEventConstants.DESTINATION,
@@ -148,18 +146,18 @@ import org.springframework.stereotype.Component;
 	                                      final String payload) {
 		    this.logger.debug("{} has been invoked", "customerUnlockedEvent");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
-		    this.logger.debug("This is the customer created: " + customer.hashCode());
-		    
-			    customer.getContactDetails().forEach(contact -> {
-				    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
-					    String receiverNumber = customer.getContactDetails().get(0).getValue();
-					    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Unlocked");
-				    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
-					    String emailAddress = customer.getContactDetails().get(0).getValue();
-					    // TODO: pass email address for templating and localization.
-					    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been Unlocked");
-				    }
-			    });
+		
+		    customer.getContactDetails().forEach(contact -> {
+			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
+				    String receiverNumber = contact.getValue();
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Unlocked");
+			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
+				    String emailAddress = contact.getValue();
+				    // TODO: Localize message
+				    // TODO: Pass message to template
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been Unlocked");
+			    }
+		    });
 	    }
 	
 	    @JmsListener(
@@ -170,20 +168,18 @@ import org.springframework.stereotype.Component;
 	                                    final String payload) {
 		    this.logger.debug("{} has been invoked", "customerClosedEvent");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
-		    this.logger.debug("This is the customer created: " + customer.hashCode());
 		
-		    if (customer.getCurrentState().equalsIgnoreCase("CLOSED")) {
-			    customer.getContactDetails().forEach(contact -> {
-				    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
-					    String receiverNumber = customer.getContactDetails().get(0).getValue();
-					    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Closed");
-				    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
-					    String emailAddress = customer.getContactDetails().get(0).getValue();
-					    // TODO: pass email address for templating and localization.
-					    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been Closed");
-				    }
-			    });
-		    }
+		    customer.getContactDetails().forEach(contact -> {
+			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
+				    String receiverNumber = contact.getValue();
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Closed");
+			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
+				    String emailAddress = contact.getValue();
+				    // TODO: Localize message
+				    // TODO: Pass message to template
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been Closed");
+			    }
+		    });
 	    }
 	
 	    @JmsListener(
@@ -192,21 +188,19 @@ import org.springframework.stereotype.Component;
 	    )
 	    public void customerReopenedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                                      final String payload) {
-		    this.logger.debug("{} has been invoked", "customerReopenedEvent");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
-		    this.logger.debug("This is the customer created: " + customer.hashCode());
-		    if (customer.getCurrentState().equalsIgnoreCase("LOCKED")) {
-			    customer.getContactDetails().forEach(contact -> {
-				    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
-					    String receiverNumber = customer.getContactDetails().get(0).getValue();
-					    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been reopened");
-				    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
-					    String emailAddress = customer.getContactDetails().get(0).getValue();
-					    // TODO: pass email address for templating and localization.
-					    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account Reopened", "Dear Valued Customer, Your account has been reopened");
-				    }
-			    });
-		    }
+		
+		    customer.getContactDetails().forEach(contact -> {
+			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
+				    String receiverNumber = contact.getValue();
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been reopened");
+			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
+				    String emailAddress = contact.getValue();
+				    // TODO: Localize message
+				    // TODO: Pass message to template
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account Reopened", "Dear Valued Customer, Your account has been reopened");
+			    }
+		    });
 	    }
 	
 	    @JmsListener(
@@ -217,18 +211,19 @@ import org.springframework.stereotype.Component;
 	                                           final String payload) {
 		    this.logger.debug("{} has been invoked", "contactDetailsChangedEvent");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
-		    this.logger.debug("This is the customer created: " + customer.hashCode());
-			    customer.getContactDetails().forEach(contact -> {
-				    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
-					    String receiverNumber = customer.getContactDetails().get(0).getValue();
-					    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your contact has been changed succesfully");
-				    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
-					    String emailAddress = customer.getContactDetails().get(0).getValue();
-					    // TODO: pass email address for templating and localization.
-					    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress,
-							    "Contact Details Changed",
-							    "Dear Valued Customer, Your contact has been changed succesfully");
-				    }
-			    });
-		    }
+		
+		    customer.getContactDetails().forEach(contact -> {
+			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
+				    String receiverNumber = contact.getValue();
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your contact has been changed succesfully");
+			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
+				    String emailAddress = contact.getValue();
+				    // TODO: Localize message
+				    // TODO: Pass message to template
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress,
+						    "Contact Details Changed",
+						    "Dear Valued Customer, Your contact has been changed succesfully");
+			    }
+		    });
+	    }
     }

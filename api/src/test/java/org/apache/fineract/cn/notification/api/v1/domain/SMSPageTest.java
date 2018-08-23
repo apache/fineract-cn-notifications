@@ -18,48 +18,44 @@
  */
 package org.apache.fineract.cn.notification.api.v1.domain;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.fineract.cn.test.domain.ValidationTest;
 import org.apache.fineract.cn.test.domain.ValidationTestCase;
 import org.junit.runners.Parameterized;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
-public class SMSConfigurationTest extends ValidationTest<SMSConfiguration> {
+public class SMSPageTest extends ValidationTest<SMSPage> {
 	
-	public SMSConfigurationTest(ValidationTestCase<SMSConfiguration> testCase) {
+	SMSConfiguration smsConfiguration;
+	
+	public SMSPageTest(ValidationTestCase<SMSPage> testCase) {
 		super(testCase);
 	}
 	
 	@Parameterized.Parameters
 	public static Collection testCases() {
 		final Collection<ValidationTestCase> ret = new ArrayList<>();
-		ret.add(new ValidationTestCase<SMSConfiguration>("basicCase")
+		ret.add(new ValidationTestCase<SMSPage>("basicCase")
 				.adjustment(x -> {
 				})
-				.valid(false));
-		ret.add(new ValidationTestCase<SMSConfiguration>("nullIdentifier")
-				.adjustment(x -> x.setIdentifier(null))
-				.valid(false));
-		ret.add(new ValidationTestCase<SMSConfiguration>("tooShortIdentifier")
-				.adjustment(x -> x.setIdentifier("z"))
-				.valid(false));
-		ret.add(new ValidationTestCase<SMSConfiguration>("LongToken")
-				.adjustment(x -> x.getAccountSid())
-				.valid(false));
-		ret.add(new ValidationTestCase<SMSConfiguration>("tooLongSID")
-				.adjustment(x -> x.getAccountSid())
-				.valid(false));
+				.valid(true));
+		ret.add(new ValidationTestCase<SMSPage>("getSMSConfiguration")
+				.adjustment(x -> x.getSmsConfigurations())
+				.valid(true));
 		return ret;
 	}
 	
-	@Override
-	protected SMSConfiguration createValidTestSubject() {
-		return SMSConfiguration.create("test",
-				RandomStringUtils.randomAlphanumeric(300),
-				RandomStringUtils.randomAlphanumeric(300),
+	protected SMSPage createValidTestSubject() {
+		SMSPage smsPage = new SMSPage();
+		smsConfiguration = new SMSConfiguration();
+		SMSConfiguration.create("EmailTest",
+				"dfghjklpytredfghjkloi8u7y6trfdghjklop",
+				"ghjklp098iuyhgbnmkoiuytgtrdcfvghj",
 				"ACTIVE",
 				"SMS");
+		smsPage.setSmsConfigurations(Arrays.asList(smsConfiguration));
+		return smsPage;
 	}
 }

@@ -18,74 +18,48 @@
  */
 package org.apache.fineract.cn.notification;
 
-import org.apache.fineract.cn.customer.api.v1.domain.Customer;
 import org.apache.fineract.cn.notification.api.v1.client.NotificationManager;
 import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
-import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
 import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
-import org.apache.fineract.cn.notification.util.DomainObjectGenerator;
 import org.apache.fineract.cn.test.listener.EventRecorder;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Matchers;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Optional;
 
 public class TestEmailService extends TestNotification {
 	
+	private final String configIdentifier = "Gmail";
 	@Autowired
 	private NotificationService notificationService;
-	
 	@Autowired
 	private NotificationManager testSubject;
-	
-	private final String configIdentifier = "Gmail";
-	
 	@Autowired
 	private EventRecorder eventRecorder;
-
+	
 	public TestEmailService() {
 		super();
 	}
 	
 	@Test
-	public void sendEmail(){
+	public void sendEmail() {
 		this.logger.info("Send Email Notification");
 		this.notificationService.sendEmail("fineractcnnotificationdemo@gmail.com ",
 				"egraham15@alustudent.com",
 				"Talk is cheap, show me the code",
-				"Component test  \n");
+				"Component test  \n Next Line");
 	}
 	
 	@Test
-	public void shouldCreateEmailConfigurationEntity() throws InterruptedException {
+	public void shouldRetrieveEmailConfigurationEntity() {
 		logger.info("Create and retrieve Email Gateway configuration");
-		final EmailConfiguration emailConfiguration = DomainObjectGenerator.emailConfiguration();
-		this.testSubject.createEmailConfiguration(emailConfiguration);
-		
-		Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, emailConfiguration.getIdentifier()));
-		
-		final EmailConfiguration createdSample = this.testSubject.findEmailConfigurationByIdentifier(emailConfiguration.getIdentifier());
-		Assert.assertEquals(emailConfiguration, createdSample);
+		EmailConfiguration sampleRetrieved = this.testSubject.findEmailConfigurationByIdentifier(configIdentifier);
+		Assert.assertNotNull(sampleRetrieved);
+		Assert.assertEquals(sampleRetrieved.getIdentifier(), configIdentifier);
 	}
 	
 	@Test
-	public void retrieveEmailConfiguration(){
-		logger.info("Retrieving stored config from repositiory");
-		EmailConfiguration emailConfiguration = this.testSubject.findEmailConfigurationByIdentifier(configIdentifier);
-		
-		Assert.assertNotNull(emailConfiguration);
-		Assert.assertEquals(emailConfiguration.getIdentifier(),configIdentifier);
-	}
-	
-	private void prepareMocks(final String customerIdentifier) {
-		Mockito
-				.doAnswer(invocation -> Optional.of(new Customer()))
-				.when(this.notificationService)
-				.findCustomer(Matchers.eq(customerIdentifier),
-						tenantDataStoreContext.getTenantName());
-		
+	public void checkEmailConfigurationEntityExist() {
+		logger.info("Email Gateway configuration Exist");
+		Assert.assertTrue(this.notificationService.emailConfigurationExists(configIdentifier));
 	}
 }

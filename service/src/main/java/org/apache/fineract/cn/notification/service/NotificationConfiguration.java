@@ -62,72 +62,74 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableServiceException
 @EnableJms
 @EnableFeignClients(
-        clients = {
-                CustomerManager.class,
-                IdentityManager.class
-        }
+		clients = {
+				CustomerManager.class,
+				IdentityManager.class
+		}
 )
 @ComponentScan({
-        "org.apache.fineract.cn.notification.service.rest",
-        "org.apache.fineract.cn.notification.service.listener",
-        "org.apache.fineract.cn.notification.service.internal.service",
-        "org.apache.fineract.cn.notification.service.internal.repository",
-        "org.apache.fineract.cn.notification.service.internal.command.handler",
+		"org.apache.fineract.cn.notification.service.rest",
+		"org.apache.fineract.cn.notification.service.listener",
+		"org.apache.fineract.cn.notification.service.internal.service",
+		"org.apache.fineract.cn.notification.service.internal.repository",
+		"org.apache.fineract.cn.notification.service.internal.command.handler",
 }
 )
 @EnableJpaRepositories({
-	    "org.apache.fineract.cn.notification.service.internal.repository"
+		"org.apache.fineract.cn.notification.service.internal.repository"
 })
 @EntityScan(basePackages = "org.apache.fineract.cn.notification.service.internal.repository")
 public class NotificationConfiguration extends WebMvcConfigurerAdapter {
-
-  private final Environment environment;
-  public NotificationConfiguration(Environment environment) {
-    super();
-    this.environment = environment;
-  }
-
-  @Override
-  public void configurePathMatch(final PathMatchConfigurer configurer) {
-    configurer.setUseSuffixPatternMatch(Boolean.FALSE);
-  }
-
-  @Bean
-  public PooledConnectionFactory jmsFactory() {
-    PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory();
-    ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
-    activeMQConnectionFactory.setBrokerURL(this.environment.getProperty("activemq.brokerUrl", "vm://localhost?broker.persistent=false"));
-    pooledConnectionFactory.setConnectionFactory(activeMQConnectionFactory);
-    return pooledConnectionFactory;
-  }
-
-  @Bean
-  public JmsListenerContainerFactory jmsListenerContainerFactory(PooledConnectionFactory jmsFactory) {
-    DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-    factory.setPubSubDomain(true);
-    factory.setConnectionFactory(jmsFactory);
-    factory.setErrorHandler(ex -> {
-      loggerBean().error(ex.getCause().toString());
-    });
-    factory.setConcurrency(this.environment.getProperty("activemq.concurrency", "3-10"));
-    return factory;
-  }
-
-  @Bean
-  public JmsTemplate jmsTemplate(ApplicationName applicationName, PooledConnectionFactory jmsFactory) {
-    ActiveMQTopic activeMQTopic = new ActiveMQTopic(applicationName.toString());
-    JmsTemplate jmsTemplate = new JmsTemplate();
-    jmsTemplate.setPubSubDomain(true);
-    jmsTemplate.setConnectionFactory(jmsFactory);
-    jmsTemplate.setDefaultDestination(activeMQTopic);
-    return jmsTemplate;
-  }
-
-  @Bean(
-          name = {ServiceConstants.LOGGER_NAME}
-  )
-  public Logger loggerBean() {
-    return LoggerFactory.getLogger(ServiceConstants.LOGGER_NAME);
-  }
-
+	
+	private final Environment environment;
+	
+	public NotificationConfiguration(Environment environment) {
+		super();
+		this.environment = environment;
+	}
+	
+	
+	@Override
+	public void configurePathMatch(final PathMatchConfigurer configurer) {
+		configurer.setUseSuffixPatternMatch(Boolean.FALSE);
+	}
+	
+	@Bean
+	public PooledConnectionFactory jmsFactory() {
+		PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory();
+		ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
+		activeMQConnectionFactory.setBrokerURL(this.environment.getProperty("activemq.brokerUrl", "vm://localhost?broker.persistent=falseac"));
+		pooledConnectionFactory.setConnectionFactory(activeMQConnectionFactory);
+		return pooledConnectionFactory;
+	}
+	
+	@Bean
+	public JmsListenerContainerFactory jmsListenerContainerFactory(PooledConnectionFactory jmsFactory) {
+		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+		factory.setPubSubDomain(true);
+		factory.setConnectionFactory(jmsFactory);
+		factory.setErrorHandler(ex -> {
+			loggerBean().error(ex.getCause().toString());
+		});
+		factory.setConcurrency(this.environment.getProperty("activemq.concurrency", "1-1"));
+		return factory;
+	}
+	
+	@Bean
+	public JmsTemplate jmsTemplate(ApplicationName applicationName, PooledConnectionFactory jmsFactory) {
+		ActiveMQTopic activeMQTopic = new ActiveMQTopic(applicationName.toString());
+		JmsTemplate jmsTemplate = new JmsTemplate();
+		jmsTemplate.setPubSubDomain(true);
+		jmsTemplate.setConnectionFactory(jmsFactory);
+		jmsTemplate.setDefaultDestination(activeMQTopic);
+		return jmsTemplate;
+	}
+	
+	@Bean(
+			name = {ServiceConstants.LOGGER_NAME}
+	)
+	public Logger loggerBean() {
+		return LoggerFactory.getLogger(ServiceConstants.LOGGER_NAME);
+	}
+	
 }

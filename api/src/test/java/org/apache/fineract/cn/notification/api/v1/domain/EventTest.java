@@ -18,7 +18,6 @@
  */
 package org.apache.fineract.cn.notification.api.v1.domain;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.fineract.cn.test.domain.ValidationTest;
 import org.apache.fineract.cn.test.domain.ValidationTestCase;
 import org.junit.runners.Parameterized;
@@ -26,40 +25,30 @@ import org.junit.runners.Parameterized;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class SMSConfigurationTest extends ValidationTest<SMSConfiguration> {
+public class EventTest extends ValidationTest<Event> {
 	
-	public SMSConfigurationTest(ValidationTestCase<SMSConfiguration> testCase) {
+	public EventTest(ValidationTestCase<Event> testCase) {
 		super(testCase);
 	}
 	
 	@Parameterized.Parameters
 	public static Collection testCases() {
 		final Collection<ValidationTestCase> ret = new ArrayList<>();
-		ret.add(new ValidationTestCase<SMSConfiguration>("basicCase")
+		ret.add(new ValidationTestCase<Event>("basicCase")
 				.adjustment(x -> {
 				})
-				.valid(false));
-		ret.add(new ValidationTestCase<SMSConfiguration>("nullIdentifier")
-				.adjustment(x -> x.setIdentifier(null))
-				.valid(false));
-		ret.add(new ValidationTestCase<SMSConfiguration>("tooShortIdentifier")
-				.adjustment(x -> x.setIdentifier("z"))
-				.valid(false));
-		ret.add(new ValidationTestCase<SMSConfiguration>("LongToken")
-				.adjustment(x -> x.getAccountSid())
-				.valid(false));
-		ret.add(new ValidationTestCase<SMSConfiguration>("tooLongSID")
-				.adjustment(x -> x.getAccountSid())
-				.valid(false));
+				.valid(true));
+		ret.add(new ValidationTestCase<Event>("nullIdentifier")
+				.adjustment(x -> x.getIdentifier().equals("customerCreated"))
+				.valid(true));
+		ret.add(new ValidationTestCase<Event>("Is Enabled")
+				.adjustment(x -> x.isEnabled())
+				.valid(true));
 		return ret;
 	}
 	
 	@Override
-	protected SMSConfiguration createValidTestSubject() {
-		return SMSConfiguration.create("test",
-				RandomStringUtils.randomAlphanumeric(300),
-				RandomStringUtils.randomAlphanumeric(300),
-				"ACTIVE",
-				"SMS");
+	protected Event createValidTestSubject() {
+		return new Event("customerCreated", true);
 	}
 }

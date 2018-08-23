@@ -24,7 +24,8 @@ import org.apache.fineract.cn.command.annotation.CommandLogLevel;
 import org.apache.fineract.cn.command.annotation.EventEmitter;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
-import org.apache.fineract.cn.notification.service.internal.command.SMSConfigurationCommand;
+import org.apache.fineract.cn.notification.service.internal.command.CreateSMSConfigurationCommand;
+import org.apache.fineract.cn.notification.service.internal.mapper.SMSConfigurationMapper;
 import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationEntity;
 import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,28 +34,23 @@ import org.springframework.transaction.annotation.Transactional;
 @SuppressWarnings("unused")
 @Aggregate
 public class SMSConfigurationAggregate {
-
-  private final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository;
-
-  @Autowired
-  public SMSConfigurationAggregate(SMSGatewayConfigurationRepository smsGatewayConfigurationRepository) {
-    super();
-    this.smsGatewayConfigurationRepository = smsGatewayConfigurationRepository;
-  }
-
-  @CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
-  @Transactional
-  @EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_SMS_CONFIGURATION)
-  public String createSMSConfiguration(final SMSConfigurationCommand smsConfigurationCommand) {
-    SMSConfiguration smsConfiguration = smsConfigurationCommand.getSMSConfiguration();
-    final SMSGatewayConfigurationEntity entity = new SMSGatewayConfigurationEntity();
-    entity.setIdentifier(smsConfiguration.getIdentifier());
-    entity.setAccountSid(smsConfiguration.getAccountSid());
-    entity.setAuth_token(smsConfiguration.getAuth_token());
-    entity.setSender_number(smsConfiguration.getSender_number());
-    entity.setState(smsConfiguration.getSate());
-    this.smsGatewayConfigurationRepository.save(entity);
-
-    return smsConfiguration.getIdentifier();
-  }
+	
+	private final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository;
+	
+	@Autowired
+	public SMSConfigurationAggregate(SMSGatewayConfigurationRepository smsGatewayConfigurationRepository) {
+		super();
+		this.smsGatewayConfigurationRepository = smsGatewayConfigurationRepository;
+	}
+	
+	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
+	@Transactional
+	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_SMS_CONFIGURATION)
+	public String createSMSConfiguration(final CreateSMSConfigurationCommand createSMSConfigurationCommand) {
+		SMSConfiguration smsConfiguration = createSMSConfigurationCommand.getSMSConfiguration();
+		final SMSGatewayConfigurationEntity entity = SMSConfigurationMapper.map(smsConfiguration);
+		this.smsGatewayConfigurationRepository.save(entity);
+		
+		return smsConfiguration.getIdentifier();
+	}
 }

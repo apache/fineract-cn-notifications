@@ -47,7 +47,7 @@ public class EmailConfigurationTest extends ValidationTest<EmailConfiguration> {
 		return ret;
 	}
 	
-	@Override
+	
 	protected EmailConfiguration createValidTestSubject() {
 		return EmailConfiguration.create("EmailTest",
 				"smtp.google.com",
@@ -58,4 +58,6 @@ public class EmailConfigurationTest extends ValidationTest<EmailConfiguration> {
 				"true",
 				"ACTIVE");
 	}
+	
+	
 }

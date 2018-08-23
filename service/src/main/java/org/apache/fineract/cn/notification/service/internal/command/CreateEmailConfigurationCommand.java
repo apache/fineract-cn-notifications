@@ -20,23 +20,23 @@ package org.apache.fineract.cn.notification.service.internal.command;
 
 import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
 
-public class EmailConfigurationCommand {
-
-  private final EmailConfiguration emailConfiguration;
-
-  public EmailConfigurationCommand(final EmailConfiguration emailConfiguration) {
-    super();
-    this.emailConfiguration = emailConfiguration;
-  }
-
-  public EmailConfiguration getEmailConfiguration() {
-    return this.emailConfiguration;
-  }
-
-  @Override
-  public String toString() {
-    return "EmailConfigurationCommand{"
-            + "EmailConfiguration=" + emailConfiguration.getIdentifier()
-            + '}';
-  }
+public class CreateEmailConfigurationCommand {
+	
+	private final EmailConfiguration emailConfiguration;
+	
+	public CreateEmailConfigurationCommand(final EmailConfiguration emailConfiguration) {
+		super();
+		this.emailConfiguration = emailConfiguration;
+	}
+	
+	public EmailConfiguration getEmailConfiguration() {
+		return this.emailConfiguration;
+	}
+	
+	@Override
+	public String toString() {
+		return "CreateEmailConfigurationCommand{"
+				+ "EmailConfiguration=" + emailConfiguration.getIdentifier()
+				+ '}';
+	}
 }
