@@ -18,9 +18,13 @@
  */
 package org.apache.fineract.cn.notification;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.fineract.cn.notification.api.v1.client.ConfigurationNotFoundException;
 import org.apache.fineract.cn.notification.api.v1.client.NotificationManager;
 import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
+import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
 import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
+import org.apache.fineract.cn.notification.util.DomainObjectGenerator;
 import org.apache.fineract.cn.test.listener.EventRecorder;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,7 +36,7 @@ public class TestEmailService extends TestNotification {
 	@Autowired
 	private NotificationService notificationService;
 	@Autowired
-	private NotificationManager testSubject;
+	private NotificationManager notificationManager;
 	@Autowired
 	private EventRecorder eventRecorder;
 	
@@ -52,9 +56,27 @@ public class TestEmailService extends TestNotification {
 	@Test
 	public void shouldRetrieveEmailConfigurationEntity() {
 		logger.info("Create and retrieve Email Gateway configuration");
-		EmailConfiguration sampleRetrieved = this.testSubject.findEmailConfigurationByIdentifier(configIdentifier);
+		EmailConfiguration sampleRetrieved = this.notificationManager.findEmailConfigurationByIdentifier(configIdentifier);
 		Assert.assertNotNull(sampleRetrieved);
 		Assert.assertEquals(sampleRetrieved.getIdentifier(), configIdentifier);
+	}
+	
+	@Test
+	public void shouldCreateNewEmailConfigurationEntity() throws InterruptedException{
+		logger.info("Create Email Gateway configuration");
+		this.notificationManager.createEmailConfiguration(DomainObjectGenerator.emailConfiguration());
+		
+		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION,EmailConfiguration.class));
+	}
+	
+	@Test
+	public void emailConfigurationNotFound() throws Exception {
+		try {
+			this.notificationManager.findEmailConfigurationByIdentifier(RandomStringUtils.randomAlphanumeric(8));
+			Assert.fail();
+		} catch (final ConfigurationNotFoundException ex) {
+			logger.info("Expected cause" + ex.getCause());
+		}
 	}
 	
 	@Test

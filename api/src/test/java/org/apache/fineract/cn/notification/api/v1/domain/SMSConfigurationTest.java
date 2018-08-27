@@ -46,10 +46,10 @@ public class SMSConfigurationTest extends ValidationTest<SMSConfiguration> {
 				.adjustment(x -> x.setIdentifier("z"))
 				.valid(false));
 		ret.add(new ValidationTestCase<SMSConfiguration>("LongToken")
-				.adjustment(x -> x.getAccountSid())
+				.adjustment(x -> x.getAccount_sid())
 				.valid(false));
 		ret.add(new ValidationTestCase<SMSConfiguration>("tooLongSID")
-				.adjustment(x -> x.getAccountSid())
+				.adjustment(x -> x.getAccount_sid())
 				.valid(false));
 		return ret;
 	}

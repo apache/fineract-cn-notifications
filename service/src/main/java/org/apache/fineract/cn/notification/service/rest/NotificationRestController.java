@@ -23,6 +23,7 @@ import org.apache.fineract.cn.anubis.annotation.Permittable;
 import org.apache.fineract.cn.command.gateway.CommandGateway;
 import org.apache.fineract.cn.lang.ServiceException;
 import org.apache.fineract.cn.notification.api.v1.PermittableGroupIds;
+import org.apache.fineract.cn.notification.api.v1.client.ConfigurationNotFoundException;
 import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
@@ -108,7 +109,8 @@ public class NotificationRestController {
 	)
 	public
 	@ResponseBody
-	ResponseEntity<SMSConfiguration> findSMSConfigurationByIdentifier(@PathVariable("identifier") final String identifier) {
+	ResponseEntity<SMSConfiguration> findSMSConfigurationByIdentifier(@PathVariable("identifier") final String identifier)
+	throws ConfigurationNotFoundException {
 		return this.notificationService.findSMSConfigurationByIdentifier(identifier)
 				.map(ResponseEntity::ok)
 				.orElseThrow(() -> ServiceException.notFound("SMS Gateway Configuration with identifier " + identifier + " doesn't exist."));

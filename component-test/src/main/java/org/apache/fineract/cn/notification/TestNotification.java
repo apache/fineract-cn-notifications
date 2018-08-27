@@ -20,10 +20,8 @@ package org.apache.fineract.cn.notification;
 
 import org.apache.fineract.cn.anubis.test.v1.TenantApplicationSecurityEnvironmentTestRule;
 import org.apache.fineract.cn.api.context.AutoUserContext;
-import org.apache.fineract.cn.notification.api.v1.client.NotificationManager;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
 import org.apache.fineract.cn.notification.service.NotificationConfiguration;
-import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
 import org.apache.fineract.cn.test.fixture.TenantDataStoreContextTestRule;
 import org.apache.fineract.cn.test.listener.EnableEventRecording;
 import org.apache.fineract.cn.test.listener.EventRecorder;
@@ -62,10 +60,6 @@ public class TestNotification extends SuiteTestEnvironment {
 	Logger logger;
 	private AutoUserContext userContext;
 	@Autowired
-	private NotificationManager testSubject;
-	@Autowired
-	private NotificationService notificationService;
-	@Autowired
 	private EventRecorder eventRecorder;
 	@Rule
 	public final TenantApplicationSecurityEnvironmentTestRule tenantApplicationSecurityEnvironment
@@ -101,6 +95,8 @@ public class TestNotification extends SuiteTestEnvironment {
 	@EnableFeignClients(basePackages = {"org.apache.fineract.cn.notification.api.v1.client"})
 	@RibbonClient(name = APP_NAME)
 	@ComponentScan({"org.apache.fineract.cn.notification.listener",
+			"org.apache.fineract.cn.notification.service.internal.service",
+			"org.apache.fineract.cn.notification.service.internal.service.helperservice"
 	})
 	@Import({NotificationConfiguration.class})
 	public static class TestConfiguration {

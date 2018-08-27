@@ -53,6 +53,7 @@ public class EmailConfigurationTest extends ValidationTest<EmailConfiguration> {
 				"smtp.google.com",
 				"123",
 				"example",
+				"egraham",
 				"asdfaegw4t3rwg5w",
 				"true",
 				"true",

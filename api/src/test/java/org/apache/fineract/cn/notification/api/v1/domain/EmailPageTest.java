@@ -55,6 +55,7 @@ public class EmailPageTest extends ValidationTest<EmailPage> {
 				"smtp.google.com",
 				"123",
 				"example",
+				"ebez",
 				"asdfaegw4t3rwg5w",
 				"true",
 				"true",
