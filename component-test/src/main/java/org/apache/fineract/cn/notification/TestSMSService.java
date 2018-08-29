@@ -47,8 +47,8 @@ public class TestSMSService extends TestNotification {
 	@Test
 	public void sendSMS() {
 		this.logger.info("Send SMS Notification");
-		this.notificationService.sendSMS("+23058409206",
-				"Talk is cheap show me the code");
+//		this.notificationService.sendSMS("+23058409206",
+//				"Talk is cheap show me the code");
 	}
 	
 	@Test
