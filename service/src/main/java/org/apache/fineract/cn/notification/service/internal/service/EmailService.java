@@ -35,6 +35,7 @@ public class EmailService {
 	
 	private Logger logger;
 	
+	
 	@Autowired
 	public EmailService(@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger) {
 		super();
@@ -61,10 +62,9 @@ public class EmailService {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setHost("smtp.gmail.com");
 		mailSender.setPort(587);
-		
 		mailSender.setUsername("fineractcnnotificationdemo@gmail.com");
-		mailSender.setPassword("pnuugpwmcibipdpw");
-		//mailSender.setPassword("fineractcnnotification");
+		//mailSender.setPassword("pnuugpwmcibipdpw");
+		mailSender.setPassword("fineractcnnotification");
 		
 		Properties properties = mailSender.getJavaMailProperties();
 		properties.put(ServiceConstants.MAIL_TRANSPORT_PROTOCOL_PROPERTY,

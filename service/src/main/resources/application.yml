@@ -29,11 +29,14 @@ spring:
       username:
       password:
       properties:
+        debug: true
         mail:
           smtp:
             auth: true
             starttls:
               enable: true
+
+
 
 eureka:
   client:
