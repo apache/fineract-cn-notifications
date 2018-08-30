@@ -50,7 +50,7 @@ public class TestEmailService extends TestNotification {
 		this.notificationService.sendEmail("fineractcnnotificationdemo@gmail.com ",
 				"egraham15@alustudent.com",
 				"Talk is cheap, show me the code",
-				"Component test  \n Next Line");
+				"Component test \n Next Line\n\n Best Regards\nYour MFI");
 	}
 	
 	@Test

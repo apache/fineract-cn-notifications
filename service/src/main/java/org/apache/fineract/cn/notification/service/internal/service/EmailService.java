@@ -64,6 +64,7 @@ public class EmailService {
 		
 		mailSender.setUsername("fineractcnnotificationdemo@gmail.com");
 		mailSender.setPassword("pnuugpwmcibipdpw");
+		//mailSender.setPassword("fineractcnnotification");
 		
 		Properties properties = mailSender.getJavaMailProperties();
 		properties.put(ServiceConstants.MAIL_TRANSPORT_PROTOCOL_PROPERTY,

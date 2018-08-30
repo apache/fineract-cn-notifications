@@ -56,15 +56,14 @@
 		    customer.getContactDetails().forEach(contact -> {
 			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
 				    String receiverNumber = contact.getValue();
-				    logger.debug("Recieved Number: " + receiverNumber + " Type: " + ContactDetail.Type.PHONE.toString());
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer :), Your account has been created");
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer,\n\nYour account has been created\n\nBest Regards,\n Your MFI");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been created");
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer,\n\n Your account has been created\n\nBest Regards,\nMFI");
 			    }
 		    });
 	    }
@@ -83,12 +82,12 @@
 				    String receiverNumber = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Updated");
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer,\n\nYour account has been Updated\\n\\nBest Regards,\\n Your MFI\"");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been Updated");
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer,\n\nYour account has been Updated\n\nBest Regards,\n Your MFI");
 			    }
 		    });
 	    }
@@ -105,12 +104,12 @@
 		    customer.getContactDetails().forEach(contact -> {
 			    if (contact.getType().equalsIgnoreCase(ContactDetail.Type.PHONE.toString())) {
 				    String receiverNumber = contact.getValue();
-				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Activated");
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer,\n\n Your account has been Activated\n\nBest Regards,\n Your MFI");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been Activated");
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer,\n\nYour account has been Activated\n\nBest Regards,\n Your MFI");
 			    }
 		    });
 	    }
@@ -127,12 +126,12 @@
 		    customer.getContactDetails().forEach(contact -> {
 			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
 				    String receiverNumber = contact.getValue();
-				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Locked");
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer,\n\nYour account has been Locked");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been Locked");
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer,\n\nYour account has been Locked\n\nBest Regards,\n Your MFI");
 			    }
 		    });
 	    }
@@ -150,12 +149,12 @@
 		    customer.getContactDetails().forEach(contact -> {
 			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
 				    String receiverNumber = contact.getValue();
-				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Unlocked");
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer,\n\nYour account has been Unlocked");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been Unlocked");
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer,\n\nYour account has been Unlocked\n\nBest Regards,\n Your MFI");
 			    }
 		    });
 	    }
@@ -172,12 +171,12 @@
 		    customer.getContactDetails().forEach(contact -> {
 			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
 				    String receiverNumber = contact.getValue();
-				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been Closed");
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer,\n\nYour account has been Closed\n\nBest Regards\nYour MFI");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer, Your account has been Closed");
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account created", "Dear Valued Customer,\n\nYour account has been Closed\n\nBest Regards,\n Your MFI");
 			    }
 		    });
 	    }
@@ -193,12 +192,12 @@
 		    customer.getContactDetails().forEach(contact -> {
 			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
 				    String receiverNumber = contact.getValue();
-				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your account has been reopened");
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer,\n\nYour account has been reopened");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account Reopened", "Dear Valued Customer, Your account has been reopened");
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress, "Account Reopened", "Dear Valued Customer,\n\nYour account has been reopened\n\nBest Regards,\n Your MFI");
 			    }
 		    });
 	    }
@@ -215,14 +214,14 @@
 		    customer.getContactDetails().forEach(contact -> {
 			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
 				    String receiverNumber = contact.getValue();
-				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer, Your contact has been changed succesfully");
+				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer,\n\nYour contact has been changed succesfully\n\nBest Regards,\n Your MFI");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
 				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress,
 						    "Contact Details Changed",
-						    "Dear Valued Customer, Your contact has been changed succesfully");
+						    "Dear Valued Customer,\n\nYour contact has been changed successfully\n\nBest Regards\nMFI");
 			    }
 		    });
 	    }

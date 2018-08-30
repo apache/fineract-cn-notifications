@@ -46,7 +46,6 @@ public class PortfolioEventListener {
 		super();
 		this.logger = logger;
 		this.notificationService = notificationService;
-		logger.info("Porfolio initiated");
 	}
 	
 	@JmsListener(
@@ -65,6 +64,8 @@ public class PortfolioEventListener {
 	)
 	public void onDeny(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                   final String payload) {
+		this.notificationService.sendSMS("+23058409206",
+				"Dear Valued Customer,\n\nYour loan request has been denied\n\nBest Regards\nYour MFI");
 	}
 	
 	@JmsListener(
@@ -74,6 +75,9 @@ public class PortfolioEventListener {
 	)
 	public void onApprove(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                      final String payload) {
+		logger.info(payload);
+		this.notificationService.sendSMS("+23058409206",
+				"Dear Valued Customer,\n\nYour loan has been Approved and waiting disbursal\n\nBest Regards\nYour MFI");
 	}
 	
 	@JmsListener(
@@ -83,6 +87,9 @@ public class PortfolioEventListener {
 	)
 	public void onDisburse(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                       final String payload) {
+		logger.info(payload);
+		this.notificationService.sendSMS("+23058409206",
+			"Dear Valued Customer,\n\nYour loan has been disbursed\n\nBest Regards\nYour MFI");
 	}
 	
 	@JmsListener(
