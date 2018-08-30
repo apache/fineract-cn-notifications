@@ -30,6 +30,7 @@ import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.apache.fineract.cn.notification.service.internal.command.CreateEmailConfigurationCommand;
 import org.apache.fineract.cn.notification.service.internal.command.CreateSMSConfigurationCommand;
 import org.apache.fineract.cn.notification.service.internal.command.InitializeServiceCommand;
+import org.apache.fineract.cn.notification.service.internal.command.PostSMSCommand;
 import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,7 +126,8 @@ public class NotificationRestController {
 	)
 	public
 	@ResponseBody
-	ResponseEntity<EmailConfiguration> findEmailConfigurationByIdentifier(@PathVariable("identifier") final String identifier) {
+	ResponseEntity<EmailConfiguration> findEmailConfigurationByIdentifier(@PathVariable("identifier") final String identifier)
+			throws ConfigurationNotFoundException {
 		return this.notificationService.findEmailConfigurationByIdentifier(identifier)
 				.map(ResponseEntity::ok)
 				.orElseThrow(() -> ServiceException.notFound("Email Gateway Configuration with identifier " + identifier + " doesn't exist."));

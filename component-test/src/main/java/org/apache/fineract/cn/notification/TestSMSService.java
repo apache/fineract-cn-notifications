@@ -18,8 +18,14 @@
  */
 package org.apache.fineract.cn.notification;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.fineract.cn.api.util.NotFoundException;
+import org.apache.fineract.cn.customer.api.v1.client.CustomerNotFoundException;
+import org.apache.fineract.cn.notification.api.v1.client.ConfigurationNotFoundException;
 import org.apache.fineract.cn.notification.api.v1.client.NotificationManager;
+import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
+import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
 import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
 import org.apache.fineract.cn.notification.util.DomainObjectGenerator;
 import org.apache.fineract.cn.test.listener.EventRecorder;
@@ -33,7 +39,7 @@ public class TestSMSService extends TestNotification {
 	private NotificationService notificationService;
 	
 	@Autowired
-	private NotificationManager testSubject;
+	private NotificationManager notificationManager;
 	
 	@Autowired
 	private EventRecorder eventRecorder;
@@ -44,20 +50,45 @@ public class TestSMSService extends TestNotification {
 		super();
 	}
 	
+	
+	@Test
+	public void shouldCreateNewSMSConfigurationEntity() throws InterruptedException{
+		logger.info("Create SMS Gateway configuration");
+		this.notificationManager.createSMSConfiguration(DomainObjectGenerator.smsConfiguration());
+		
+		eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, SMSConfiguration.class);
+	}
+	
+	@Test
+	public void shouldTriggerCustomerCreated() throws InterruptedException{
+		logger.info("Create SMS Gateway configuration");
+		
+		eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, SMSConfiguration.class);
+	}
+	
+	@Test(expected = NotFoundException.class)
+	public void smsConfigurationNotFound() throws CustomerNotFoundException {
+		logger.info("SMS Gateway configuration Not Found");
+		try {
+			this.notificationManager.findSMSConfigurationByIdentifier(RandomStringUtils.randomAlphanumeric(8));
+		} catch (final ConfigurationNotFoundException ex) {
+			logger.info("Error Asserted");
+		}
+	}
 	@Test
 	public void sendSMS() {
 		this.logger.info("Send SMS Notification");
 //		this.notificationService.sendSMS("+23058409206",
-//				"Dear Valued Customer\nTalk is cheap show me the code\n\nBest Regards\nYour MFI");
+//				"Dear Valued Customer\n\nTalk is cheap show me the code\n\nBest Regards\nYour MFI");
 	}
 	
 	@Test
 	public void shouldCreateAndRetrieveSMSConfigurationEntity() {
 		logger.info("Create and Retrieve SMS Gateway configuration");
 		final SMSConfiguration smsConfiguration = DomainObjectGenerator.smsConfiguration();
-		this.testSubject.createSMSConfiguration(smsConfiguration);
+		this.notificationManager.createSMSConfiguration(smsConfiguration);
 		
-		SMSConfiguration sampleRetrieved = this.testSubject.findSMSConfigurationByIdentifier(configIdentifier);
+		SMSConfiguration sampleRetrieved = this.notificationManager.findSMSConfigurationByIdentifier(configIdentifier);
 		Assert.assertNotNull(sampleRetrieved);
 		Assert.assertEquals(sampleRetrieved.getIdentifier(), configIdentifier);
 	}
@@ -67,5 +98,4 @@ public class TestSMSService extends TestNotification {
 		logger.info("SMS Gateway configuration Exist");
 		Assert.assertTrue(this.notificationService.smsConfigurationExists(configIdentifier));
 	}
-	
 }

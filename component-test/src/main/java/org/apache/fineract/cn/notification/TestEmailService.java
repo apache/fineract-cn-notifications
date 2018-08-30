@@ -19,6 +19,8 @@
 package org.apache.fineract.cn.notification;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.fineract.cn.api.util.NotFoundException;
+import org.apache.fineract.cn.customer.api.v1.client.CustomerNotFoundException;
 import org.apache.fineract.cn.notification.api.v1.client.ConfigurationNotFoundException;
 import org.apache.fineract.cn.notification.api.v1.client.NotificationManager;
 import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
@@ -50,7 +52,7 @@ public class TestEmailService extends TestNotification {
 		this.notificationService.sendEmail("fineractcnnotificationdemo@gmail.com ",
 				"egraham15@alustudent.com",
 				"Talk is cheap, show me the code",
-				"Component test \n Next Line\n\n Best Regards\nYour MFI");
+				"Dear Valued Customer,\n\nComponent test sample message\n\nBest Regards\nYour MFI");
 	}
 	
 	@Test
@@ -66,16 +68,16 @@ public class TestEmailService extends TestNotification {
 		logger.info("Create Email Gateway configuration");
 		this.notificationManager.createEmailConfiguration(DomainObjectGenerator.emailConfiguration());
 		
-		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION,EmailConfiguration.class));
+		eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION,EmailConfiguration.class);
 	}
 	
-	@Test
-	public void emailConfigurationNotFound() throws Exception {
+	@Test(expected = NotFoundException.class)
+	public void emailConfigurationNotFound() throws CustomerNotFoundException {
+		logger.info("Configuration not found");
 		try {
 			this.notificationManager.findEmailConfigurationByIdentifier(RandomStringUtils.randomAlphanumeric(8));
-			Assert.fail();
 		} catch (final ConfigurationNotFoundException ex) {
-			logger.info("Expected cause" + ex.getCause());
+			logger.info("Error Asserted");
 		}
 	}
 	

@@ -16,13 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.api.v1.client;
+package org.apache.fineract.cn.notification.service.internal.command;
 
-import org.apache.fineract.cn.api.util.NotFoundException;
-
-public final class ConfigurationNotFoundException extends NotFoundException {
+public class PostSMSCommand {
 	
-	public ConfigurationNotFoundException(String reason) {
-		super(reason);
+	private final String identifier;
+	
+	public PostSMSCommand(final String identifier) {
+		super();
+		this.identifier = identifier;
+	}
+	
+	public String getIdentifier() {
+		return this.identifier;
+	}
+	
+	@Override
+	public String toString() {
+		return "PostSMSCommand{"
+				+ "PostSMS=" + identifier
+				+ '}';
 	}
 }

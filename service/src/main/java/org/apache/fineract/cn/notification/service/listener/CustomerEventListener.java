@@ -147,10 +147,10 @@
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		
 		    customer.getContactDetails().forEach(contact -> {
-			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
+			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
 				    String receiverNumber = contact.getValue();
 				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer,\n\nYour account has been Unlocked");
-			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
+			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
@@ -169,10 +169,10 @@
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		
 		    customer.getContactDetails().forEach(contact -> {
-			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
+			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
 				    String receiverNumber = contact.getValue();
 				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer,\n\nYour account has been Closed\n\nBest Regards\nYour MFI");
-			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
+			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
@@ -190,10 +190,10 @@
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		
 		    customer.getContactDetails().forEach(contact -> {
-			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
+			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
 				    String receiverNumber = contact.getValue();
 				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer,\n\nYour account has been reopened");
-			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
+			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
@@ -212,16 +212,63 @@
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		
 		    customer.getContactDetails().forEach(contact -> {
-			    if (contact.getType().equals(ContactDetail.Type.PHONE)) {
+			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
 				    String receiverNumber = contact.getValue();
-				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer,\n\nYour contact has been changed succesfully\n\nBest Regards,\n Your MFI");
-			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL)) {
+				    notificationService.sendSMS(receiverNumber,
+						    "Dear Valued Customer," +
+								    "\n\nYour contact has been changed successfully" +
+								    "\nNew Contact: "+receiverNumber+
+								    "\n\nBest Regards," +
+								    "\n Your MFI");
+			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com", emailAddress,
-						    "Contact Details Changed",
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
+						    emailAddress,
+						    "Contact Details Changed" +
+								    "New Contact: "+emailAddress,
 						    "Dear Valued Customer,\n\nYour contact has been changed successfully\n\nBest Regards\nMFI");
+			    }
+		    });
+	    }
+	
+	    @JmsListener(
+			    destination = CustomerEventConstants.DESTINATION,
+			    selector = CustomerEventConstants.SELECTOR_PUT_ADDRESS
+	    )
+	    public void addressChangedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                                    final String payload) {
+		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
+		
+		    customer.getContactDetails().forEach(contact -> {
+			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
+				    String receiverNumber = contact.getValue();
+				    notificationService.sendSMS(receiverNumber,
+						    "Dear Valued Customer," +
+								    "\n\nYour address has been changed successfully" +
+								    "\nStreet: "+customer.getAddress().getStreet()+
+								    "\nCity: "+customer.getAddress().getCity()+
+								    "\nState: "+customer.getAddress().getRegion()+
+								    "\nCountry: "+customer.getAddress().getCountry()+
+								    "\n\nBest Regards," +
+								    "\n Your MFI");
+			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
+				    String emailAddress = contact.getValue();
+				    // TODO: Localize message
+				    // TODO: Pass message to template
+				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
+						    emailAddress,
+						    "Contact Details Changed" +
+								    "New Contact: "+emailAddress,
+						    "Dear Valued Customer," +
+								    "\n\nYour address has been changed successfully" +
+								    "\nStreet: "+customer.getAddress().getStreet()+
+								    "\nCity: "+customer.getAddress().getCity()+
+								    "\nState: "+customer.getAddress().getRegion()+
+								    "\nCountry: "+customer.getAddress().getCountry()+
+								    "\n\nBest Regards" +
+								    "\nMFI");
 			    }
 		    });
 	    }
