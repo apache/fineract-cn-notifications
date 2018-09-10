@@ -19,13 +19,13 @@
 package org.apache.fineract.cn.notification.service.internal.command;
 
 public class InitializeServiceCommand {
-
-  public InitializeServiceCommand() {
-    super();
-  }
-
-  @Override
-  public String toString() {
-    return "InitializeServiceCommand{}";
-  }
+	
+	public InitializeServiceCommand() {
+		super();
+	}
+	
+	@Override
+	public String toString() {
+		return "InitializeServiceCommand{}";
+	}
 }

@@ -18,25 +18,23 @@
  */
 package org.apache.fineract.cn.notification.service.internal.command;
 
-import org.apache.fineract.cn.notification.api.v1.domain.Sample;
-
-public class SampleCommand {
-
-  private final Sample sample;
-
-  public SampleCommand(final Sample sample) {
-    super();
-    this.sample = sample;
-  }
-
-  public Sample sample() {
-    return this.sample;
-  }
-
-  @Override
-  public String toString() {
-    return "SampleCommand{" +
-        "sample=" + sample.getIdentifier() +
-        '}';
-  }
+public class PostSMSCommand {
+	
+	private final String identifier;
+	
+	public PostSMSCommand(final String identifier) {
+		super();
+		this.identifier = identifier;
+	}
+	
+	public String getIdentifier() {
+		return this.identifier;
+	}
+	
+	@Override
+	public String toString() {
+		return "PostSMSCommand{"
+				+ "PostSMS=" + identifier
+				+ '}';
+	}
 }

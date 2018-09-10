@@ -29,22 +29,22 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @Component
 public class MigrationEventListener {
-
-  private final EventRecorder eventRecorder;
-
-  @Autowired
-  public MigrationEventListener(@SuppressWarnings("SpringJavaAutowiringInspection") final EventRecorder eventRecorder) {
-    super();
-    this.eventRecorder = eventRecorder;
-  }
-
-  @JmsListener(
-      subscription = NotificationEventConstants.DESTINATION,
-      destination = NotificationEventConstants.DESTINATION,
-      selector = NotificationEventConstants.SELECTOR_INITIALIZE
-  )
-  public void onInitialization(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-                               final String payload) {
-    this.eventRecorder.event(tenant, NotificationEventConstants.INITIALIZE, payload, String.class);
-  }
+	
+	private final EventRecorder eventRecorder;
+	
+	@Autowired
+	public MigrationEventListener(@SuppressWarnings("SpringJavaAutowiringInspection") final EventRecorder eventRecorder) {
+		super();
+		this.eventRecorder = eventRecorder;
+	}
+	
+	@JmsListener(
+			subscription = NotificationEventConstants.DESTINATION,
+			destination = NotificationEventConstants.DESTINATION,
+			selector = NotificationEventConstants.SELECTOR_INITIALIZE
+	)
+	public void onInitialization(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	                             final String payload) {
+		this.eventRecorder.event(tenant, NotificationEventConstants.INITIALIZE, payload, String.class);
+	}
 }

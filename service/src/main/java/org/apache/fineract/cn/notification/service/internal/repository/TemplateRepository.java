@@ -18,11 +18,12 @@
  */
 package org.apache.fineract.cn.notification.service.internal.repository;
 
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface SampleJpaEntityRepository extends JpaRepository<SampleJpaEntity, Long> {
-  Optional<SampleJpaEntity> findByIdentifier(String identifier);
+public interface TemplateRepository extends JpaRepository<TemplateEntity, Long> {
+	Optional<TemplateEntity> findByIdentifier(String identifier);
 }
