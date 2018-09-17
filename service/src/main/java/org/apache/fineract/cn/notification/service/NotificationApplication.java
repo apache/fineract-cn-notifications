@@ -21,12 +21,12 @@ package org.apache.fineract.cn.notification.service;
 import org.springframework.boot.SpringApplication;
 
 public class NotificationApplication {
-
-  public NotificationApplication() {
-    super();
-  }
-
-  public static void main(String[] args) {
-    SpringApplication.run(NotificationConfiguration.class, args);
-  }
+	
+	public NotificationApplication() {
+		super();
+	}
+	
+	public static void main(String[] args) {
+		SpringApplication.run(NotificationConfiguration.class, args);
+	}
 }

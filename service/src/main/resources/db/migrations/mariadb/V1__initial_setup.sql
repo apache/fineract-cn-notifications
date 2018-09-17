@@ -18,55 +18,39 @@
 --
 
 -- -----------------------------------------------------
--- Table `fineract-cn-notification`.`email_gateway_configurations`
+-- Table wada_sms_gateway_configurations
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fineract-cn-notification`.`email_gateway_configurations` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `identifer` VARCHAR(45) NULL DEFAULT NULL,
-  `host` VARCHAR(45) NOT NULL,
-  `port` VARCHAR(45) NOT NULL,
-  `username` VARCHAR(45) NOT NULL,
-  `app_id` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
-
+CREATE TABLE wada_sms_gateway_configurations (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  identifier VARCHAR(45) NULL DEFAULT NULL,
+  account_sid VARCHAR(255) NOT NULL,
+  auth_token VARCHAR(255) NOT NULL,
+  sender_number VARCHAR(45) NOT NULL,
+  state VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (id));
 
 -- -----------------------------------------------------
--- Table `fineract-cn-notification`.`sms_gateway_configurations`
+-- Table wada_email_gateway_configurations
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fineract-cn-notification`.`sms_gateway_configurations` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `identifier` VARCHAR(45) NULL DEFAULT NULL,
-  `accountsid` VARCHAR(255) NOT NULL,
-  `auth_token` VARCHAR(255) NOT NULL,
-  `option` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
-
+CREATE TABLE wada_email_gateway_configurations (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  identifier VARCHAR(45) NULL DEFAULT NULL,
+  host VARCHAR(45) NOT NULL,
+  port VARCHAR(45) NOT NULL,
+  username VARCHAR(45) NOT NULL,
+  app_password VARCHAR(255) NOT NULL,
+  protocol VARCHAR(45)NOT NULL,
+  smtp_auth VARCHAR (45)NOT NULL,
+  start_tls VARCHAR (45)NOT NULL,
+  state VARCHAR(45)NOT NULL,
+  PRIMARY KEY (id));
 
 -- -----------------------------------------------------
--- Table `fineract-cn-notification`.`templates`
+-- Table wada_templates
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `fineract-cn-notification`.`templates` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
-
--- ------------------------------------------------------
-
-CREATE TABLE sample (
-  id BIGINT NOT NULL AUTO_INCREMENT,
-  identifier VARCHAR(8) NOT NULL,
-  payload VARCHAR(512) NULL,
-  CONSTRAINT notification_pk PRIMARY KEY (id)
-);
-
-CREATE TABLE template_sample (
-  id BIGINT NOT NULL AUTO_INCREMENT,
-  identifier VARCHAR(8) NOT NULL,
-  payload VARCHAR(512) NULL,
-  CONSTRAINT template_sample_pk PRIMARY KEY (id)
-);
+CREATE TABLE wada_templates (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  identifier VARCHAR(45) NULL DEFAULT NULL,
+  event VARCHAR(45) NULL DEFAULT NULL,
+  url VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id));

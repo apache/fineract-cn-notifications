@@ -18,50 +18,51 @@
  */
 package org.apache.fineract.cn.notification.service.internal.command.handler;
 
-import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
-import org.apache.fineract.cn.notification.service.ServiceConstants;
-import org.apache.fineract.cn.notification.service.internal.command.InitializeServiceCommand;
-import javax.sql.DataSource;
 import org.apache.fineract.cn.command.annotation.Aggregate;
 import org.apache.fineract.cn.command.annotation.CommandHandler;
 import org.apache.fineract.cn.command.annotation.CommandLogLevel;
 import org.apache.fineract.cn.command.annotation.EventEmitter;
 import org.apache.fineract.cn.lang.ApplicationName;
 import org.apache.fineract.cn.mariadb.domain.FlywayFactoryBean;
+import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
+import org.apache.fineract.cn.notification.service.ServiceConstants;
+import org.apache.fineract.cn.notification.service.internal.command.InitializeServiceCommand;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
+
 @SuppressWarnings({
-    "unused"
+		"unused"
 })
 @Aggregate
 public class MigrationAggregate {
-
-  private final Logger logger;
-  private final DataSource dataSource;
-  private final FlywayFactoryBean flywayFactoryBean;
-  private final ApplicationName applicationName;
-
-  @Autowired
-  public MigrationAggregate(@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger,
-                            final DataSource dataSource,
-                            final FlywayFactoryBean flywayFactoryBean,
-                            final ApplicationName applicationName) {
-    super();
-    this.logger = logger;
-    this.dataSource = dataSource;
-    this.flywayFactoryBean = flywayFactoryBean;
-    this.applicationName = applicationName;
-  }
-
-  @CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
-  @Transactional
-  @EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.INITIALIZE)
-  public String initialize(final InitializeServiceCommand initializeServiceCommand) {
-    this.logger.debug("Start service migration.");
-    this.flywayFactoryBean.create(this.dataSource).migrate();
-    return this.applicationName.getVersionString();
-  }
+	
+	private final Logger logger;
+	private final DataSource dataSource;
+	private final FlywayFactoryBean flywayFactoryBean;
+	private final ApplicationName applicationName;
+	
+	@Autowired
+	public MigrationAggregate(@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger,
+	                          final DataSource dataSource,
+	                          final FlywayFactoryBean flywayFactoryBean,
+	                          final ApplicationName applicationName) {
+		super();
+		this.logger = logger;
+		this.dataSource = dataSource;
+		this.flywayFactoryBean = flywayFactoryBean;
+		this.applicationName = applicationName;
+	}
+	
+	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
+	@Transactional
+	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.INITIALIZE)
+	public String initialize(final InitializeServiceCommand initializeServiceCommand) {
+		this.logger.debug("Start service migration.");
+		this.flywayFactoryBean.create(this.dataSource).migrate();
+		return this.applicationName.getVersionString();
+	}
 }

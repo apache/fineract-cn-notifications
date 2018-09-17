@@ -18,6 +18,11 @@
  */
 package org.apache.fineract.cn.notification.api.v1.client;
 
-@SuppressWarnings("WeakerAccess")
-public class IamATeapotException extends RuntimeException {
+import org.apache.fineract.cn.api.util.NotFoundException;
+
+public final class ConfigurationNotFoundException extends NotFoundException {
+	
+	public ConfigurationNotFoundException(String reason) {
+		super(reason);
+	}
 }

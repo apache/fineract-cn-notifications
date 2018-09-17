@@ -20,6 +20,5 @@ package org.apache.fineract.cn.notification.api.v1;
 
 @SuppressWarnings("unused")
 public interface PermittableGroupIds {
-  String SAMPLE_MANAGEMENT = "notification__v1__samples";
-  String SELF_MANAGEMENT = "notification__v1__self";
+	String SELF_MANAGEMENT = "notification__v1__self";
 }
