@@ -47,8 +47,8 @@ import java.security.interfaces.RSAPrivateKey;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-		classes = {TestNotification.TestConfiguration.class})
-public class TestNotification extends SuiteTestEnvironment {
+		classes = {AbstractNotificationTest.TestConfiguration.class})
+public class AbstractNotificationTest extends SuiteTestEnvironment {
 	
 	@ClassRule
 	public final static TenantDataStoreContextTestRule tenantDataStoreContext = TenantDataStoreContextTestRule.forRandomTenantName(cassandraInitializer, mariaDBInitializer);
@@ -65,13 +65,13 @@ public class TestNotification extends SuiteTestEnvironment {
 	public final TenantApplicationSecurityEnvironmentTestRule tenantApplicationSecurityEnvironment
 			= new TenantApplicationSecurityEnvironmentTestRule(testEnvironment, this::waitForInitialize);
 	
-	public TestNotification() {
+	public AbstractNotificationTest() {
 		super();
 	}
 	
 	@Before
 	public void prepTest() {
-		userContext = tenantApplicationSecurityEnvironment.createAutoUserContext(TestNotification.TEST_USER);
+		userContext = tenantApplicationSecurityEnvironment.createAutoUserContext(AbstractNotificationTest.TEST_USER);
 		final RSAPrivateKey tenantPrivateKey = tenantApplicationSecurityEnvironment.getSystemSecurityEnvironment().tenantPrivateKey();
 		logger.info("tenantPrivateKey = {}", tenantPrivateKey);
 	}

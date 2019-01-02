@@ -32,7 +32,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestEmailService extends TestNotification {
+public class TestEmailService extends AbstractNotificationTest {
 	
 	private final String configIdentifier = "Gmail";
 	@Autowired
