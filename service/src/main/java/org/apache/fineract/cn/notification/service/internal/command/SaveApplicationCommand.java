@@ -16,7 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.api.v1.client;
+package org.apache.fineract.cn.notification.service.internal.command;
 
-public final class ConfigurationNotFoundException extends RuntimeException {
+public class SaveApplicationCommand {
+
+  private final String tenantIdentifier;
+  private final String applicationIdentifier;
+
+  public SaveApplicationCommand(String tenantIdentifier, final String applicationIdentifier) {
+    super();
+    this.tenantIdentifier = tenantIdentifier;
+    this.applicationIdentifier = applicationIdentifier;
+  }
+
+  public String getTenantIdentifier() {
+    return tenantIdentifier;
+  }
+
+  public String getApplicationIdentifier() {
+    return this.applicationIdentifier;
+  }
+
+  @Override
+  public String toString() {
+    return "SaveApplicationCommand{" +
+            "tenantIdentifier='" + tenantIdentifier + '\'' +
+            ", applicationIdentifier='" + applicationIdentifier + '\'' +
+            '}';
+  }
 }

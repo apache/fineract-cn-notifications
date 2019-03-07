@@ -64,6 +64,7 @@ dependencies {
             [group: 'org.apache.fineract.cn', name: 'cassandra', version: versions.frameworkcassandra],
             [group: 'org.apache.fineract.cn', name: 'mariadb', version: versions.frameworkmariadb],
             [group: 'org.apache.fineract.cn', name: 'command', version: versions.frameworkcommand],
+            [group: 'org.apache.fineract.cn.permitted-feign-client', name: 'library', version: versions.frameworkpermittedfeignclient],
             [group: 'org.hibernate', name: 'hibernate-validator', version: versions.validator]
     )
 }

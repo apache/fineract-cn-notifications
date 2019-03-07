@@ -18,6 +18,7 @@
  */
 package org.apache.fineract.cn.notification.service;
 
+import org.apache.fineract.cn.notification.service.internal.config.NotificationConfiguration;
 import org.springframework.boot.SpringApplication;
 
 public class NotificationApplication {

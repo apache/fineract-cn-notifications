@@ -28,11 +28,11 @@ import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 public class DomainObjectGenerator {
 	
 	public static EmailConfiguration emailConfiguration() {
-		EmailConfiguration emailConfiguration = EmailConfiguration.create("emailtest",
-				"smtp.google.com",
-				"1233",
+		EmailConfiguration emailConfiguration = EmailConfiguration.create(RandomStringUtils.randomAlphanumeric(14),
+				"smtp.example.com",
+				"8443",
 				"smtp",
-				"example",
+				"user@example.com",
 				RandomStringUtils.randomAlphanumeric(16),
 				"true",
 				"true",
@@ -42,11 +42,11 @@ public class DomainObjectGenerator {
 	
 	public static SMSConfiguration smsConfiguration() {
 		SMSConfiguration smsConfiguration = SMSConfiguration.create(
-				RandomStringUtils.randomAlphanumeric(8),
-				RandomStringUtils.randomAlphanumeric(16),
-				RandomStringUtils.randomAlphanumeric(16),
-				"+309483932",
-				"ACTIVE");
+				RandomStringUtils.randomAlphanumeric(10),
+				RandomStringUtils.randomAlphanumeric(24),
+				RandomStringUtils.randomAlphanumeric(24),
+				"+233 27 309 4932",
+				"DEACTIVATED");
 		
 		return smsConfiguration;
 	}

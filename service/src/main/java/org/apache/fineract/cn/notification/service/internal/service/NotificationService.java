@@ -19,100 +19,70 @@
 package org.apache.fineract.cn.notification.service.internal.service;
 
 import org.apache.fineract.cn.customer.api.v1.domain.Customer;
-import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
-import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
-import org.apache.fineract.cn.notification.service.internal.mapper.EmailConfigurationMapper;
-import org.apache.fineract.cn.notification.service.internal.mapper.SMSConfigurationMapper;
-import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationRepository;
-import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationRepository;
-import org.apache.fineract.cn.notification.service.internal.service.helperservice.CustomerAdaptor;
-import org.apache.fineract.cn.notification.service.internal.service.helperservice.NotificationAuthentication;
+import org.apache.fineract.cn.notification.service.internal.identity.CustomerPermittedClient;
+import org.apache.fineract.cn.notification.service.internal.identity.NotificationAuthentication;
+import org.apache.fineract.cn.notification.service.internal.service.externalServiceClients.CustomerService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class NotificationService {
+	
 	private final SMSService smsService;
 	private final EmailService emailService;
 	
-	private final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository;
-	private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
-	
 	private final NotificationAuthentication notificationAuthentication;
-	private final CustomerAdaptor customerAdaptor;
+	private final CustomerService customerService;
 	private final Logger logger;
-	
-	private final String configureIdentifier = "Twilio";
+	private final CustomerPermittedClient customerPermittedClient;
 	
 	@Autowired
-	public NotificationService(final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository,
-	                           final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository,
-	                           final CustomerAdaptor customerAdaptor,
+	
+	public NotificationService(final CustomerService customerService,
 	                           final SMSService smsService,
 	                           final EmailService emailService,
 	                           final NotificationAuthentication notificationAuthentication,
+	                           final CustomerPermittedClient customerPermittedClient,
 	                           @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger
 	) {
 		super();
-		this.smsGatewayConfigurationRepository = smsGatewayConfigurationRepository;
-		this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
-		this.customerAdaptor = customerAdaptor;
+		this.customerService = customerService;
 		this.smsService = smsService;
 		this.emailService = emailService;
 		this.notificationAuthentication = notificationAuthentication;
+		this.customerPermittedClient = customerPermittedClient;
 		this.logger = logger;
-		this.logger.debug("{} has been initiated", this.getClass());
-	}
-	
-	
-	public List<SMSConfiguration> findAllActiveSMSConfigurationEntities() {
-		return SMSConfigurationMapper.map(this.smsGatewayConfigurationRepository.findAll());
-	}
-	
-	public List<EmailConfiguration> findAllActiveEmailConfigurationEntities() {
-		return EmailConfigurationMapper.map(this.emailGatewayConfigurationRepository.findAll());
-	}
-	
-	public Optional<SMSConfiguration> findSMSConfigurationByIdentifier(final String identifier) {
-		return this.smsGatewayConfigurationRepository.findByIdentifier(identifier).map(SMSConfigurationMapper::map);
-	}
-	
-	
-	public Optional<EmailConfiguration> findEmailConfigurationByIdentifier(final String identifier) {
-		return this.emailGatewayConfigurationRepository.findByIdentifier(identifier).map(EmailConfigurationMapper::map);
 	}
 	
 	public Optional<Customer> findCustomer(final String customerIdentifier, String tenant) {
-		notificationAuthentication.authenticate(tenant);
-		return this.customerAdaptor.findCustomer(customerIdentifier);
+		return notificationAuthentication.getCustomer(tenant,customerIdentifier);
+		//return Optional.of(this.customerPermittedClient.findCustomer(customerIdentifier));
 	}
 	
-	public Boolean smsConfigurationExists(final String identifier) {
-		return this.smsGatewayConfigurationRepository.existsByIdentifier(identifier);
+	//SMS Related Operations
+	public SMSService setNewSMSService(SMSService smsService, String configurationId){
+		smsService.customConfiguration(configurationId);
+		return smsService;
 	}
 	
-	public Boolean emailConfigurationExists(final String identifier) {
-		return this.emailGatewayConfigurationRepository.existsByIdentifier(identifier);
+	public String sendSMS(String receiver, String template) {
+		if (!this.smsService.isConfigured) this.smsService.configureSMSGatewayWithActiveConfiguration();
+		return this.smsService.sendSMS(receiver, template);
 	}
 	
-	public void configureSMSSender() {
-		SMSConfiguration configuration = findSMSConfigurationByIdentifier(configureIdentifier).get();
-		smsService.configure(configuration.getAccount_sid(),
-				configuration.getAuth_token(),
-				configuration.getSender_number());
+	//Email Related Operations
+	public String sendEmail(String from, String to, String subject, String message) {
+		if (!emailService.isConfigured) emailService.configureEmailGatewayWithActiveConfiguration();
+		return this.emailService.sendEmail(from, to, subject, message);
 	}
 	
-	public void sendSMS(String receiver, String template) {
-		this.smsService.sendSMS(receiver, template);
-	}
-	
-	public void sendEmail(String from, String to, String subject, String message) {
-		this.emailService.sendEmail(from, to, subject, message);
+	public EmailService setNewEmailService(EmailService emailService, String configurationId){
+		emailService.customConfiguration(configurationId);
+		return emailService;
 	}
 }

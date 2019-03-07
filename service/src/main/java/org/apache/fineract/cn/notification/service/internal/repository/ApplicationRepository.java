@@ -16,26 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.service;
+package org.apache.fineract.cn.notification.service.internal.repository;
 
-public interface ServiceConstants {
-	String LOGGER_NAME = "notification-logger";
-	
-	String CUSTOMER_SERVICE_NAME ="customer-v1";
-	String ACCOUNT_SERVICE_NAME ="account-v1";
-	String PORTFOLIO_SERVICE_NAME ="porfolio-v1";
-	
-	String MAIL_TRANSPORT_PROTOCOL_PROPERTY = "mail.transport.protocol";
-	String MAIL_TRANSPORT_PROTOCOL_VALUE = "smtp";
-	String MAIL_SMTP_AUTH_PROPERTY = "mail.smtp.auth";
-	String MAIL_SMTP_AUTH_VALUE = "true";
-	String MAIL_SMTP_STARTTLS_ENABLE_PROPERTY = "mail.smtp.starttls.enable";
-	String MAIL_SMTP_STARTTLS_ENABLE_VALUE = "true";
-	
-	String GOOGLE_MAIL_SERVER = "smtp.gmail.com";
-	String YAHOO_MAIL_SERVER = "smtp.mail.yahoo.com";
-	
-	String MAIL_SMTP_TIMEOUT_PROPERTY = "";
-	String MAIL_SMTP_TIMEOUT_VALUE = "";
-	
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.LockModeType;
+import java.util.Optional;
+
+@Repository
+public interface ApplicationRepository extends JpaRepository<ApplicationEntity, Long> {
+  @Lock(LockModeType.PESSIMISTIC_WRITE)
+  void deleteByTenantIdentifierAndApplicationIdentifier(String tenantIdentifier, String applicationIdentifier);
+  
+  Optional<ApplicationEntity> findByTenantIdentifierAndApplicationIdentifier(String tenantIdentifier, String applicationIdentifier);
 }

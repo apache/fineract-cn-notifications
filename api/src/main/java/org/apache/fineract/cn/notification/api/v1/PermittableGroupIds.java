@@ -21,4 +21,9 @@ package org.apache.fineract.cn.notification.api.v1;
 @SuppressWarnings("unused")
 public interface PermittableGroupIds {
 	String SELF_MANAGEMENT = "notification__v1__self";
+	
+	static String forApplication(final String serviceName) {
+		return serviceName.replace("-", "__") + "__customer";
+	}
+	static String customerGroupEndPoint = "notification__v1__customer__v1";
 }

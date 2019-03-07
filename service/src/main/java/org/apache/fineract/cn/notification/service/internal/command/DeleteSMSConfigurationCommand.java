@@ -16,26 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.service;
+package org.apache.fineract.cn.notification.service.internal.command;
 
-public interface ServiceConstants {
-	String LOGGER_NAME = "notification-logger";
+public class DeleteSMSConfigurationCommand {
 	
-	String CUSTOMER_SERVICE_NAME ="customer-v1";
-	String ACCOUNT_SERVICE_NAME ="account-v1";
-	String PORTFOLIO_SERVICE_NAME ="porfolio-v1";
+	private final String identifier;
 	
-	String MAIL_TRANSPORT_PROTOCOL_PROPERTY = "mail.transport.protocol";
-	String MAIL_TRANSPORT_PROTOCOL_VALUE = "smtp";
-	String MAIL_SMTP_AUTH_PROPERTY = "mail.smtp.auth";
-	String MAIL_SMTP_AUTH_VALUE = "true";
-	String MAIL_SMTP_STARTTLS_ENABLE_PROPERTY = "mail.smtp.starttls.enable";
-	String MAIL_SMTP_STARTTLS_ENABLE_VALUE = "true";
+	public DeleteSMSConfigurationCommand(final String identifier) {
+		super();
+		this.identifier = identifier;
+	}
 	
-	String GOOGLE_MAIL_SERVER = "smtp.gmail.com";
-	String YAHOO_MAIL_SERVER = "smtp.mail.yahoo.com";
+	public String getIdentifier() {
+		return this.identifier;
+	}
 	
-	String MAIL_SMTP_TIMEOUT_PROPERTY = "";
-	String MAIL_SMTP_TIMEOUT_VALUE = "";
-	
+	@Override
+	public String toString() {
+		return "DeleteSMSConfigurationCommand{" +
+				"identifier='" + identifier + '\'' +
+				'}';
+	}
 }

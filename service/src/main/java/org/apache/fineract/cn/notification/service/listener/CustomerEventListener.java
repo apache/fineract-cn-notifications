@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
     /*
      * Licensed to the Apache Software Foundation (ASF) under one
      * or more contributor license agreements.  See the NOTICE file
@@ -51,7 +69,7 @@
 	    public void customerCreatedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                                     final String payload) {
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
-		    this.logger.debug("{} has been invoked", "customerCreatedEvent");
+		    this.logger.info("{} has been invoked", "customerCreatedEvent");
 		
 		    customer.getContactDetails().forEach(contact -> {
 			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
@@ -83,7 +101,7 @@
 	    )
 	    public void customerUpdatedEvents(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                                      final String payload) {
-		    this.logger.debug("{} has been invoked", "customerUpdatedEvents");
+		    this.logger.info("{} has been invoked", "customerUpdatedEvents");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		
 		    customer.getContactDetails().forEach(contact -> {
@@ -102,7 +120,7 @@
 				    // TODO: Pass message to template
 				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
 						    emailAddress,
-						    "Account created",
+						    "Account updated",
 						    "Dear Valued Customer," +
 								    "\n\nYour account has been Updated" +
 								    "\n\nBest Regards," +
@@ -117,7 +135,7 @@
 	    )
 	    public void customerActivatedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                                       final String payload) {
-		    this.logger.debug("{} has been invoked", "customerActivatedEvent");
+		    this.logger.info("{} has been invoked", "customerActivatedEvent");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		
 		    customer.getContactDetails().forEach(contact -> {
@@ -134,7 +152,7 @@
 				    // TODO: Pass message to template
 				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
 						    emailAddress,
-						    "Account created",
+						    "Account activated",
 						    "Dear Valued Customer," +
 								    "\n\nYour account has been Activated" +
 								    "\n\nBest Regards," +
@@ -149,7 +167,7 @@
 	    )
 	    public void customerLockedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                                    final String payload) {
-		    this.logger.debug("{} has been invoked", "customerLockedEvent");
+		    this.logger.info("{} has been invoked", "customerLockedEvent");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		
 		    customer.getContactDetails().forEach(contact -> {
@@ -165,7 +183,7 @@
 				    // TODO: Localize message
 				    // TODO: Pass message to template
 				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
-						    emailAddress, "Account created",
+						    emailAddress, "Account locked",
 						    "Dear Valued Customer," +
 								    "\n\nYour account has been Locked" +
 								    "\n\nBest Regards," +
@@ -180,7 +198,7 @@
 	    )
 	    public void customerUnlockedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                                      final String payload) {
-		    this.logger.debug("{} has been invoked", "customerUnlockedEvent");
+		    this.logger.info("{} has been invoked", "customerUnlockedEvent");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		
 		    customer.getContactDetails().forEach(contact -> {
@@ -212,7 +230,7 @@
 	    )
 	    public void customerClosedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                                    final String payload) {
-		    this.logger.debug("{} has been invoked", "customerClosedEvent");
+		    this.logger.info("{} has been invoked", "customerClosedEvent");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		
 		    customer.getContactDetails().forEach(contact -> {
@@ -228,7 +246,7 @@
 				    // TODO: Localize message
 				    // TODO: Pass message to template
 				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
-						    emailAddress, "Account created",
+						    emailAddress, "Account closed",
 						    "Dear Valued Customer," +
 								    "\n\nYour account has been Closed" +
 								    "\n\nBest Regards," +
@@ -243,7 +261,7 @@
 	    )
 	    public void customerReopenedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                                      final String payload) {
-		    this.logger.debug("{} has been invoked", "customerReopenedEvent");
+		    this.logger.info("{} has been invoked", "customerReopenedEvent");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		
 		    customer.getContactDetails().forEach(contact -> {
@@ -275,7 +293,7 @@
 	    )
 	    public void contactDetailsChangedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                                           final String payload) {
-		    this.logger.debug("{} has been invoked", "contactDetailsChangedEvent");
+		    this.logger.info("{} has been invoked", "contactDetailsChangedEvent");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		
 		    customer.getContactDetails().forEach(contact -> {
@@ -309,7 +327,7 @@
 	    )
 	    public void addressChangedEvent(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                                    final String payload) {
-		    this.logger.debug("{} has been invoked", "addressChangedEvent");
+		    this.logger.info("{} has been invoked", "addressChangedEvent");
 		
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		

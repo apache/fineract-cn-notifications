@@ -21,12 +21,12 @@
 -- Table wada_sms_gateway_configurations
 -- -----------------------------------------------------
 CREATE TABLE wada_sms_gateway_configurations (
-  id INT(11) NOT NULL AUTO_INCREMENT,
+  id INT(45) NOT NULL AUTO_INCREMENT,
   identifier VARCHAR(45) NULL DEFAULT NULL,
   account_sid VARCHAR(255) NOT NULL,
   auth_token VARCHAR(255) NOT NULL,
   sender_number VARCHAR(45) NOT NULL,
-  state VARCHAR(45) NULL DEFAULT NULL,
+  state VARCHAR(20) NULL DEFAULT NULL,
   PRIMARY KEY (id));
 
 -- -----------------------------------------------------
@@ -42,7 +42,7 @@ CREATE TABLE wada_email_gateway_configurations (
   protocol VARCHAR(45)NOT NULL,
   smtp_auth VARCHAR (45)NOT NULL,
   start_tls VARCHAR (45)NOT NULL,
-  state VARCHAR(45)NOT NULL,
+  state VARCHAR(10)NOT NULL,
   PRIMARY KEY (id));
 
 -- -----------------------------------------------------
@@ -54,3 +54,17 @@ CREATE TABLE wada_templates (
   event VARCHAR(45) NULL DEFAULT NULL,
   url VARCHAR(255) NOT NULL,
   PRIMARY KEY (id));
+
+-- -----------------------------------------------------
+-- Table wada_data_source_application
+-- -----------------------------------------------------
+  CREATE TABLE wada_data_source_application (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  tenant_identifier        VARCHAR(32) NOT NULL,
+  application_identifier   VARCHAR(32) NOT NULL,
+  permittable_identifier   VARCHAR(32) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+INSERT INTO wada_sms_gateway_configurations VALUES ('1', 'Twilio', 'AC1fde2c6f26f367b93231c5fdb944c908', 'bc9a53e41745b8471e0ecafc859d86aa', '+1 510-944-1898', 'ACTIVE');
+INSERT INTO wada_email_gateway_configurations VALUES ('1', 'Gmail', 'smtp.gmail.com', '587','fineractcnnotificationdemo@gmail.com', 'pnuugpwmcibipdpw', 'smtp', 'true', 'true', 'ACTIVE');
