@@ -2,8 +2,12 @@
 .idea
 build/
 target/
-**/out/
-**/build/
+logs
+**/out
+**/build
+**/logs
+**/target
+local.properties
 
 # Ignore Gradle GUI config
 gradle-app.setting
