@@ -21,7 +21,7 @@
 -- Table wada_sms_gateway_configurations
 -- -----------------------------------------------------
 CREATE TABLE wada_sms_gateway_configurations (
-  id INT(11) NOT NULL AUTO_INCREMENT,
+  id INT NOT NULL,
   identifier VARCHAR(45) NULL DEFAULT NULL,
   account_sid VARCHAR(255) NOT NULL,
   auth_token VARCHAR(255) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE wada_sms_gateway_configurations (
 -- Table wada_email_gateway_configurations
 -- -----------------------------------------------------
 CREATE TABLE wada_email_gateway_configurations (
-  id INT(11) NOT NULL AUTO_INCREMENT,
+  id INT NOT NULL,
   identifier VARCHAR(45) NULL DEFAULT NULL,
   host VARCHAR(45) NOT NULL,
   port VARCHAR(45) NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE wada_email_gateway_configurations (
 -- Table wada_templates
 -- -----------------------------------------------------
 CREATE TABLE wada_templates (
-  id INT(11) NOT NULL AUTO_INCREMENT,
+  id INT NOT NULL,
   identifier VARCHAR(45) NULL DEFAULT NULL,
   event VARCHAR(45) NULL DEFAULT NULL,
   url VARCHAR(255) NOT NULL,

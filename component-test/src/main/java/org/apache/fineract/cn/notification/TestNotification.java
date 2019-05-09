@@ -51,7 +51,7 @@ import java.security.interfaces.RSAPrivateKey;
 public class TestNotification extends SuiteTestEnvironment {
 	
 	@ClassRule
-	public final static TenantDataStoreContextTestRule tenantDataStoreContext = TenantDataStoreContextTestRule.forRandomTenantName(cassandraInitializer, mariaDBInitializer);
+	public final static TenantDataStoreContextTestRule tenantDataStoreContext = TenantDataStoreContextTestRule.forRandomTenantName(cassandraInitializer, postgreSQLInitializer);
 	private static final String LOGGER_NAME = "test-logger";
 	private static final String TEST_USER = "homer";
 	@SuppressWarnings("WeakerAccess")
