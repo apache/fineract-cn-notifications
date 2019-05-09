@@ -23,7 +23,6 @@ import org.apache.fineract.cn.api.util.NotFoundException;
 import org.apache.fineract.cn.customer.api.v1.client.CustomerNotFoundException;
 import org.apache.fineract.cn.notification.api.v1.client.ConfigurationNotFoundException;
 import org.apache.fineract.cn.notification.api.v1.client.NotificationManager;
-import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
 import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
@@ -34,7 +33,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestSMSService extends TestNotification {
+public class TestSMSService extends AbstractNotificationTest {
 	
 	final SMSConfiguration smsConfiguration;
 	@Autowired

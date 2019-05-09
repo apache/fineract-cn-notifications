@@ -59,6 +59,13 @@ asciidoctor {
             'snippets': file('build/doc/generated-snippets/')
 }
 
+asciidoctor {
+    sourceDir 'build/doc/asciidoc/'
+    outputDir 'build/doc/html5'
+    options backend: "html", doctype: "book"
+    attributes "source-highlighter": "highlightjs", 'snippets': file('build/doc/generated-snippets/')
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
