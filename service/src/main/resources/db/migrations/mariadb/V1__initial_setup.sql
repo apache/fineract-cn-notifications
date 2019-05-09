@@ -66,5 +66,5 @@ CREATE TABLE wada_templates (
   PRIMARY KEY (id)
 );
 
-INSERT INTO wada_sms_gateway_configurations VALUES ('1', 'Twilio', 'AC1fde2c6f26f367b93231c5fdb944c908', 'bc9a53e41745b8471e0ecafc859d86aa', '+1 510-944-1898', 'ACTIVE');
+INSERT INTO wada_sms_gateway_configurations VALUES ('1', 'Twilio', 'ACdc00866577a42133e16d98456ad15592', '0b2f78b1c083eb71599d014d1af5748e', '+12055486680', 'ACTIVE');
 INSERT INTO wada_email_gateway_configurations VALUES ('1', 'Gmail', 'smtp.gmail.com', '587','fineractcnnotificationdemo@gmail.com', 'pnuugpwmcibipdpw', 'smtp', 'true', 'true', 'ACTIVE');

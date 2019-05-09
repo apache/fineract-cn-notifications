@@ -25,8 +25,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 		TestEmailService.class,
 		TestSMSService.class,
-		TestApplicationAuthentication.class,
-		NotificationApiDocumentation.class
+		EmailApiDocumentation.class,
+		SmsApiDocumentation.class,
 })
 public class TestSuite extends SuiteTestEnvironment {
 }

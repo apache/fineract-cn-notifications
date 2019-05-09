@@ -85,7 +85,7 @@ public class TestSMSService extends AbstractNotificationTest {
 	}
 	
 	@Test
-	public void sendSMS() {
+	public void shouldSendAnSMS() {
 		this.logger.info("Send SMS Notification");
 		String messageHash = this.notificationService.sendSMS("+23058409206",
 				"Dear Valued Customer\n\nTalk is cheap show me the code\n\nBest Regards\nYour MFI");

@@ -37,8 +37,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -50,7 +50,9 @@ public class SmsApiDocumentation extends AbstractNotificationTest {
 
   @Autowired
   private WebApplicationContext context;
-
+  private Gson gson = new Gson();
+  
+  
   private MockMvc mockMvc;
 
   @Autowired
@@ -69,23 +71,23 @@ public class SmsApiDocumentation extends AbstractNotificationTest {
 
   @Test
   public void documentCreateSMSConfiguration() throws Exception {
-    final SMSConfiguration smsConfiguration = DomainObjectGenerator.smsConfiguration();
-
-    Gson gson = new Gson();
-    this.mockMvc.perform(post("/notification/sms/create")
-            .accept(MediaType.APPLICATION_JSON_VALUE)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .content(gson.toJson(smsConfiguration)))
-            .andExpect(status().isAccepted())
-            .andDo(document("document-create-smsconfiguration", preprocessRequest(prettyPrint()),
-                    requestFields(
-                            fieldWithPath("identifier").description("SMSConfiguration's identifier"),
-                            fieldWithPath("auth_token").description("SMSConfiguration's auth_token"),
-                            fieldWithPath("account_sid").description("SMSConfiguration's account_sid"),
-                            fieldWithPath("sender_number").description("Sender's number"),
-                            fieldWithPath("state").description("SMSConfiguration's state")
-                    )
-            ));
+    final SMSConfiguration randomSMSConfiguration = DomainObjectGenerator.smsConfiguration();
+  
+    this.mockMvc.perform(post("/configuration/sms/create")
+        .accept(MediaType.APPLICATION_JSON_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(gson.toJson(randomSMSConfiguration)))
+        .andExpect(status().isCreated())
+        .andDo(document("document-create-sms-configuration", preprocessRequest(prettyPrint()),
+            requestFields(
+                fieldWithPath("identifier").description("Configuration Id for SMS Gateway"),
+                fieldWithPath("auth_token").description("SMS API authentication token"),
+                fieldWithPath("account_sid").description("SMS API account SID"),
+                fieldWithPath("sender_number").description("SMS API sender number"),
+                fieldWithPath("state").description("The state of the Gateway" +
+                    "\n ACTIVE for Gateway to be used" +
+                    "\n DEACTIVATED for inactive gateways")
+            )));
   }
 
   @Test
@@ -100,7 +102,7 @@ public class SmsApiDocumentation extends AbstractNotificationTest {
     this.notificationManager.createSMSConfiguration(smsConfiguration);
     this.eventRecorder.wait(NotificationEventConstants.POST_SMS_CONFIGURATION, SMSConfiguration.class);
 
-    this.mockMvc.perform(get("/notification/sms/" + smsConfiguration.getIdentifier())
+    this.mockMvc.perform(get("/configuration/sms/" + smsConfiguration.getIdentifier())
             .accept(MediaType.ALL_VALUE)
             .contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(status().isOk())
@@ -114,5 +116,55 @@ public class SmsApiDocumentation extends AbstractNotificationTest {
                             fieldWithPath("state").description("SMSConfiguration's state")
                     )
             ));
+  }
+  
+  @Test
+  public void documentUpdateSMSConfiguration() throws Exception {
+    final SMSConfiguration newRandomConfiguration = DomainObjectGenerator.smsConfiguration();
+    final SMSConfiguration randomSMSConfiguration = DomainObjectGenerator.smsConfiguration();
+    
+    this.notificationManager.createSMSConfiguration(randomSMSConfiguration);
+    
+    super.eventRecorder.wait(NotificationEventConstants.POST_SMS_CONFIGURATION, randomSMSConfiguration.getIdentifier());
+    
+    newRandomConfiguration.setIdentifier(randomSMSConfiguration.getIdentifier());
+    newRandomConfiguration.setSender_number("new.host.com");
+    newRandomConfiguration.setState("ACTIVE");
+    newRandomConfiguration.setAccount_sid("asdLAKSKFssdfasdf554");
+    newRandomConfiguration.setAuth_token("aalkeifjlasdfalje333");
+    
+    notificationManager.updateSMSConfiguration(randomSMSConfiguration);
+    
+    this.mockMvc.perform(put("/configuration/sms/update")
+        .accept(MediaType.APPLICATION_JSON_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(gson.toJson(randomSMSConfiguration)))
+        .andExpect(status().isAccepted())
+        .andDo(document("document-update-sms-configuration", preprocessRequest(prettyPrint()),
+            requestFields(
+                fieldWithPath("identifier").description("Configuration Id for SMS Gateway"),
+                fieldWithPath("auth_token").description("SMS API authentication token"),
+                fieldWithPath("account_sid").description("SMS API account SID"),
+                fieldWithPath("sender_number").description("SMS API sender number"),
+                fieldWithPath("state").description("The state of the Gateway" +
+                    "\n ACTIVE for Gateway to be used" +
+                    "\n DEACTIVATED for inactive gateways")
+            )));
+  }
+  
+  @Test
+  public void documentDeleteSMSConfiguration() throws Exception {
+    final SMSConfiguration randomSMSConfiguration = DomainObjectGenerator.smsConfiguration();
+    
+    this.notificationManager.createSMSConfiguration(randomSMSConfiguration);
+    
+    super.eventRecorder.wait(NotificationEventConstants.POST_SMS_CONFIGURATION, randomSMSConfiguration.getIdentifier());
+    
+    System.out.println(randomSMSConfiguration.getIdentifier());
+    this.mockMvc.perform(delete("/configuration/sms/delete/" + randomSMSConfiguration.getIdentifier())
+        .accept(MediaType.APPLICATION_JSON_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk())
+        .andDo(document("document-delete-sms-configuration", preprocessRequest(prettyPrint())));
   }
 }

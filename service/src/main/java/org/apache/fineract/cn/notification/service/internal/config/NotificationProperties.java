@@ -46,6 +46,7 @@ import org.springframework.stereotype.Component;
 public class NotificationProperties {
 	
 	private String user;
+	private String password;
 	
 	public NotificationProperties() {
 	}
@@ -56,5 +57,13 @@ public class NotificationProperties {
 	
 	public void setUser(String user) {
 		this.user = user;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

@@ -51,7 +51,7 @@ public class TestEmailService extends AbstractNotificationTest {
 	
 	
 	@Test
-	public void sendEmail() throws InterruptedException {
+	public void shouldSendAnEmail() throws InterruptedException {
 		this.logger.info("Send Email Notification");
 		String messageHash = notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
 				"egraham15@alustudent.com",

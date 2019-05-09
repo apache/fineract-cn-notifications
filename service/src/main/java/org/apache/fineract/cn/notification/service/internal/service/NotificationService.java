@@ -60,8 +60,9 @@ public class NotificationService {
 	}
 	
 	public Optional<Customer> findCustomer(final String customerIdentifier, String tenant) {
-		return notificationAuthentication.getCustomer(tenant,customerIdentifier);
-		//return Optional.of(this.customerPermittedClient.findCustomer(customerIdentifier));
+		notificationAuthentication.authenticate(tenant);
+		//return notificationAuthentication.getCustomer(tenant,customerIdentifier);
+		return customerService.findCustomer(customerIdentifier);
 	}
 	
 	//SMS Related Operations

@@ -20,8 +20,14 @@ package org.apache.fineract.cn.notification.service.internal.identity;
 
 import org.apache.fineract.cn.api.context.AutoUserContext;
 import org.apache.fineract.cn.api.util.InvalidTokenException;
+import org.apache.fineract.cn.api.util.UserContextHolder;
+import org.apache.fineract.cn.customer.api.v1.client.CustomerManager;
+import org.apache.fineract.cn.customer.api.v1.client.CustomerNotFoundException;
 import org.apache.fineract.cn.customer.api.v1.domain.Customer;
+import org.apache.fineract.cn.identity.api.v1.client.IdentityManager;
+import org.apache.fineract.cn.identity.api.v1.domain.Authentication;
 import org.apache.fineract.cn.lang.AutoTenantContext;
+import org.apache.fineract.cn.lang.TenantContextHolder;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.apache.fineract.cn.notification.service.internal.config.NotificationProperties;
 import org.apache.fineract.cn.permittedfeignclient.service.ApplicationAccessTokenService;
@@ -29,6 +35,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Base64Utils;
 
 import java.util.Optional;
 
@@ -38,16 +45,20 @@ public class NotificationAuthentication {
 	private Logger logger;
 	private CustomerPermittedClient customerPermittedClient;
 	private NotificationProperties notificationProperties;
+	private IdentityManager identityManager;
+	
 	
 	@Autowired
 	public NotificationAuthentication(final NotificationProperties notificationPropertities,
-	                                  final CustomerPermittedClient customerPermittedClient,
+	                                  final IdentityManager identityManager,
+			                              final CustomerPermittedClient customerPermittedClient,
 	                                  @SuppressWarnings("SpringJavaAutowiringInspection")final ApplicationAccessTokenService applicationAccessTokenService,
 	                                  @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger) {
 		this.logger = logger;
 		this.customerPermittedClient = customerPermittedClient;
 		this.notificationProperties = notificationPropertities;
 		this.applicationAccessTokenService = applicationAccessTokenService;
+		this.identityManager = identityManager;
 	}
 	
 	public Optional<Customer> getCustomer(String tenantIdentifier, String customerId) {
@@ -64,5 +75,15 @@ public class NotificationAuthentication {
 				}
 				return Optional.empty();
 			}
+	}
+	
+	public void authenticate(String tenant) {
+		TenantContextHolder.clear();
+		TenantContextHolder.setIdentifier(tenant);
+		
+		final Authentication authentication =
+				this.identityManager.login(notificationProperties.getUser(), Base64Utils.encodeToString(notificationProperties.getPassword().getBytes()));
+		UserContextHolder.clear();
+		UserContextHolder.setAccessToken(notificationProperties.getUser(), authentication.getAccessToken());
 	}
 }

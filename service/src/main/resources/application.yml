@@ -83,4 +83,5 @@ flyway:
   enabled: false
 
 notification:
-  user: wadaadmin
+  user: operator
+  password: init1@l
