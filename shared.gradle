@@ -56,7 +56,6 @@ repositories {
     jcenter()
     mavenLocal()
     maven { url 'https://mifos.jfrog.io/mifos/libs-snapshot/' }
-
 }
 
 dependencyManagement {
