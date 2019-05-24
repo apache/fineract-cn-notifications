@@ -23,6 +23,7 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.rest.api.v2010.account.MessageCreator;
 import com.twilio.type.PhoneNumber;
+import org.apache.fineract.cn.command.annotation.Aggregate;
 import org.apache.fineract.cn.command.annotation.CommandHandler;
 import org.apache.fineract.cn.command.annotation.CommandLogLevel;
 import org.apache.fineract.cn.command.annotation.EventEmitter;
@@ -34,15 +35,14 @@ import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewa
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Aggregate
 public class SMSService {
 	
 	static boolean isConfigured;
@@ -104,7 +104,7 @@ public class SMSService {
 	
 	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
 	@Transactional
-	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_SEND_SMS_NOTIFICATION)
+	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.SEND_SMS_NOTIFICATION)
 	public String sendSMS(String receiver, String template) {
 		Twilio.init(this.accountSid, this.authToken);
 		MessageCreator messageCreator = Message.creator(this.accountSid,
@@ -112,6 +112,6 @@ public class SMSService {
 				new PhoneNumber(this.senderNumber),
 				template);
 		Message message = messageCreator.create();
-		return message.getTo().concat(" - " + message.getSid());
+		return message.getTo();
 	}
 }

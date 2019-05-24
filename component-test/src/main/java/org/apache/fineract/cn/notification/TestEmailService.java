@@ -20,16 +20,13 @@ package org.apache.fineract.cn.notification;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.fineract.cn.api.util.NotFoundException;
-import org.apache.fineract.cn.customer.api.v1.client.CustomerNotFoundException;
 import org.apache.fineract.cn.notification.api.v1.client.ConfigurationNotFoundException;
 import org.apache.fineract.cn.notification.api.v1.client.NotificationManager;
 import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
 import org.apache.fineract.cn.notification.service.internal.service.EmailService;
-import org.apache.fineract.cn.notification.service.internal.service.EventHelper;
 import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
 import org.apache.fineract.cn.notification.util.DomainObjectGenerator;
-import org.apache.fineract.cn.test.listener.EventRecorder;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +50,7 @@ public class TestEmailService extends AbstractNotificationTest {
 	@Test
 	public void shouldSendAnEmail() throws InterruptedException {
 		this.logger.info("Send Email Notification");
-		String messageHash = notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
+		String to = notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
 				"egraham15@alustudent.com",
 				"Address Details Changed",
 				"Dear Valued Customer," +
@@ -65,7 +62,7 @@ public class TestEmailService extends AbstractNotificationTest {
 						"\n\nBest Regards" +
 						"\nMFI");
 		
-		Assert.assertNotNull(messageHash);
+		Assert.assertNotNull(to);
 	}
 	
 	@Test(expected = NotFoundException.class)
@@ -83,19 +80,17 @@ public class TestEmailService extends AbstractNotificationTest {
 		logger.info("Create and Retrieve Email Gateway configuration");
 		this.notificationManager.createEmailConfiguration(emailConfiguration);
 		
-		this.eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, emailConfiguration.getIdentifier());
+		Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, emailConfiguration.getIdentifier()));
 		
 		EmailConfiguration sampleRetrieved = this.notificationManager.findEmailConfigurationByIdentifier(emailConfiguration.getIdentifier());
-		Assert.assertNotNull(sampleRetrieved);
-		Assert.assertEquals(sampleRetrieved.getIdentifier(), emailConfiguration.getIdentifier());
+		Assert.assertEquals(sampleRetrieved.getIdentifier(),emailConfiguration.getIdentifier());
 	}
 	
 	@Test
 	public void checkEmailConfigurationEntityExist() throws InterruptedException {
 		logger.info("Email Gateway configuration Exist");
 		this.notificationManager.createEmailConfiguration(emailConfiguration);
-		super.eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, emailConfiguration.getIdentifier());
-		
+		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, emailConfiguration.getIdentifier()));
 		Assert.assertTrue(this.emailService.emailConfigurationExists(emailConfiguration.getIdentifier()));
 	}
 	

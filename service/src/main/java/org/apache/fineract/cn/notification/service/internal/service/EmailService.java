@@ -37,7 +37,6 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -151,7 +150,7 @@ public class EmailService {
 	
 	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
 	@Transactional
-	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_SEND_EMAIL_NOTIFICATION)
+	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.SEND_EMAIL_NOTIFICATION)
 	public String sendEmail(String from, String to, String subject, String message) {
 		SimpleMailMessage mail = new SimpleMailMessage();
 		
@@ -165,6 +164,6 @@ public class EmailService {
 		} catch (MailException exception) {
 			logger.debug("Caused by:" + exception.getCause().toString());
 		}
-		return to.concat(" - " + mailSender.hashCode());
+		return to;
 	}
 }
