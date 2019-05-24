@@ -1,4 +1,4 @@
-# Apache Fineract CN Notification
+# Apache Fineract CN Notification [![Build Status](https://api.travis-ci.com/apache/fineract-cn-notifications.svg?branch=develop)](https://travis-ci.com/apache/fineract-cn-notifications)
 
 This mircroservice contains all the functionalities for SMS and Email Notification
 
