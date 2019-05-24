@@ -16,20 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification;
+package org.apache.fineract.cn.notification.service.internal.service.util;
 
-import org.apache.fineract.cn.notification.importer.TestTemplateImport;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
-@RunWith(Suite.class)
-@SuiteClasses({
-		TestTemplateImport.class,
-		TestEmailService.class,
-		TestSMSService.class,
-		EmailApiDocumentation.class,
-		SmsApiDocumentation.class,
-})
-public class TestSuite extends SuiteTestEnvironment {
+import java.util.Map;
+/*
+ebenezergraham created on 5/12/19
+*/
+@Service
+public class MailBuilder {
+		private TemplateEngine templateEngine;
+		
+		@Autowired
+		public MailBuilder(TemplateEngine templateEngine) {
+			this.templateEngine = templateEngine;
+		}
+		
+		public String build(Map<String, Object> message, String template) {
+			Context context = new Context();
+			for(Map.Entry m:message.entrySet()){
+				context.setVariable(m.getKey().toString(), m.getValue().toString());
+			}
+			return templateEngine.process(template, context);
+		}
 }

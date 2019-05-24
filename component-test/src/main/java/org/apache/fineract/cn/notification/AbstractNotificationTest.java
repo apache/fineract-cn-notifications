@@ -20,8 +20,10 @@ package org.apache.fineract.cn.notification;
 
 import org.apache.fineract.cn.anubis.test.v1.TenantApplicationSecurityEnvironmentTestRule;
 import org.apache.fineract.cn.api.context.AutoUserContext;
+import org.apache.fineract.cn.notification.api.v1.client.NotificationManager;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
 import org.apache.fineract.cn.notification.service.internal.config.NotificationConfiguration;
+import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
 import org.apache.fineract.cn.test.fixture.TenantDataStoreContextTestRule;
 import org.apache.fineract.cn.test.listener.EnableEventRecording;
 import org.apache.fineract.cn.test.listener.EventRecorder;
@@ -51,14 +53,21 @@ public class AbstractNotificationTest extends SuiteTestEnvironment {
 	public final static TenantDataStoreContextTestRule tenantDataStoreContext = TenantDataStoreContextTestRule.forRandomTenantName(cassandraInitializer, mariaDBInitializer);
 	public static final String LOGGER_NAME = "test-logger";
 	public static final String TEST_USER = "homer";
+	public static final String TEST_ADDRESS = "egraham15@alustudent.com";
+	public static final String TEST_TEMPLATE= "test_sample";
 	
 	@SuppressWarnings("WeakerAccess")
 	@Autowired
 	@Qualifier(LOGGER_NAME)
-	Logger logger;
+	public Logger logger;
 	public AutoUserContext userContext;
 	@Autowired
 	public EventRecorder eventRecorder;
+	@Autowired
+	public NotificationManager testSubject;
+	@Autowired
+	public NotificationService notificationService;
+	
 	@Rule
 	public final TenantApplicationSecurityEnvironmentTestRule tenantApplicationSecurityEnvironment
 			= new TenantApplicationSecurityEnvironmentTestRule(testEnvironment, this::waitForInitialize);

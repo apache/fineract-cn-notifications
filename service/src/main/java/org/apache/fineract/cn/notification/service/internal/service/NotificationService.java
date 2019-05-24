@@ -19,6 +19,7 @@
 package org.apache.fineract.cn.notification.service.internal.service;
 
 import org.apache.fineract.cn.customer.api.v1.domain.Customer;
+import org.apache.fineract.cn.notification.api.v1.domain.Template;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.apache.fineract.cn.notification.service.internal.identity.CustomerPermittedClient;
 import org.apache.fineract.cn.notification.service.internal.identity.NotificationAuthentication;
@@ -28,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -35,6 +37,7 @@ public class NotificationService {
 	
 	private final SMSService smsService;
 	private final EmailService emailService;
+	private final TemplateService templateService;
 	
 	private final NotificationAuthentication notificationAuthentication;
 	private final CustomerService customerService;
@@ -46,6 +49,7 @@ public class NotificationService {
 	public NotificationService(final CustomerService customerService,
 	                           final SMSService smsService,
 	                           final EmailService emailService,
+	                           final TemplateService templateService,
 	                           final NotificationAuthentication notificationAuthentication,
 	                           final CustomerPermittedClient customerPermittedClient,
 	                           @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger
@@ -54,6 +58,7 @@ public class NotificationService {
 		this.customerService = customerService;
 		this.smsService = smsService;
 		this.emailService = emailService;
+		this.templateService = templateService;
 		this.notificationAuthentication = notificationAuthentication;
 		this.customerPermittedClient = customerPermittedClient;
 		this.logger = logger;
@@ -65,25 +70,26 @@ public class NotificationService {
 		return customerService.findCustomer(customerIdentifier);
 	}
 	
-	//SMS Related Operations
-	public SMSService setNewSMSService(SMSService smsService, String configurationId){
-		smsService.customConfiguration(configurationId);
-		return smsService;
-	}
-	
 	public String sendSMS(String receiver, String template) {
-		if (!this.smsService.isConfigured) this.smsService.configureSMSGatewayWithActiveConfiguration();
+		if (!this.smsService.isConfigured) this.smsService.configureServiceWithDefaultGateway();
 		return this.smsService.sendSMS(receiver, template);
 	}
 	
-	//Email Related Operations
-	public String sendEmail(String from, String to, String subject, String message) {
-		if (!emailService.isConfigured) emailService.configureEmailGatewayWithActiveConfiguration();
-		return this.emailService.sendEmail(from, to, subject, message);
+	/*To be used as a backup should Formatted email fail*/
+	public void sendEmail(String to, String templateIdentifier,Object payload) {
+		Template template = this.templateService.findTemplateWithIdentifier(templateIdentifier).get();
+		if (!this.emailService.isConfigured) {
+			this.emailService.setNewConfiguration(template.getSenderEmail());
+		}
+		this.emailService.sendPlainEmail(to, template.getSubject(), template.getMessage());
 	}
 	
-	public EmailService setNewEmailService(EmailService emailService, String configurationId){
-		emailService.customConfiguration(configurationId);
-		return emailService;
+	public void sendFormattedEmail(String to, String templateIdentifier, Map<String,Object> variables) {
+		Template template = this.templateService.findTemplateWithIdentifier(templateIdentifier).get();
+		if (!this.emailService.isConfigured) {
+			this.emailService.setNewConfiguration(template.getSenderEmail());
+		}
+		
+		this.emailService.sendFormattedEmail(to, template.getSubject(), variables,template.getUrl());
 	}
 }

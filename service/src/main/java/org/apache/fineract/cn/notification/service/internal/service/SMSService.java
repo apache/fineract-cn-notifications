@@ -34,11 +34,9 @@ import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewa
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,15 +61,15 @@ public class SMSService {
 	
 	//@PostConstruct
 	public void init() {
-		if (findActiveSMSConfigurationEntity().isPresent()){
-			configureSMSGatewayWithActiveConfiguration();
+		if (getDefaultSMSConfiguration().isPresent()){
+			configureServiceWithDefaultGateway();
 		}else{
 			//Todo: Send an alert on the interface to configure the service
 		}
 	}
 	
-	public boolean configureSMSGatewayWithActiveConfiguration() {
-		SMSConfiguration configuration = findActiveSMSConfigurationEntity().get();
+	public boolean configureServiceWithDefaultGateway() {
+		SMSConfiguration configuration = getDefaultSMSConfiguration().get();
 		this.accountSid = configuration.getAccount_sid();
 		this.authToken = configuration.getAuth_token();
 		this.senderNumber = configuration.getSender_number();
@@ -86,8 +84,8 @@ public class SMSService {
 		return this.isConfigured = true;
 	}
 	
-	public Optional<SMSConfiguration> findActiveSMSConfigurationEntity() {
-		return this.smsGatewayConfigurationRepository.active().map(SMSConfigurationMapper::map);
+	public Optional<SMSConfiguration> getDefaultSMSConfiguration() {
+		return this.smsGatewayConfigurationRepository.defaultGateway().map(SMSConfigurationMapper::map);
 	}
 	
 	public Boolean smsConfigurationExists(final String identifier) {
@@ -98,7 +96,7 @@ public class SMSService {
 		return this.smsGatewayConfigurationRepository.findByIdentifier(identifier).map(SMSConfigurationMapper::map);
 	}
 	
-	public List<SMSConfiguration> findAllActiveSMSConfigurationEntities() {
+	public List<SMSConfiguration> findAllSMSConfigurationEntities() {
 		return SMSConfigurationMapper.map(this.smsGatewayConfigurationRepository.findAll());
 	}
 	

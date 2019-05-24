@@ -33,7 +33,7 @@ CREATE TABLE wada_sms_gateway_configurations (
 -- Table wada_email_gateway_configurations
 -- -----------------------------------------------------
 CREATE TABLE wada_email_gateway_configurations (
-  id INT(11) NOT NULL AUTO_INCREMENT,
+  id INT NOT NULL AUTO_INCREMENT,
   identifier VARCHAR(45) NULL DEFAULT NULL,
   host VARCHAR(45) NOT NULL,
   port VARCHAR(45) NOT NULL,
@@ -49,22 +49,14 @@ CREATE TABLE wada_email_gateway_configurations (
 -- Table wada_templates
 -- -----------------------------------------------------
 CREATE TABLE wada_templates (
-  id INT(11) NOT NULL AUTO_INCREMENT,
-  identifier VARCHAR(45) NULL DEFAULT NULL,
-  event VARCHAR(45) NULL DEFAULT NULL,
+  id INT NOT NULL AUTO_INCREMENT,
+  template_identifier VARCHAR(45) NULL DEFAULT NULL,
+  sender_email VARCHAR(255) NULL DEFAULT NULL,
+  subject VARCHAR(255) NULL DEFAULT NULL,
+  message VARCHAR(1024) NULL DEFAULT NULL,
   url VARCHAR(255) NOT NULL,
   PRIMARY KEY (id));
 
--- -----------------------------------------------------
--- Table wada_data_source_application
--- -----------------------------------------------------
-  CREATE TABLE wada_data_source_application (
-  id BIGINT NOT NULL AUTO_INCREMENT,
-  tenant_identifier        VARCHAR(32) NOT NULL,
-  application_identifier   VARCHAR(32) NOT NULL,
-  permittable_identifier   VARCHAR(32) NOT NULL,
-  PRIMARY KEY (id)
-);
 
-INSERT INTO wada_sms_gateway_configurations VALUES ('1', 'Twilio', 'ACdc00866577a42133e16d98456ad15592', '0b2f78b1c083eb71599d014d1af5748e', '+12055486680', 'ACTIVE');
-INSERT INTO wada_email_gateway_configurations VALUES ('1', 'Gmail', 'smtp.gmail.com', '587','fineractcnnotificationdemo@gmail.com', 'pnuugpwmcibipdpw', 'smtp', 'true', 'true', 'ACTIVE');
+INSERT INTO wada_sms_gateway_configurations VALUES ('1', 'DEFAULT', 'ACdc00866577a42133e16d98456ad15592', '0b2f78b1c083eb71599d014d1af5748e', '+12055486680', 'ACTIVE');
+INSERT INTO wada_email_gateway_configurations VALUES ('1', 'DEFAULT', 'smtp.gmail.com', '587','fineractcnnotificationdemo@gmail.com', 'pnuugpwmcibipdpw', 'smtp', 'true', 'true', 'ACTIVE');

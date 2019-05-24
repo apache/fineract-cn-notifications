@@ -85,3 +85,7 @@ flyway:
 notification:
   user: operator
   password: init1@l
+
+activemq:
+  brokerUrl: vm://localhost?broker.persistent=false
+  concurrency: 1-1

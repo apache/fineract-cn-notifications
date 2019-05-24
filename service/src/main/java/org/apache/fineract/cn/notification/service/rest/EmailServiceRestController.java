@@ -24,11 +24,9 @@ import org.apache.fineract.cn.command.gateway.CommandGateway;
 import org.apache.fineract.cn.lang.ServiceException;
 import org.apache.fineract.cn.notification.api.v1.PermittableGroupIds;
 import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
-import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.apache.fineract.cn.notification.service.internal.command.*;
 import org.apache.fineract.cn.notification.service.internal.service.EmailService;
-import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -95,7 +93,7 @@ public class EmailServiceRestController {
 	public
 	@ResponseBody
 	List<EmailConfiguration> findAllActiveEmailConfigurationEntities() {
-		return this.emailService.findAllActiveEmailConfigurationEntities();
+		return this.emailService.findAllEmailConfigurationEntities();
 	}
 	
 	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)

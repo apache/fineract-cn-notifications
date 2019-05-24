@@ -52,6 +52,11 @@ import org.springframework.jms.config.JmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.templatemode.StandardTemplateModeHandlers;
+
+import java.nio.charset.StandardCharsets;
 
 @SuppressWarnings("WeakerAccess")
 @Configuration
@@ -103,23 +108,24 @@ public class NotificationConfiguration extends WebMvcConfigurerAdapter {
 	}
 	
 	@Bean
-	public PooledConnectionFactory jmsFactory() {
+	public PooledConnectionFactory pooledConnectionFactory() {
 		PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory();
 		ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
-		activeMQConnectionFactory.setBrokerURL(this.environment.getProperty("activemq.brokerUrl", "vm://localhost?broker.persistent=falseac"));
+		activeMQConnectionFactory.setBrokerURL(this.environment.getProperty("activemq.brokerUrl","vm://localhost?broker.persistent=false"));
 		pooledConnectionFactory.setConnectionFactory(activeMQConnectionFactory);
 		return pooledConnectionFactory;
 	}
 	
 	@Bean
 	public JmsListenerContainerFactory jmsListenerContainerFactory(PooledConnectionFactory jmsFactory) {
-		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+		final DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+		factory.setConnectionFactory(jmsFactory);
 		factory.setPubSubDomain(true);
 		factory.setConnectionFactory(jmsFactory);
 		factory.setErrorHandler(ex -> {
-			loggerBean().error(ex.getCause().toString());
+			loggerBean().warn(ex.getCause().toString());
 		});
-		factory.setConcurrency(this.environment.getProperty("activemq.concurrency", "1-1"));
+		factory.setConcurrency(this.environment.getProperty("activemq.concurrency","1-1"));
 		return factory;
 	}
 	
@@ -131,6 +137,23 @@ public class NotificationConfiguration extends WebMvcConfigurerAdapter {
 		jmsTemplate.setConnectionFactory(jmsFactory);
 		jmsTemplate.setDefaultDestination(activeMQTopic);
 		return jmsTemplate;
+	}
+	
+	@Bean
+	public SpringTemplateEngine springTemplateEngine() {
+		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+		templateEngine.addTemplateResolver(htmlTemplateResolver());
+		return templateEngine;
+	}
+	
+	@Bean
+	public SpringResourceTemplateResolver htmlTemplateResolver(){
+		SpringResourceTemplateResolver emailTemplateResolver = new SpringResourceTemplateResolver();
+		emailTemplateResolver.setPrefix("classpath:/templates/");
+		emailTemplateResolver.setSuffix(".html");
+		emailTemplateResolver.setTemplateMode(StandardTemplateModeHandlers.HTML5.getTemplateModeName());
+		emailTemplateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
+		return emailTemplateResolver;
 	}
 	
 	@Bean(

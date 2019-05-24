@@ -84,13 +84,10 @@
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
+				    notificationService.sendEmail(
 						    emailAddress,
-						    "Account created",
-						    "Dear Valued Customer," +
-								    "\n\nYour account has been created" +
-								    "\n\nBest Regards," +
-								    "\nYour MFI");
+						    "customerCreatedEvent",
+						    payload);
 			    }
 		    });
 	    }
@@ -118,13 +115,10 @@
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
+				    notificationService.sendEmail(
 						    emailAddress,
-						    "Account updated",
-						    "Dear Valued Customer," +
-								    "\n\nYour account has been Updated" +
-								    "\n\nBest Regards," +
-								    "\nYour MFI");
+						    "customerUpdatedEvents",
+						    payload);
 			    }
 		    });
 	    }
@@ -150,13 +144,10 @@
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
+				    notificationService.sendEmail(
 						    emailAddress,
-						    "Account activated",
-						    "Dear Valued Customer," +
-								    "\n\nYour account has been Activated" +
-								    "\n\nBest Regards," +
-								    "\nYour MFI");
+						    "customerActivatedEvent",
+						    payload);
 			    }
 		    });
 	    }
@@ -182,12 +173,9 @@
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
-						    emailAddress, "Account locked",
-						    "Dear Valued Customer," +
-								    "\n\nYour account has been Locked" +
-								    "\n\nBest Regards," +
-								    "\nYour MFI");
+				    notificationService.sendEmail(
+						    emailAddress, "customerLockedEvent",
+						    payload);
 			    }
 		    });
 	    }
@@ -213,13 +201,10 @@
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
+				    notificationService.sendEmail(
 						    emailAddress,
-						    "Account created",
-						    "Dear Valued Customer," +
-								    "\n\nYour account has been Unlocked" +
-								    "\n\nBest Regards," +
-								    "\nYour MFI");
+						    "customerUnlockedEvent",
+						    payload);
 			    }
 		    });
 	    }
@@ -245,12 +230,9 @@
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
-						    emailAddress, "Account closed",
-						    "Dear Valued Customer," +
-								    "\n\nYour account has been Closed" +
-								    "\n\nBest Regards," +
-								    "\nYour MFI");
+				    notificationService.sendEmail(
+						    emailAddress, "customerClosedEvent",
+						    payload);
 			    }
 		    });
 	    }
@@ -276,13 +258,10 @@
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
+				    notificationService.sendEmail(
 						    emailAddress,
-						    "Account Reopened",
-						    "Dear Valued Customer," +
-								    "\n\nYour account has been reopened" +
-								    "\n\nBest Regards," +
-								    "\nYour MFI");
+						    "customerReopenedEvent",
+						    payload);
 			    }
 		    });
 	    }
@@ -309,14 +288,10 @@
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
+				    notificationService.sendEmail(
 						    emailAddress,
-						    "Contact Details Changed",
-						    "Dear Valued Customer," +
-								    "\n\nYour contact has been changed successfully" +
-								    "\n\tNew Contact: "+emailAddress+
-								    "\n\nBest Regards" +
-								    "\nYour MFI");
+						    "contactDetailsChangedEvent",
+						    payload);
 			    }
 		    });
 	    }
@@ -347,18 +322,10 @@
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendEmail("fineractcnnotificationdemo@gmail.com",
+				    notificationService.sendEmail(
 						    emailAddress,
-						    "Contact Details Changed" +
-								    "New Contact: "+emailAddress,
-						    "Dear Valued Customer," +
-								    "\n\nYour address has been changed successfully" +
-								    "\nStreet: "+ customer.getAddress().getStreet() +
-								    "\nCity: "+ customer.getAddress().getCity() +
-								    "\nState: "+ customer.getAddress().getRegion() +
-								    "\nCountry: "+ customer.getAddress().getCountry() +
-								    "\n\nBest Regards" +
-								    "\nYour MFI");
+						    "addressChangedEvent",
+						    payload);
 			    }
 		    });
 	    }

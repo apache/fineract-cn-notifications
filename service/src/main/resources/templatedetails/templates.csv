@@ -1,0 +1,28 @@
+-
+- Licensed to the Apache Software Foundation (ASF) under one
+- or more contributor license agreements.  See the NOTICE file
+- distributed with this work for additional information
+- regarding copyright ownership.  The ASF licenses this file
+- to you under the Apache License, Version 2.0 (the
+- "License"); you may not use this file except in compliance
+- with the License.  You may obtain a copy of the License at
+-
+-   http://www.apache.org/licenses/LICENSE-2.0
+-
+- Unless required by applicable law or agreed to in writing,
+- software distributed under the License is distributed on an
+- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+- KIND, either express or implied.  See the License for the
+- specific language governing permissions and limitations
+- under the License.
+-
+template_identifier,sender_email,subject,message,url
+customerCreatedEvent,DEFAULT,Account created,"Your account has been created",template
+customerUpdatedEvents,DEFAULT,Account updated,Your account has been Updated,template
+customerActivatedEvent,DEFAULT,Account Activated,Your account has been Activated,template
+customerLockedEvent,DEFAULT,Account Locked,Your account has been Locked,template
+customerUnlockedEvent,DEFAULT,Account unlocked,Your account has been Unlocked,template
+customerClosedEvent,DEFAULT,Account closed successfully,Your account has been Closed,template
+customerReopenedEvent,DEFAULT,Account Reopened,Your account has been reopened,template
+contactDetailsChangedEvent,DEFAULT,Contact details has been updated,Your contact has been changed successfully,template
+addressChangedEvent,DEFAULT,Residence address has been changed,Your address has been changed successfully,template

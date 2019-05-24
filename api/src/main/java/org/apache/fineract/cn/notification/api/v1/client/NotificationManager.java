@@ -23,6 +23,7 @@ import org.apache.fineract.cn.api.annotation.ThrowsExceptions;
 import org.apache.fineract.cn.api.util.CustomFeignClientsConfiguration;
 import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
+import org.apache.fineract.cn.notification.api.v1.domain.Template;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -66,6 +67,14 @@ public interface NotificationManager {
 			consumes = MediaType.APPLICATION_JSON_VALUE
 	)
 	String createEmailConfiguration(final EmailConfiguration emailConfiguration);
+	
+	@RequestMapping(
+			value = "/template/create",
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE,
+			consumes = MediaType.APPLICATION_JSON_VALUE
+	)
+	String createTemplate(final Template template);
 	
 	@RequestMapping(
 			value = "/configuration/sms/{identifier}",
