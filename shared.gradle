@@ -123,8 +123,7 @@ rat {
             "gradlew",
             "gradlew.bat",
             "README.md",
-            "**/.dockerignore/**"
-
+            ".dockerignore"
     ]
 }
 
