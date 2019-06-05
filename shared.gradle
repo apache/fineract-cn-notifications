@@ -96,11 +96,11 @@ artifactory {
         }
 
         defaults {
-            publications ('api', 'componentTest', 'service', 'bootService')
+            publications('api', 'componentTest', 'service', 'bootService')
         }
     }
 }
-artifactoryPublish.dependsOn('clean','publishToMavenLocal')
+artifactoryPublish.dependsOn('clean', 'publishToMavenLocal')
 
 license {
     header rootProject.file('../HEADER')
@@ -125,5 +125,6 @@ rat {
             "README.md",
             ".dockerignore"
     ]
+    plainOutput = true
 }
 
