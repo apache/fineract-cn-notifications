@@ -40,7 +40,7 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 @RestController
-@RequestMapping("/configuration/sms/")
+@RequestMapping("/configuration/sms")
 public class SMSServiceRestController {
 	
 	private final Logger logger;
@@ -59,14 +59,13 @@ public class SMSServiceRestController {
 	
 	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)
 	@RequestMapping(
-			value = "/active",
 			method = RequestMethod.GET,
 			consumes = MediaType.ALL_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public
 	@ResponseBody
-	List<SMSConfiguration> findAllActiveSMSConfigurationEntities() {
+	List<SMSConfiguration> findAllSMSConfigurationEntities() {
 		return this.smsService.findAllSMSConfigurationEntities();
 	}
 	
@@ -87,14 +86,13 @@ public class SMSServiceRestController {
 	
 	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)
 	@RequestMapping(
-			value = "/create",
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public
 	@ResponseBody
-	ResponseEntity<Void> createSMSConfiguration(@RequestBody @Valid final SMSConfiguration smsConfiguration) throws InterruptedException {
+	ResponseEntity<Void> createSMSConfiguration(@RequestBody @Valid final SMSConfiguration smsConfiguration) {
 		if (this.smsService.smsConfigurationExists(smsConfiguration.getIdentifier())) {
 			throw ServiceException.conflict("Configuration {0} already exists.", smsConfiguration.getIdentifier());
 		}
@@ -104,7 +102,7 @@ public class SMSServiceRestController {
 	}
 	
 	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)
-	@RequestMapping(value = "/update",
+	@RequestMapping(
 			method = RequestMethod.PUT,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
@@ -117,7 +115,7 @@ public class SMSServiceRestController {
 	}
 	
 	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)
-	@RequestMapping(value = "/delete/{identifier}",
+	@RequestMapping(value = "/{identifier}",
 			method = RequestMethod.DELETE,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE

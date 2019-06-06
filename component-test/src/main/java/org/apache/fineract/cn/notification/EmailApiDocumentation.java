@@ -71,7 +71,7 @@ public class EmailApiDocumentation extends AbstractNotificationTest {
   public void documentCreateEmailConfiguration() throws Exception {
     final EmailConfiguration emailConfiguration = DomainObjectGenerator.emailConfiguration();
 
-    this.mockMvc.perform(post("/configuration/email/create")
+    this.mockMvc.perform(post("/configuration/email")
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(gson.toJson(emailConfiguration)))
@@ -149,7 +149,7 @@ public class EmailApiDocumentation extends AbstractNotificationTest {
     
     super.eventRecorder.wait(NotificationEventConstants.UPDATE_EMAIL_CONFIGURATION, newRandomConfiguration.getIdentifier());
     
-    this.mockMvc.perform(put("/configuration/sms/update")
+    this.mockMvc.perform(put("/configuration/sms")
         .accept(MediaType.APPLICATION_JSON_VALUE)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .content(gson.toJson(newRandomConfiguration)))
@@ -180,7 +180,7 @@ public class EmailApiDocumentation extends AbstractNotificationTest {
     notificationManager.createEmailConfiguration(randomConfiguration);
     super.eventRecorder.wait(NotificationEventConstants.DELETE_EMAIL_CONFIGURATION, randomConfiguration.getIdentifier());
     
-    this.mockMvc.perform(delete("/configuration/email/delete/" + randomConfiguration.getIdentifier())
+    this.mockMvc.perform(delete("/configuration/email/" + randomConfiguration.getIdentifier())
         .accept(MediaType.APPLICATION_JSON_VALUE)
         .contentType(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())

@@ -18,22 +18,17 @@
  */
 package org.apache.fineract.cn.notification.service.internal.config;
 
-import org.apache.activemq.command.ActiveMQTopic;
 import org.apache.activemq.jms.pool.PooledConnectionFactory;
-import org.apache.activemq.spring.ActiveMQConnectionFactory;
 import org.apache.fineract.cn.anubis.config.EnableAnubis;
 import org.apache.fineract.cn.async.config.EnableAsync;
 import org.apache.fineract.cn.cassandra.config.EnableCassandra;
 import org.apache.fineract.cn.command.config.EnableCommandProcessing;
 import org.apache.fineract.cn.customer.api.v1.client.CustomerManager;
 import org.apache.fineract.cn.identity.api.v1.client.IdentityManager;
-import org.apache.fineract.cn.lang.ApplicationName;
 import org.apache.fineract.cn.lang.config.EnableServiceException;
 import org.apache.fineract.cn.lang.config.EnableTenantContext;
 import org.apache.fineract.cn.mariadb.config.EnableMariaDB;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
-import org.apache.fineract.cn.notification.service.internal.identity.CustomerPermittedClient;
-import org.apache.fineract.cn.permittedfeignclient.config.EnablePermissionRequestingFeignClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -71,12 +66,10 @@ import java.nio.charset.StandardCharsets;
 @EnableServiceException
 @EnableJms
 @EnableConfigurationProperties
-@EnablePermissionRequestingFeignClient(feignClasses = {CustomerPermittedClient.class})
 @EnableFeignClients(
 		clients = {
 				CustomerManager.class,
 				IdentityManager.class,
-				CustomerPermittedClient.class
 		}
 )
 @ComponentScan({
@@ -85,7 +78,6 @@ import java.nio.charset.StandardCharsets;
 		"org.apache.fineract.cn.notification.service.internal",
 		"org.apache.fineract.cn.notification.service.internal.repository",
 		"org.apache.fineract.cn.notification.service.internal.command.handler",
-		"org.apache.fineract.cn.notification.service.internal.identity",
 		"org.apache.fineract.cn.notification.service.internal.config",
 }
 )
@@ -108,15 +100,6 @@ public class NotificationConfiguration extends WebMvcConfigurerAdapter {
 	}
 	
 	@Bean
-	public PooledConnectionFactory pooledConnectionFactory() {
-		PooledConnectionFactory pooledConnectionFactory = new PooledConnectionFactory();
-		ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
-		activeMQConnectionFactory.setBrokerURL(this.environment.getProperty("activemq.brokerUrl","vm://localhost?broker.persistent=false"));
-		pooledConnectionFactory.setConnectionFactory(activeMQConnectionFactory);
-		return pooledConnectionFactory;
-	}
-	
-	@Bean
 	public JmsListenerContainerFactory jmsListenerContainerFactory(PooledConnectionFactory jmsFactory) {
 		final DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 		factory.setConnectionFactory(jmsFactory);
@@ -127,16 +110,6 @@ public class NotificationConfiguration extends WebMvcConfigurerAdapter {
 		});
 		factory.setConcurrency(this.environment.getProperty("activemq.concurrency","1-1"));
 		return factory;
-	}
-	
-	@Bean
-	public JmsTemplate jmsTemplate(ApplicationName applicationName, PooledConnectionFactory jmsFactory) {
-		ActiveMQTopic activeMQTopic = new ActiveMQTopic(applicationName.toString());
-		JmsTemplate jmsTemplate = new JmsTemplate();
-		jmsTemplate.setPubSubDomain(true);
-		jmsTemplate.setConnectionFactory(jmsFactory);
-		jmsTemplate.setDefaultDestination(activeMQTopic);
-		return jmsTemplate;
 	}
 	
 	@Bean

@@ -31,51 +31,56 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
+
 @SuppressWarnings("unused")
 @FeignClient(value = "notification-v1", path = "/notification/v1", configuration = CustomFeignClientsConfiguration.class)
 public interface NotificationManager {
 	
 	@RequestMapping(
-			value = "/configuration/sms/active",
+			value = "/configuration/sms",
 			method = RequestMethod.GET,
 			produces = MediaType.ALL_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-	SMSConfiguration findAllActiveSMSConfigurationEntities();
+	List<SMSConfiguration> findAllSMSConfigurations();
 	
 	@RequestMapping(
-			value = "/configuration/email/active",
+			value = "/configuration/email",
 			method = RequestMethod.GET,
 			produces = MediaType.ALL_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-	EmailConfiguration findAllActiveEmailConfigurationEntities();
+	List<EmailConfiguration> findAllEmailConfigurations();
 	
 	@RequestMapping(
-			value = "/configuration/sms/create",
+			value = "/configuration/sms",
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE
 	)
 	@ThrowsExceptions({
-			@ThrowsException(status = HttpStatus.NOT_FOUND, exception = ConfigurationNotFoundException.class)
+			@ThrowsException(status = HttpStatus.CONFLICT, exception = ConfigurationAlreadyExistException.class)
 	})
 	String createSMSConfiguration(final SMSConfiguration smsConfiguration);
 	
 	@RequestMapping(
-			value = "/configuration/email/create",
-			method = RequestMethod.POST,
-			produces = MediaType.APPLICATION_JSON_VALUE,
-			consumes = MediaType.APPLICATION_JSON_VALUE
-	)
-	String createEmailConfiguration(final EmailConfiguration emailConfiguration);
-	
-	@RequestMapping(
-			value = "/template/create",
+			value = "/configuration/email",
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE
 	)
 	@ThrowsExceptions({
-			@ThrowsException(status = HttpStatus.UNPROCESSABLE_ENTITY, exception = TemplateAlreadyExistException.class)
+			@ThrowsException(status = HttpStatus.CONFLICT, exception = ConfigurationAlreadyExistException.class)
+	})
+	String createEmailConfiguration(final EmailConfiguration emailConfiguration);
+	
+	@RequestMapping(
+			value = "/template",
+			method = RequestMethod.POST,
+			produces = MediaType.APPLICATION_JSON_VALUE,
+			consumes = MediaType.APPLICATION_JSON_VALUE
+	)
+	@ThrowsExceptions({
+			@ThrowsException(status = HttpStatus.CONFLICT, exception = TemplateAlreadyExistException.class)
 	})
 	String createTemplate(final Template template);
 	
@@ -95,32 +100,31 @@ public interface NotificationManager {
 	)
 	EmailConfiguration findEmailConfigurationByIdentifier(@PathVariable("identifier") final String identifier);
 	
-	@RequestMapping(value = "/configuration/sms/update",
+	@RequestMapping(value = "/configuration/sms",
 			method = RequestMethod.PUT,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	void updateSMSConfiguration(final SMSConfiguration smsConfiguration);
 	
-	@RequestMapping(value = "/configuration/email/update",
+	@RequestMapping(value = "/configuration/email",
 			method = RequestMethod.PUT,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	void updateEmailConfiguration(final EmailConfiguration emailConfiguration);
 	
-	@RequestMapping(value = "/configuration/sms/delete/{identifier}",
+	@RequestMapping(value = "/configuration/sms/{identifier}",
 			method = RequestMethod.DELETE,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	void deleteSMSConfiguration(@PathVariable("identifier") final String identifier);
 	
-	@RequestMapping(value = "/configuration/email/delete/{identifier}",
+	@RequestMapping(value = "/configuration/email/{identifier}",
 			method = RequestMethod.DELETE,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	void deleteEmailConfiguration(@PathVariable("identifier") final String identifier);
-	
 }

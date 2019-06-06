@@ -73,7 +73,7 @@ public class SmsApiDocumentation extends AbstractNotificationTest {
   public void documentCreateSMSConfiguration() throws Exception {
     final SMSConfiguration randomSMSConfiguration = DomainObjectGenerator.smsConfiguration();
   
-    this.mockMvc.perform(post("/configuration/sms/create")
+    this.mockMvc.perform(post("/configuration/sms")
         .accept(MediaType.APPLICATION_JSON_VALUE)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .content(gson.toJson(randomSMSConfiguration)))
@@ -135,7 +135,7 @@ public class SmsApiDocumentation extends AbstractNotificationTest {
     
     notificationManager.updateSMSConfiguration(randomSMSConfiguration);
     
-    this.mockMvc.perform(put("/configuration/sms/update")
+    this.mockMvc.perform(put("/configuration/sms")
         .accept(MediaType.APPLICATION_JSON_VALUE)
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .content(gson.toJson(randomSMSConfiguration)))
@@ -160,8 +160,7 @@ public class SmsApiDocumentation extends AbstractNotificationTest {
     
     super.eventRecorder.wait(NotificationEventConstants.POST_SMS_CONFIGURATION, randomSMSConfiguration.getIdentifier());
     
-    System.out.println(randomSMSConfiguration.getIdentifier());
-    this.mockMvc.perform(delete("/configuration/sms/delete/" + randomSMSConfiguration.getIdentifier())
+    this.mockMvc.perform(delete("/configuration/sms/" + randomSMSConfiguration.getIdentifier())
         .accept(MediaType.APPLICATION_JSON_VALUE)
         .contentType(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isOk())

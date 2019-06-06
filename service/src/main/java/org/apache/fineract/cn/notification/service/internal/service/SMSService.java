@@ -32,6 +32,7 @@ import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConsta
 import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.apache.fineract.cn.notification.service.internal.mapper.SMSConfigurationMapper;
 import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationRepository;
+import org.hibernate.mapping.Map;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -111,7 +112,9 @@ public class SMSService {
 				new PhoneNumber(receiver),
 				new PhoneNumber(this.senderNumber),
 				template);
-		Message message = messageCreator.create();
-		return message.getTo();
+		//Message message = messageCreator.create();
+		
+		System.out.println("\n\n\nsent");
+		return "";//message;
 	}
 }

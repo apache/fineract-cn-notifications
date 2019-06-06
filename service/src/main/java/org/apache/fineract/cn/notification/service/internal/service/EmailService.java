@@ -123,7 +123,7 @@ public class EmailService {
 			mail.setTo(to);
 			mail.setSubject(subject);
 			mail.setText(message);
-			this.mailSender.send(mail);
+			//this.mailSender.send(mail);
 			return to;
 		} catch (MailException exception) {
 			logger.debug("Caused by:" + exception.getCause().toString());
@@ -146,7 +146,7 @@ public class EmailService {
 			messageHelper.setText(content, true);
 		};
 		try {
-			this.mailSender.send(messagePreparator);
+			//this.mailSender.send(messagePreparator);
 			return to;
 		} catch (MailException e) {
 			logger.error("Failed to send Formatted email{}", e.getMessage());

@@ -25,7 +25,6 @@ import org.apache.fineract.cn.customer.api.v1.domain.Customer;
 import org.apache.fineract.cn.notification.api.v1.client.ConfigurationNotFoundException;
 import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
-import org.apache.fineract.cn.notification.service.internal.importer.TemplateImporter;
 import org.apache.fineract.cn.notification.service.internal.service.EmailService;
 import org.apache.fineract.cn.notification.util.DomainObjectGenerator;
 import org.junit.Assert;
@@ -33,7 +32,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -105,7 +103,7 @@ public class TestEmailService extends AbstractNotificationTest {
 		Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, emailConfiguration.getIdentifier()));
 		
 		EmailConfiguration sampleRetrieved = notificationManager.findEmailConfigurationByIdentifier(emailConfiguration.getIdentifier());
-		Assert.assertEquals(sampleRetrieved.getIdentifier(),emailConfiguration.getIdentifier());
+		Assert.assertEquals(sampleRetrieved,emailConfiguration);
 	}
 	
 	@Test
@@ -117,7 +115,7 @@ public class TestEmailService extends AbstractNotificationTest {
 	}
 	
 	@Test
-	public void shouldFindActiveGateway() {
+	public void shouldFindDefaultGateway() {
 		this.logger.info("Find Active Gateway");
 		Assert.assertNotNull(this.emailService.getDefaultEmailConfigurationEntity());
 	}

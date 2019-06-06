@@ -49,13 +49,13 @@ import org.springframework.stereotype.Component;
 
 @SuppressWarnings("unused")
 @Component
-public class EventListener {
+public class ConfigurationEventListener {
 	private final EventRecorder eventRecorder;
 	private final Logger logger;
 	
 	@Autowired
-	public EventListener(final EventRecorder eventRecorder,
-	                     @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger) {
+	public ConfigurationEventListener(final EventRecorder eventRecorder,
+	                                  @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger) {
 		this.logger = logger;
 		this.eventRecorder = eventRecorder;
 	}
