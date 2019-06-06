@@ -60,3 +60,16 @@ CREATE TABLE wada_templates (
 
 INSERT INTO wada_sms_gateway_configurations VALUES ('1', 'DEFAULT', 'ACdc00866577a42133e16d98456ad15592', '0b2f78b1c083eb71599d014d1af5748e', '+12055486680', 'ACTIVE');
 INSERT INTO wada_email_gateway_configurations VALUES ('1', 'DEFAULT', 'smtp.gmail.com', '587','fineractcnnotificationdemo@gmail.com', 'pnuugpwmcibipdpw', 'smtp', 'true', 'true', 'ACTIVE');
+
+/*Insert default template for supported events*/
+INSERT INTO wada_templates VALUES ('1','customerCreatedEvent','DEFAULT','Account created','Your account has been created','template');
+INSERT INTO wada_templates VALUES ('2','customerUpdatedEvents','DEFAULT','Account updated','Your account has been Updated','template');
+INSERT INTO wada_templates VALUES ('3','customerActivatedEvent','DEFAULT','Account Activated','Your account has been Activated','template');
+INSERT INTO wada_templates VALUES ('4','customerLockedEvent','DEFAULT','Account Locked','Your account has been Locked','template');
+INSERT INTO wada_templates VALUES ('5','customerUnlockedEvent','DEFAULT','Account unlocked','Your account has been Unlocked','template');
+INSERT INTO wada_templates VALUES ('6','customerClosedEvent','DEFAULT','Account closed successfully','Your account has been Closed','template');
+INSERT INTO wada_templates VALUES ('7','customerReopenedEvent','DEFAULT','Account Reopened','Your account has been reopened','template');
+INSERT INTO wada_templates VALUES ('8','contactDetailsChangedEvent','DEFAULT','Contact details has been updated','Your contact has been changed successfully','template');
+INSERT INTO wada_templates VALUES ('9','addressChangedEvent','DEFAULT','Residence address has been changed','Your address has been changed successfully','template');
+
+INSERT INTO wada_templates VALUES ('10','sample','DEFAULT','Test Subject','Talk is cheap! Show me the code','template');

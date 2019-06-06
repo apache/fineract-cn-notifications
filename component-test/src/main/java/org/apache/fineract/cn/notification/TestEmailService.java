@@ -49,33 +49,19 @@ public class TestEmailService extends AbstractNotificationTest {
 		emailConfiguration = DomainObjectGenerator.emailConfiguration();
 	}
 	
-	
 	@Test
-	public void shouldSendAnEmail() throws InterruptedException, IOException {
+	public void shouldSendAnEmail() throws InterruptedException,IOException {
 		this.logger.info("Send Email Notification");
-		final TemplateImporter importer = new TemplateImporter(testSubject, logger);
-		final URL uri = ClassLoader.getSystemResource("importdata/test-templates.csv");
-		importer.importCSV(uri);
-//		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_TEMPLATE, TEST_TEMPLATE));
-      eventRecorder.wait(NotificationEventConstants.POST_TEMPLATE, TEST_TEMPLATE);
-		
 		notificationService.sendEmail(
 				TEST_ADDRESS,
 				TEST_TEMPLATE,
 				null);
-		//Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.POST_SEND_EMAIL_NOTIFICATION,TEST_ADDRESS ));
-		this.eventRecorder.wait(NotificationEventConstants.POST_SEND_EMAIL_NOTIFICATION,TEST_ADDRESS );
+		//Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.SEND_EMAIL_NOTIFICATION,TEST_ADDRESS ));
 	}
 	
 	@Test
 	public void shouldSendFormattedEmail() throws InterruptedException, IOException {
 		this.logger.info("Send Email Notification");
-		final TemplateImporter importer = new TemplateImporter(testSubject, logger);
-		final URL uri = ClassLoader.getSystemResource("importdata/test-templates.csv");
-		importer.importCSV(uri);
-		
-		//Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_TEMPLATE, TEST_TEMPLATE));
-		eventRecorder.wait(NotificationEventConstants.POST_TEMPLATE, TEST_TEMPLATE);
 		
 		Customer customerPayload = new Customer();
 		customerPayload.setGivenName("Test");
@@ -98,15 +84,14 @@ public class TestEmailService extends AbstractNotificationTest {
 				templateVariables
 		);
 		
-		//Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.POST_SEND_EMAIL_NOTIFICATION,TEST_ADDRESS ));
-		this.eventRecorder.wait(NotificationEventConstants.POST_SEND_EMAIL_NOTIFICATION,TEST_ADDRESS );
+		//Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.SEND_EMAIL_NOTIFICATION,TEST_ADDRESS ));
 	}
 	
 	@Test(expected = NotFoundException.class)
 	public void emailConfigurationNotFound() throws ConfigurationNotFoundException {
 		logger.info("Configuration not found");
 		try {
-			this.testSubject.findEmailConfigurationByIdentifier(RandomStringUtils.randomAlphanumeric(8));
+			notificationManager.findEmailConfigurationByIdentifier(RandomStringUtils.randomAlphanumeric(8));
 		} catch (final ConfigurationNotFoundException ex) {
 			logger.info("Error Asserted");
 		}
@@ -115,21 +100,19 @@ public class TestEmailService extends AbstractNotificationTest {
 	@Test
 	public void shouldCreateAndRetrieveEmailConfigurationEntity() throws InterruptedException {
 		logger.info("Create and Retrieve Email Gateway configuration");
-		this.testSubject.createEmailConfiguration(emailConfiguration);
+		notificationManager.createEmailConfiguration(emailConfiguration);
 		
-		this.eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, emailConfiguration.getIdentifier());
+		Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, emailConfiguration.getIdentifier()));
 		
-		EmailConfiguration sampleRetrieved = this.testSubject.findEmailConfigurationByIdentifier(emailConfiguration.getIdentifier());
-		Assert.assertNotNull(sampleRetrieved);
-		Assert.assertEquals(sampleRetrieved.getIdentifier(), emailConfiguration.getIdentifier());
+		EmailConfiguration sampleRetrieved = notificationManager.findEmailConfigurationByIdentifier(emailConfiguration.getIdentifier());
+		Assert.assertEquals(sampleRetrieved.getIdentifier(),emailConfiguration.getIdentifier());
 	}
 	
 	@Test
 	public void checkEmailConfigurationEntityExist() throws InterruptedException {
 		logger.info("Email Gateway configuration Exist");
-		this.testSubject.createEmailConfiguration(emailConfiguration);
-		super.eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, emailConfiguration.getIdentifier());
-		
+		notificationManager.createEmailConfiguration(emailConfiguration);
+		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, emailConfiguration.getIdentifier()));
 		Assert.assertTrue(this.emailService.emailConfigurationExists(emailConfiguration.getIdentifier()));
 	}
 	

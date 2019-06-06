@@ -74,6 +74,9 @@ public interface NotificationManager {
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE
 	)
+	@ThrowsExceptions({
+			@ThrowsException(status = HttpStatus.UNPROCESSABLE_ENTITY, exception = TemplateAlreadyExistException.class)
+	})
 	String createTemplate(final Template template);
 	
 	@RequestMapping(

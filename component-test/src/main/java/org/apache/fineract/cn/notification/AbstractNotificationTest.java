@@ -54,7 +54,7 @@ public class AbstractNotificationTest extends SuiteTestEnvironment {
 	public static final String LOGGER_NAME = "test-logger";
 	public static final String TEST_USER = "homer";
 	public static final String TEST_ADDRESS = "egraham15@alustudent.com";
-	public static final String TEST_TEMPLATE= "test_sample";
+	public static final String TEST_TEMPLATE= "sample";
 	
 	@SuppressWarnings("WeakerAccess")
 	@Autowired
@@ -64,7 +64,7 @@ public class AbstractNotificationTest extends SuiteTestEnvironment {
 	@Autowired
 	public EventRecorder eventRecorder;
 	@Autowired
-	public NotificationManager testSubject;
+	public NotificationManager notificationManager;
 	@Autowired
 	public NotificationService notificationService;
 	

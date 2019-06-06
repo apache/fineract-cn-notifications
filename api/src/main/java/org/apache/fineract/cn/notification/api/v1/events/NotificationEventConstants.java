@@ -36,8 +36,8 @@ public interface NotificationEventConstants {
 	String DELETE_TEMPLATE = "delete-template";
 	String DELETE_SOURCE_APPLICATION = "delete-source-application";
 	
-	String POST_SEND_EMAIL_NOTIFICATION = "post-send-email-notification";
-	String POST_SEND_SMS_NOTIFICATION = "post-send-sms-notification";
+	String SEND_EMAIL_NOTIFICATION = "post-send-email-notification";
+	String SEND_SMS_NOTIFICATION = "post-send-sms-notification";
 	
 	String POST_ENABLE_CUSTOMER_CREATED_EVENT = "post-enable-customer-created-event";
 	String POST_ENABLE_CUSTOMER_UPDATED_EVENT = "post-enable-customer-updated-event";
@@ -57,6 +57,6 @@ public interface NotificationEventConstants {
 	String SELECTOR_POST_SOURCE_APPLICATION = SELECTOR_NAME + " = '" + POST_SOURCE_APPLICATION + "'";
 	String SELECTOR_DELETE_SOURCE_APPLICATION = SELECTOR_NAME + " = '" + DELETE_SOURCE_APPLICATION + "'";
 	
-	String SELECTOR_POST_SEND_EMAIL_NOTIFICATION = SELECTOR_NAME + " = '" + POST_SEND_EMAIL_NOTIFICATION + "'";
-	String SELECTOR_POST_SEND_SMS_NOTIFICATION = SELECTOR_NAME + " = '" + POST_SEND_SMS_NOTIFICATION + "'";
+	String SELECTOR_SEND_EMAIL_NOTIFICATION = SELECTOR_NAME + " = '" + SEND_EMAIL_NOTIFICATION + "'";
+	String SELECTOR_SEND_SMS_NOTIFICATION = SELECTOR_NAME + " = '" + SEND_SMS_NOTIFICATION + "'";
 }

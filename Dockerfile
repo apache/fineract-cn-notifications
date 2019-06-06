@@ -18,7 +18,7 @@
 #
 FROM openjdk:8-jdk-alpine
 
-ARG notification_port=2033
+ARG notification_port=2031
 
 ENV server.max-http-header-size=16384 \
     cassandra.clusterName="Test Cluster" \
@@ -28,4 +28,4 @@ ENV server.max-http-header-size=16384 \
 WORKDIR /tmp
 COPY notification-service-boot-0.1.0-BUILD-SNAPSHOT.jar .
 
-CMD ["java", "-jar", "customer-service-boot-0.1.0-BUILD-SNAPSHOT.jar"]
+CMD ["java", "-jar", "notification-service-boot-0.1.0-BUILD-SNAPSHOT.jar"]

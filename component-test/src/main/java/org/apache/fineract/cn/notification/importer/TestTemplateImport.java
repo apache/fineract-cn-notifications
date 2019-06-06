@@ -44,14 +44,12 @@ public class TestTemplateImport extends AbstractNotificationTest {
 		template.setMessage("Message");
 		template.setUrl("test/url");
 		
-		testSubject.createTemplate(template);
-		//Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_TEMPLATE, template.getTemplateIdentifier()));
-		eventRecorder.wait(NotificationEventConstants.POST_TEMPLATE, template.getTemplateIdentifier());
+		notificationManager.createTemplate(template);
+		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_TEMPLATE, template.getTemplateIdentifier()));
 		
-		final TemplateImporter importer = new TemplateImporter(testSubject, logger);
+		final TemplateImporter importer = new TemplateImporter(notificationManager, logger);
 		final URL uri = ClassLoader.getSystemResource("importdata/test-templates.csv");
 		importer.importCSV(uri);
-		//Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_TEMPLATE, "sample"));
-		eventRecorder.wait(NotificationEventConstants.POST_TEMPLATE, "sample");
+		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_TEMPLATE, "test_sample"));
 	}
 }

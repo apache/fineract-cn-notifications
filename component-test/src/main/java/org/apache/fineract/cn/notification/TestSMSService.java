@@ -59,10 +59,9 @@ public class TestSMSService extends AbstractNotificationTest {
 		logger.info("Create and Retrieve SMS Gateway configuration");
 		this.notificationManager.createSMSConfiguration(smsConfiguration);
 		
-		this.eventRecorder.wait(NotificationEventConstants.POST_SMS_CONFIGURATION, smsConfiguration.getIdentifier());
+		Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.POST_SMS_CONFIGURATION, smsConfiguration.getIdentifier()));
 		
 		SMSConfiguration sampleRetrieved = this.notificationManager.findSMSConfigurationByIdentifier(smsConfiguration.getIdentifier());
-		Assert.assertNotNull(sampleRetrieved);
 		Assert.assertEquals(sampleRetrieved.getIdentifier(), smsConfiguration.getIdentifier());
 	}
 	
@@ -83,10 +82,10 @@ public class TestSMSService extends AbstractNotificationTest {
 	}
 	
 	@Test
-	public void shouldSendAnSMS() {
+	public void shouldSendAnSMS(){
 		this.logger.info("Send SMS Notification");
-		String messageHash = this.notificationService.sendSMS("+23058409206",
+		String to = this.notificationService.sendSMS("+23058409206",
 				"Dear Valued Customer\n\nTalk is cheap show me the code\n\nBest Regards\nYour MFI");
-		Assert.assertNotNull(messageHash);
+		Assert.assertNotNull(to);
 	}
 }

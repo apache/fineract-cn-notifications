@@ -115,7 +115,7 @@ public class EmailService {
 	
 	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
 	@Transactional
-	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_SEND_EMAIL_NOTIFICATION)
+	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.SEND_EMAIL_NOTIFICATION)
 	public String sendPlainEmail(String to, String subject, String message) {
 		SimpleMailMessage mail = new SimpleMailMessage();
 		
@@ -128,12 +128,12 @@ public class EmailService {
 		} catch (MailException exception) {
 			logger.debug("Caused by:" + exception.getCause().toString());
 		}
-		return null;
+		return to;
 	}
 	
 	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
 	@Transactional
-	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_SEND_EMAIL_NOTIFICATION)
+	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.SEND_EMAIL_NOTIFICATION)
 	public String sendFormattedEmail(String to,
 	                                 String subject,
 	                                 Map<String, Object> message,

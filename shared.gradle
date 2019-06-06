@@ -58,7 +58,6 @@ repositories {
     jcenter()
     mavenLocal()
     maven { url 'https://mifos.jfrog.io/mifos/libs-snapshot/' }
-
 }
 
 dependencyManagement {
@@ -99,11 +98,11 @@ artifactory {
         }
 
         defaults {
-            publications ('api', 'componentTest', 'service', 'bootService')
+            publications('api', 'componentTest', 'service', 'bootService')
         }
     }
 }
-artifactoryPublish.dependsOn('clean','publishToMavenLocal')
+artifactoryPublish.dependsOn('clean', 'publishToMavenLocal')
 
 license {
     header rootProject.file('../HEADER')
@@ -126,8 +125,10 @@ rat {
             "gradlew",
             "gradlew.bat",
             "README.md",
-            "**/.dockerignore/**"
-
+            ".dockerignore",
+            "component-test/src/main/resources/importdata/*.csv",
+            "service/src/main/resources/templatedetails/*.csv",
     ]
+    plainOutput = true
 }
 
