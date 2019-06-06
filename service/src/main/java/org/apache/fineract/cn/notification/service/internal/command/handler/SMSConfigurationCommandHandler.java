@@ -24,7 +24,9 @@ import org.apache.fineract.cn.command.annotation.CommandLogLevel;
 import org.apache.fineract.cn.command.annotation.EventEmitter;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
+import org.apache.fineract.cn.notification.service.internal.command.UpdateSMSConfigurationCommand;
 import org.apache.fineract.cn.notification.service.internal.command.CreateSMSConfigurationCommand;
+import org.apache.fineract.cn.notification.service.internal.command.DeleteSMSConfigurationCommand;
 import org.apache.fineract.cn.notification.service.internal.mapper.SMSConfigurationMapper;
 import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationEntity;
 import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationRepository;
@@ -33,12 +35,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("unused")
 @Aggregate
-public class SMSConfigurationAggregate {
+public class SMSConfigurationCommandHandler {
 	
 	private final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository;
 	
 	@Autowired
-	public SMSConfigurationAggregate(SMSGatewayConfigurationRepository smsGatewayConfigurationRepository) {
+	public SMSConfigurationCommandHandler(SMSGatewayConfigurationRepository smsGatewayConfigurationRepository) {
 		super();
 		this.smsGatewayConfigurationRepository = smsGatewayConfigurationRepository;
 	}
@@ -46,11 +48,29 @@ public class SMSConfigurationAggregate {
 	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
 	@Transactional
 	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_SMS_CONFIGURATION)
-	public String createSMSConfiguration(final CreateSMSConfigurationCommand createSMSConfigurationCommand) {
+	public String process(final CreateSMSConfigurationCommand createSMSConfigurationCommand) {
 		SMSConfiguration smsConfiguration = createSMSConfigurationCommand.getSMSConfiguration();
 		final SMSGatewayConfigurationEntity entity = SMSConfigurationMapper.map(smsConfiguration);
 		this.smsGatewayConfigurationRepository.save(entity);
 		
 		return smsConfiguration.getIdentifier();
+	}
+	
+	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
+	@Transactional
+	public String process(final UpdateSMSConfigurationCommand updateSMSConfigurationCommand) {
+		final SMSGatewayConfigurationEntity newEntity = SMSConfigurationMapper.map(updateSMSConfigurationCommand.getSMSConfiguration());
+		this.smsGatewayConfigurationRepository.deleteSMSGatewayConfigurationEntityBy(newEntity.getIdentifier());
+		this.smsGatewayConfigurationRepository.save(newEntity);
+		
+		return newEntity.getIdentifier();
+	}
+	
+	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
+	@Transactional
+	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.DELETE_SMS_CONFIGURATION)
+	public String process(final DeleteSMSConfigurationCommand deleteSMSConfigurationCommand) {
+		smsGatewayConfigurationRepository.deleteSMSGatewayConfigurationEntityBy(deleteSMSConfigurationCommand.getIdentifier());
+		return deleteSMSConfigurationCommand.getIdentifier();
 	}
 }

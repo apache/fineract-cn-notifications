@@ -34,7 +34,7 @@ public class SMSConfiguration {
 	private String account_sid;
 	@Length(max = 45)
 	private String sender_number;
-	@Length(max = 45)
+	@Length(max = 20)
 	private String state;
 	
 	public SMSConfiguration() {

@@ -31,4 +31,9 @@ public interface EmailGatewayConfigurationRepository extends JpaRepository<Email
 	
 	@Query("SELECT CASE WHEN COUNT(c) > 0 THEN 'true' ELSE 'false' END FROM EmailGatewayConfigurationEntity c WHERE c.identifier = :identifier")
 	Boolean existsByIdentifier(@Param("identifier") final String identifier);
+	
+	@Query("SELECT entity FROM EmailGatewayConfigurationEntity entity WHERE entity.state='ACTIVE'")
+	Optional<EmailGatewayConfigurationEntity> active();
+	
+	void deleteEmailGatewayConfigurationEntityBy(String identifier);
 }

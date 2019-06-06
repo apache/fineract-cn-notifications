@@ -37,10 +37,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -50,8 +49,9 @@ public class EmailApiDocumentation extends AbstractNotificationTest {
 
   @Autowired
   private WebApplicationContext context;
-
-  private MockMvc mockMvc;
+	private Gson gson = new Gson();
+	
+	private MockMvc mockMvc;
 
   @Autowired
   private NotificationManager notificationManager;
@@ -71,12 +71,11 @@ public class EmailApiDocumentation extends AbstractNotificationTest {
   public void documentCreateEmailConfiguration() throws Exception {
     final EmailConfiguration emailConfiguration = DomainObjectGenerator.emailConfiguration();
 
-    Gson gson = new Gson();
-    this.mockMvc.perform(post("/notification/email/create")
+    this.mockMvc.perform(post("/configuration/email/create")
             .accept(MediaType.APPLICATION_JSON_VALUE)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(gson.toJson(emailConfiguration)))
-            .andExpect(status().isAccepted())
+            .andExpect(status().isCreated())
             .andDo(document("document-create-emailconfiguration", preprocessRequest(prettyPrint()),
                     requestFields(
                             fieldWithPath("identifier").description("EmailConfiguration's identifier"),
@@ -107,7 +106,7 @@ public class EmailApiDocumentation extends AbstractNotificationTest {
     this.notificationManager.createEmailConfiguration(emailConfiguration);
     eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, EmailConfiguration.class);
 
-    this.mockMvc.perform(get("/notification/email/" + emailConfiguration.getIdentifier())
+    this.mockMvc.perform(get("/configuration/email/" + emailConfiguration.getIdentifier())
             .accept(MediaType.ALL_VALUE)
             .contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(status().isOk())
@@ -124,5 +123,67 @@ public class EmailApiDocumentation extends AbstractNotificationTest {
                             fieldWithPath("state").description("EmailConfiguration's state")
                     )
             ));
+  }
+  
+  @Test
+  public void documentUpdateEmailConfiguration() throws Exception {
+    
+    final EmailConfiguration randomEmailConfiguration = DomainObjectGenerator.emailConfiguration();
+    final EmailConfiguration newRandomConfiguration = DomainObjectGenerator.emailConfiguration();
+    
+    this.notificationManager.createEmailConfiguration(randomEmailConfiguration);
+    
+    super.eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, randomEmailConfiguration.getIdentifier());
+    
+    newRandomConfiguration.setIdentifier(randomEmailConfiguration.getIdentifier());
+    newRandomConfiguration.setHost("new.host.com");
+    newRandomConfiguration.setApp_password("changePassword");
+    newRandomConfiguration.setPort("554");
+    newRandomConfiguration.setProtocol("pop3");
+    newRandomConfiguration.setUsername("newaddress@example.com");
+    newRandomConfiguration.setSmtp_auth("false");
+    newRandomConfiguration.setStart_tls("false");
+    newRandomConfiguration.setState("ACTIVE");
+    
+    notificationManager.updateEmailConfiguration(newRandomConfiguration);
+    
+    super.eventRecorder.wait(NotificationEventConstants.UPDATE_EMAIL_CONFIGURATION, newRandomConfiguration.getIdentifier());
+    
+    this.mockMvc.perform(put("/configuration/sms/update")
+        .accept(MediaType.APPLICATION_JSON_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(gson.toJson(newRandomConfiguration)))
+        .andExpect(status().isAccepted())
+        .andDo(document("document-update-email-configuration", preprocessRequest(prettyPrint()),
+            requestFields(
+                fieldWithPath("identifier").description("Configuration Id for Email Server"),
+                fieldWithPath("host").description("Email Server host address"),
+                fieldWithPath("port").description("Email Server port number"),
+                fieldWithPath("protocol").description("Type of protocol in use " +
+                    "\nSMTP" +
+                    "\nPOP3" +
+                    "\nIMAP"),
+                fieldWithPath("username").description("Email address"),
+                fieldWithPath("app_password").description("Email app password or normal password"),
+                fieldWithPath("smtp_auth").description("Enable SMTP"),
+                fieldWithPath("start_tls").description("Enable TLS"),
+                fieldWithPath("state").description("" +
+                    "\n ACTIVE for Gateway to be used" +
+                    "\n DEACTIVATED for inactive gateways")
+            )));
+  }
+  
+  @Test
+  public void documentDeleteEmailConfiguration() throws Exception {
+    final EmailConfiguration randomConfiguration = DomainObjectGenerator.emailConfiguration();
+    
+    notificationManager.createEmailConfiguration(randomConfiguration);
+    super.eventRecorder.wait(NotificationEventConstants.DELETE_EMAIL_CONFIGURATION, randomConfiguration.getIdentifier());
+    
+    this.mockMvc.perform(delete("/configuration/email/delete/" + randomConfiguration.getIdentifier())
+        .accept(MediaType.APPLICATION_JSON_VALUE)
+        .contentType(MediaType.APPLICATION_JSON_VALUE))
+        .andExpect(status().isOk())
+        .andDo(document("document-delete-email-configuration", preprocessResponse(prettyPrint())));
   }
 }

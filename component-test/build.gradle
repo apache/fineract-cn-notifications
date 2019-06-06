@@ -18,6 +18,7 @@
 buildscript {
     ext {
         springBootVersion = '1.4.1.RELEASE'
+        asciidoctorVersion = '1.5.3'
     }
 
     repositories {
@@ -26,7 +27,7 @@ buildscript {
 
     dependencies {
         classpath ("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("org.asciidoctor:asciidoctor-gradle-plugin:1.5.3")
+        classpath("org.asciidoctor:asciidoctor-gradle-plugin:${asciidoctorVersion}")
     }
 }
 
@@ -48,8 +49,15 @@ dependencies {
             [group: 'org.apache.fineract.cn', name: 'lang', version: versions.frameworklang],
             [group: 'org.springframework.boot', name: 'spring-boot-starter-test'],
             [group: 'org.springframework.restdocs', name: 'spring-restdocs-mockmvc'],
-            [group: 'junit', name: 'junit', version: '4.12']
+            [group: 'junit', name: 'junit', version: versions.junit]
     )
+}
+asciidoctor {
+    sourceDir 'build/doc/asciidoc/'
+    outputDir 'build/doc/html5'
+    options backend: "html", doctype: "book"
+    attributes "source-highlighter": "highlightjs",
+            'snippets': file('build/doc/generated-snippets/')
 }
 
 asciidoctor {
@@ -66,4 +74,8 @@ publishing {
             version project.findProperty('externalVersion') ?: project.version
         }
     }
+}
+
+task generateDocs {
+    dependsOn asciidoctor
 }

@@ -18,10 +18,13 @@
  */
 package org.apache.fineract.cn.notification.api.v1.client;
 
+import org.apache.fineract.cn.api.annotation.ThrowsException;
+import org.apache.fineract.cn.api.annotation.ThrowsExceptions;
 import org.apache.fineract.cn.api.util.CustomFeignClientsConfiguration;
 import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,37 +35,40 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface NotificationManager {
 	
 	@RequestMapping(
-			value = "/notification/sms/active",
+			value = "/configuration/sms/active",
 			method = RequestMethod.GET,
 			produces = MediaType.ALL_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	SMSConfiguration findAllActiveSMSConfigurationEntities();
 	
 	@RequestMapping(
-			value = "/notification/email/active",
+			value = "/configuration/email/active",
 			method = RequestMethod.GET,
 			produces = MediaType.ALL_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	EmailConfiguration findAllActiveEmailConfigurationEntities();
 	
 	@RequestMapping(
-			value = "/notification/sms/create",
+			value = "/configuration/sms/create",
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE
 	)
-	void createSMSConfiguration(final SMSConfiguration smsConfiguration);
+	@ThrowsExceptions({
+			@ThrowsException(status = HttpStatus.NOT_FOUND, exception = ConfigurationNotFoundException.class)
+	})
+	String createSMSConfiguration(final SMSConfiguration smsConfiguration);
 	
 	@RequestMapping(
-			value = "/notification/email/create",
+			value = "/configuration/email/create",
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE
 	)
-	void createEmailConfiguration(final EmailConfiguration emailConfiguration);
+	String createEmailConfiguration(final EmailConfiguration emailConfiguration);
 	
 	@RequestMapping(
-			value = "/notification/sms/{identifier}",
+			value = "/configuration/sms/{identifier}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE
@@ -70,10 +76,39 @@ public interface NotificationManager {
 	SMSConfiguration findSMSConfigurationByIdentifier(@PathVariable("identifier") final String identifier);
 	
 	@RequestMapping(
-			value = "/notification/email/{identifier}",
+			value = "/configuration/email/{identifier}",
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE
 	)
 	EmailConfiguration findEmailConfigurationByIdentifier(@PathVariable("identifier") final String identifier);
+	
+	@RequestMapping(value = "/configuration/sms/update",
+			method = RequestMethod.PUT,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	void updateSMSConfiguration(final SMSConfiguration smsConfiguration);
+	
+	@RequestMapping(value = "/configuration/email/update",
+			method = RequestMethod.PUT,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	void updateEmailConfiguration(final EmailConfiguration emailConfiguration);
+	
+	@RequestMapping(value = "/configuration/sms/delete/{identifier}",
+			method = RequestMethod.DELETE,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	void deleteSMSConfiguration(@PathVariable("identifier") final String identifier);
+	
+	@RequestMapping(value = "/configuration/email/delete/{identifier}",
+			method = RequestMethod.DELETE,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	void deleteEmailConfiguration(@PathVariable("identifier") final String identifier);
+	
 }

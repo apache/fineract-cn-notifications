@@ -24,7 +24,9 @@ import org.apache.fineract.cn.command.annotation.CommandLogLevel;
 import org.apache.fineract.cn.command.annotation.EventEmitter;
 import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
+import org.apache.fineract.cn.notification.service.internal.command.UpdateEmailConfigurationCommand;
 import org.apache.fineract.cn.notification.service.internal.command.CreateEmailConfigurationCommand;
+import org.apache.fineract.cn.notification.service.internal.command.DeleteEmailConfigurationCommand;
 import org.apache.fineract.cn.notification.service.internal.mapper.EmailConfigurationMapper;
 import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationEntity;
 import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationRepository;
@@ -33,25 +35,45 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("unused")
 @Aggregate
-public class EmailConfigurationAggregate {
+public class EmailConfigurationCommandHandler {
 	
 	private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
 	
 	@Autowired
-	public EmailConfigurationAggregate(EmailGatewayConfigurationRepository emailGatewayConfigurationRepository) {
+	public EmailConfigurationCommandHandler(EmailGatewayConfigurationRepository emailGatewayConfigurationRepository) {
 		super();
 		this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
 	}
 	
-	@CommandHandler(logStart = CommandLogLevel.DEBUG, logFinish = CommandLogLevel.DEBUG)
+	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
 	@Transactional
 	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_EMAIL_CONFIGURATION)
-	public String createEmailConfiguration(final CreateEmailConfigurationCommand createEmailConfigurationCommand) {
+	public String process(final CreateEmailConfigurationCommand createEmailConfigurationCommand) {
 		
 		EmailConfiguration emailConfiguration = createEmailConfigurationCommand.getEmailConfiguration();
 		final EmailGatewayConfigurationEntity entity = EmailConfigurationMapper.map(emailConfiguration);
 		this.emailGatewayConfigurationRepository.save(entity);
 		
 		return emailConfiguration.getIdentifier();
+	}
+	
+	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
+	@Transactional
+	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.UPDATE_EMAIL_CONFIGURATION)
+	public String process(final UpdateEmailConfigurationCommand updateEmailConfigurationCommand) {
+		EmailConfiguration emailConfiguration = updateEmailConfigurationCommand.getEmailConfiguration();
+		final EmailGatewayConfigurationEntity newEntity = EmailConfigurationMapper.map(emailConfiguration);
+		this.emailGatewayConfigurationRepository.deleteEmailGatewayConfigurationEntityBy(newEntity.getIdentifier());
+		this.emailGatewayConfigurationRepository.save(newEntity);
+		
+		return emailConfiguration.getIdentifier();
+	}
+	
+	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
+	@Transactional
+	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.DELETE_EMAIL_CONFIGURATION)
+	public String process(final DeleteEmailConfigurationCommand deleteEmailConfigurationCommand) {
+		this.emailGatewayConfigurationRepository.deleteEmailGatewayConfigurationEntityBy(deleteEmailConfigurationCommand.getIdentifier());
+		return deleteEmailConfigurationCommand.getIdentifier();
 	}
 }

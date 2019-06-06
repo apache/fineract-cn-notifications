@@ -16,25 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.service;
+package org.apache.fineract.cn.notification.service.internal.config;
 
 import org.apache.activemq.command.ActiveMQTopic;
 import org.apache.activemq.jms.pool.PooledConnectionFactory;
 import org.apache.activemq.spring.ActiveMQConnectionFactory;
-import org.apache.fineract.cn.identity.api.v1.client.IdentityManager;
 import org.apache.fineract.cn.anubis.config.EnableAnubis;
 import org.apache.fineract.cn.async.config.EnableAsync;
 import org.apache.fineract.cn.cassandra.config.EnableCassandra;
 import org.apache.fineract.cn.command.config.EnableCommandProcessing;
 import org.apache.fineract.cn.customer.api.v1.client.CustomerManager;
+import org.apache.fineract.cn.identity.api.v1.client.IdentityManager;
 import org.apache.fineract.cn.lang.ApplicationName;
 import org.apache.fineract.cn.lang.config.EnableServiceException;
 import org.apache.fineract.cn.lang.config.EnableTenantContext;
 import org.apache.fineract.cn.mariadb.config.EnableMariaDB;
+import org.apache.fineract.cn.notification.service.ServiceConstants;
+import org.apache.fineract.cn.notification.service.internal.identity.CustomerPermittedClient;
+import org.apache.fineract.cn.permittedfeignclient.config.EnablePermissionRequestingFeignClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
@@ -61,18 +65,23 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableAnubis
 @EnableServiceException
 @EnableJms
+@EnableConfigurationProperties
+@EnablePermissionRequestingFeignClient(feignClasses = {CustomerPermittedClient.class})
 @EnableFeignClients(
 		clients = {
 				CustomerManager.class,
-				IdentityManager.class
+				IdentityManager.class,
+				CustomerPermittedClient.class
 		}
 )
 @ComponentScan({
 		"org.apache.fineract.cn.notification.service.rest",
 		"org.apache.fineract.cn.notification.service.listener",
-		"org.apache.fineract.cn.notification.service.internal.service",
+		"org.apache.fineract.cn.notification.service.internal",
 		"org.apache.fineract.cn.notification.service.internal.repository",
 		"org.apache.fineract.cn.notification.service.internal.command.handler",
+		"org.apache.fineract.cn.notification.service.internal.identity",
+		"org.apache.fineract.cn.notification.service.internal.config",
 }
 )
 @EnableJpaRepositories({
@@ -87,7 +96,6 @@ public class NotificationConfiguration extends WebMvcConfigurerAdapter {
 		super();
 		this.environment = environment;
 	}
-	
 	
 	@Override
 	public void configurePathMatch(final PathMatchConfigurer configurer) {

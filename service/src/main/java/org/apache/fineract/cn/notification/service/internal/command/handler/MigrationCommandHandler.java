@@ -38,7 +38,7 @@ import javax.sql.DataSource;
 		"unused"
 })
 @Aggregate
-public class MigrationAggregate {
+public class MigrationCommandHandler {
 	
 	private final Logger logger;
 	private final DataSource dataSource;
@@ -46,10 +46,10 @@ public class MigrationAggregate {
 	private final ApplicationName applicationName;
 	
 	@Autowired
-	public MigrationAggregate(@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger,
-	                          final DataSource dataSource,
-	                          final FlywayFactoryBean flywayFactoryBean,
-	                          final ApplicationName applicationName) {
+	public MigrationCommandHandler(@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger,
+	                               final DataSource dataSource,
+	                               final FlywayFactoryBean flywayFactoryBean,
+	                               final ApplicationName applicationName) {
 		super();
 		this.logger = logger;
 		this.dataSource = dataSource;

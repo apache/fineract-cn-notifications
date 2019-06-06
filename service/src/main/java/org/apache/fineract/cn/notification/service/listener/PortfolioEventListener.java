@@ -55,6 +55,12 @@ public class PortfolioEventListener {
 	)
 	public void onOpen(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                   final String payload) {
+		logger.debug("Payload: " + payload+ "Tenant" +tenant);
+		this.notificationService.sendSMS("+23058409206",
+				"Dear Valued Customer," +
+						"\n\nYour loan request has been denied" +
+						"\n\nBest Regards" +
+						"\nYour MFI");
 	}
 	
 	@JmsListener(
@@ -65,7 +71,10 @@ public class PortfolioEventListener {
 	public void onDeny(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                   final String payload) {
 		this.notificationService.sendSMS("+23058409206",
-				"Dear Valued Customer,\n\nYour loan request has been denied\n\nBest Regards\nYour MFI");
+				"Dear Valued Customer," +
+						"\n\nYour loan request has been denied" +
+						"\n\nBest Regards" +
+						"\nYour MFI");
 	}
 	
 	@JmsListener(
@@ -77,7 +86,10 @@ public class PortfolioEventListener {
 	                      final String payload) {
 		logger.info(payload);
 		this.notificationService.sendSMS("+23058409206",
-				"Dear Valued Customer,\n\nYour loan has been Approved and waiting disbursal\n\nBest Regards\nYour MFI");
+				"Dear Valued Customer," +
+						"\n\nYour loan has been Approved and waiting disbursal" +
+						"\n\nBest Regards" +
+						"\nYour MFI");
 	}
 	
 	@JmsListener(
@@ -87,18 +99,12 @@ public class PortfolioEventListener {
 	)
 	public void onDisburse(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                       final String payload) {
-		logger.info(payload);
+		logger.info(payload.toString());
 		this.notificationService.sendSMS("+23058409206",
-			"Dear Valued Customer,\n\nYour loan has been disbursed\n\nBest Regards\nYour MFI");
-	}
-	
-	@JmsListener(
-			subscription = IndividualLoanEventConstants.DESTINATION,
-			destination = IndividualLoanEventConstants.DESTINATION,
-			selector = IndividualLoanEventConstants.SELECTOR_APPLY_INTEREST_INDIVIDUALLOAN_CASE
-	)
-	public void onApplyInterest(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-	                            final String payload) {
+			"Dear Valued Customer," +
+					"\n\nYour loan has been disbursed" +
+					"\n\nBest Regards" +
+					"\nYour MFI");
 	}
 	
 	@JmsListener(
@@ -108,15 +114,11 @@ public class PortfolioEventListener {
 	)
 	public void onAcceptPayment(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                            final String payload) {
-	}
-	
-	@JmsListener(
-			subscription = IndividualLoanEventConstants.DESTINATION,
-			destination = IndividualLoanEventConstants.DESTINATION,
-			selector = IndividualLoanEventConstants.SELECTOR_CHECK_LATE_INDIVIDUALLOAN_CASE
-	)
-	public void onCheckLate(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-	                        final String payload) {
+		this.notificationService.sendSMS("+23058409206",
+				"Dear Valued Customer," +
+						"\n\nYour payment has been accepted" +
+						"\n\nBest Regards" +
+						"\nYour MFI");
 	}
 	
 	@JmsListener(
@@ -126,6 +128,12 @@ public class PortfolioEventListener {
 	)
 	public void onMarkLate(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                       final String payload) {
+		
+		this.notificationService.sendSMS("+23058409206",
+				"Dear Valued Customer," +
+						"\n\nYour payment for your loan is late" +
+						"\n\nBest Regards" +
+						"\nYour MFI");
 	}
 	
 	@JmsListener(
@@ -135,15 +143,11 @@ public class PortfolioEventListener {
 	)
 	public void onMarkInArrears(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                            final String payload) {
-	}
-	
-	@JmsListener(
-			subscription = IndividualLoanEventConstants.DESTINATION,
-			destination = IndividualLoanEventConstants.DESTINATION,
-			selector = IndividualLoanEventConstants.SELECTOR_WRITE_OFF_INDIVIDUALLOAN_CASE
-	)
-	public void onWriteOff(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-	                       final String payload) {
+		this.notificationService.sendSMS("+23058409206",
+				"Dear Valued Customer," +
+						"\n\nYour payment has been marked as arrears for next payment" +
+						"\n\nBest Regards" +
+						"\nYour MFI");
 	}
 	
 	@JmsListener(
@@ -153,6 +157,11 @@ public class PortfolioEventListener {
 	)
 	public void onClose(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                    final String payload) {
+		this.notificationService.sendSMS("+23058409206",
+				"Dear Valued Customer," +
+						"\n\nYour loan has been closed" +
+						"\n\nBest Regards" +
+						"\nYour MFI");
 	}
 	
 	@JmsListener(
@@ -162,5 +171,10 @@ public class PortfolioEventListener {
 	)
 	public void onRecover(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                      final String payload) {
+		this.notificationService.sendSMS("+23058409206",
+				"Dear Valued Customer," +
+						"\n\nYour arrears have been recovered" +
+						"\n\nBest Regards" +
+						"\nYour MFI");
 	}
 }

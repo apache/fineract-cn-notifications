@@ -26,7 +26,7 @@ import java.util.Objects;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class EmailConfiguration {
 	@ValidIdentifier
-	@Length(max = 11)
+	@Length(max = 45)
 	private String identifier;
 	@Length(max = 45)
 	private String host;
@@ -42,7 +42,7 @@ public class EmailConfiguration {
 	private String smtp_auth;
 	@Length(max = 45)
 	private String start_tls;
-	@Length(max = 45)
+	@Length(max = 10)
 	private String state;
 	
 	public EmailConfiguration() {

@@ -32,4 +32,3 @@ env:
 after_failure:
   - ./gradlew rat
   - cat api/build/reports/rat/rat-report.txt
-

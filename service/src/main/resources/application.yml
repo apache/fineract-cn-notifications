@@ -82,7 +82,6 @@ async:
 flyway:
   enabled: false
 
-smssender:
-  accountSID: AC1fde2c6f26f367b93231c5fdb944c908
-  authToken: bc9a53e41745b8471e0ecafc859d86aa
-  senderNumber: +1 510-944-1898
+notification:
+  user: operator
+  password: init1@l

@@ -21,14 +21,11 @@ package org.apache.fineract.cn.notification;
 import org.apache.fineract.cn.anubis.test.v1.TenantApplicationSecurityEnvironmentTestRule;
 import org.apache.fineract.cn.api.context.AutoUserContext;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
-import org.apache.fineract.cn.notification.service.NotificationConfiguration;
+import org.apache.fineract.cn.notification.service.internal.config.NotificationConfiguration;
 import org.apache.fineract.cn.test.fixture.TenantDataStoreContextTestRule;
 import org.apache.fineract.cn.test.listener.EnableEventRecording;
 import org.apache.fineract.cn.test.listener.EventRecorder;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,15 +49,16 @@ public class AbstractNotificationTest extends SuiteTestEnvironment {
 	
 	@ClassRule
 	public final static TenantDataStoreContextTestRule tenantDataStoreContext = TenantDataStoreContextTestRule.forRandomTenantName(cassandraInitializer, mariaDBInitializer);
-	private static final String LOGGER_NAME = "test-logger";
-	private static final String TEST_USER = "homer";
+	public static final String LOGGER_NAME = "test-logger";
+	public static final String TEST_USER = "homer";
+	
 	@SuppressWarnings("WeakerAccess")
 	@Autowired
 	@Qualifier(LOGGER_NAME)
 	Logger logger;
-	private AutoUserContext userContext;
+	public AutoUserContext userContext;
 	@Autowired
-	private EventRecorder eventRecorder;
+	public EventRecorder eventRecorder;
 	@Rule
 	public final TenantApplicationSecurityEnvironmentTestRule tenantApplicationSecurityEnvironment
 			= new TenantApplicationSecurityEnvironmentTestRule(testEnvironment, this::waitForInitialize);
@@ -96,7 +94,7 @@ public class AbstractNotificationTest extends SuiteTestEnvironment {
 	@RibbonClient(name = APP_NAME)
 	@ComponentScan({"org.apache.fineract.cn.notification.listener",
 			"org.apache.fineract.cn.notification.service.internal.service",
-			"org.apache.fineract.cn.notification.service.internal.service.helperservice"
+			"org.apache.fineract.cn.notification.service.internal.service.externalServiceClients"
 	})
 	@Import({NotificationConfiguration.class})
 	public static class TestConfiguration {

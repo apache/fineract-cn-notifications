@@ -23,46 +23,95 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.rest.api.v2010.account.MessageCreator;
 import com.twilio.type.PhoneNumber;
+import org.apache.fineract.cn.command.annotation.Aggregate;
+import org.apache.fineract.cn.command.annotation.CommandHandler;
+import org.apache.fineract.cn.command.annotation.CommandLogLevel;
+import org.apache.fineract.cn.command.annotation.EventEmitter;
+import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
+import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
+import org.apache.fineract.cn.notification.service.internal.mapper.SMSConfigurationMapper;
+import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
+@Aggregate
 public class SMSService {
 	
+	static boolean isConfigured;
+	private final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository;
 	private final Logger logger;
-	@Value("${smssender.accountSID}")
-	private String ACCOUNT_SID;
-	@Value("${smssender.authToken}")
-	private String AUTH_TOKEN;
-	@Value("${smssender.senderNumber}")
-	private String SENDERNUMBER;
+	private String accountSid;
+	private String authToken;
+	private String senderNumber;
 	
 	@Autowired
-	public SMSService(@Qualifier(ServiceConstants.LOGGER_NAME) Logger logger) {
+	public SMSService(final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository,
+	                  @Qualifier(ServiceConstants.LOGGER_NAME) Logger logger) {
 		super();
 		this.logger = logger;
+		this.isConfigured = false;
+		this.smsGatewayConfigurationRepository = smsGatewayConfigurationRepository;
 	}
 	
-	public void configure(String accountSID,
-	                      String authToken,
-	                      String senderNumber) {
-		ACCOUNT_SID = accountSID;
-		AUTH_TOKEN = authToken;
-		SENDERNUMBER = senderNumber;
+	//@PostConstruct
+	public void init() {
+		if (findActiveSMSConfigurationEntity().isPresent()){
+			configureSMSGatewayWithActiveConfiguration();
+		}else{
+			//Todo: Send an alert on the interface to configure the service
+		}
 	}
 	
-	public void sendSMS(String receiver, String template) {
-		this.logger.debug("sendSMS invoked");
-		Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-		MessageCreator messageCreator = Message.creator(ACCOUNT_SID,
+	public boolean configureSMSGatewayWithActiveConfiguration() {
+		SMSConfiguration configuration = findActiveSMSConfigurationEntity().get();
+		this.accountSid = configuration.getAccount_sid();
+		this.authToken = configuration.getAuth_token();
+		this.senderNumber = configuration.getSender_number();
+		return this.isConfigured = true;
+	}
+	
+	public boolean customConfiguration(String identifier) {
+		SMSConfiguration configuration = findSMSConfigurationByIdentifier(identifier).get();
+		this.accountSid = configuration.getAccount_sid();
+		this.authToken = configuration.getAuth_token();
+		this.senderNumber = configuration.getSender_number();
+		return this.isConfigured = true;
+	}
+	
+	public Optional<SMSConfiguration> findActiveSMSConfigurationEntity() {
+		return this.smsGatewayConfigurationRepository.active().map(SMSConfigurationMapper::map);
+	}
+	
+	public Boolean smsConfigurationExists(final String identifier) {
+		return this.smsGatewayConfigurationRepository.existsByIdentifier(identifier);
+	}
+	
+	public Optional<SMSConfiguration> findSMSConfigurationByIdentifier(final String identifier) {
+		return this.smsGatewayConfigurationRepository.findByIdentifier(identifier).map(SMSConfigurationMapper::map);
+	}
+	
+	public List<SMSConfiguration> findAllActiveSMSConfigurationEntities() {
+		return SMSConfigurationMapper.map(this.smsGatewayConfigurationRepository.findAll());
+	}
+	
+	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
+	@Transactional
+	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.SEND_SMS_NOTIFICATION)
+	public String sendSMS(String receiver, String template) {
+		Twilio.init(this.accountSid, this.authToken);
+		MessageCreator messageCreator = Message.creator(this.accountSid,
 				new PhoneNumber(receiver),
-				new PhoneNumber(SENDERNUMBER),
+				new PhoneNumber(this.senderNumber),
 				template);
 		Message message = messageCreator.create();
-		System.out.println(message.getSid());
+		return message.getTo();
 	}
 }

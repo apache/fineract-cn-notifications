@@ -18,11 +18,11 @@
  */
 package org.apache.fineract.cn.notification.service.internal.command;
 
-public class PostSMSCommand {
+public class DeleteSMSConfigurationCommand {
 	
 	private final String identifier;
 	
-	public PostSMSCommand(final String identifier) {
+	public DeleteSMSConfigurationCommand(final String identifier) {
 		super();
 		this.identifier = identifier;
 	}
@@ -33,8 +33,8 @@ public class PostSMSCommand {
 	
 	@Override
 	public String toString() {
-		return "PostSMSCommand{"
-				+ "PostSMS=" + identifier
-				+ '}';
+		return "DeleteSMSConfigurationCommand{" +
+				"identifier='" + identifier + '\'' +
+				'}';
 	}
 }

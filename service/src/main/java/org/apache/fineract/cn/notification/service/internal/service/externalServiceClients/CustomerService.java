@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.service.internal.service.helperservice;
+package org.apache.fineract.cn.notification.service.internal.service.externalServiceClients;
 
 import org.apache.fineract.cn.customer.api.v1.client.CustomerManager;
 import org.apache.fineract.cn.customer.api.v1.client.CustomerNotFoundException;
@@ -30,13 +30,13 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class CustomerAdaptor {
+public class CustomerService {
 	
 	private final Logger logger;
 	private final CustomerManager customerManager;
 	
 	@Autowired
-	public CustomerAdaptor(@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger,
+	public CustomerService(@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger,
 	                       final CustomerManager customerManager) {
 		super();
 		this.logger = logger;

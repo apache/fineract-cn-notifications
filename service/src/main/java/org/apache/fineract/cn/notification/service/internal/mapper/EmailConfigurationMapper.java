@@ -21,6 +21,7 @@ package org.apache.fineract.cn.notification.service.internal.mapper;
 
 import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
 import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationEntity;
+import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,5 @@ public class EmailConfigurationMapper {
 		emailConfigurationList.addAll(emailGatewayConfigurationEntity.stream().map(EmailConfigurationMapper::map).collect(Collectors.toList()));
 		return emailConfigurationList;
 	}
-	
 }
 
