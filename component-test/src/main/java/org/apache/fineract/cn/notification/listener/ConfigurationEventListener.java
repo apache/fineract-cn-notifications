@@ -108,6 +108,7 @@ public class ConfigurationEventListener {
 	public void onDeleteEmailConfiguration(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                           final String payload) {
 		this.eventRecorder.event(tenant, NotificationEventConstants.DELETE_EMAIL_CONFIGURATION, payload, String.class);
+		logger.info("onDeleteEmailConfiguration received");
 	}
 	
 	@JmsListener(
@@ -148,6 +149,6 @@ public class ConfigurationEventListener {
 		public void onPostTemplate(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 		final String payload) {
 			this.eventRecorder.event(tenant, NotificationEventConstants.POST_TEMPLATE, payload, String.class);
-		}
+	}
 	
 }

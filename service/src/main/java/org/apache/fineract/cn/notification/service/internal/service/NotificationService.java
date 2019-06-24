@@ -60,7 +60,7 @@ public class NotificationService {
 		return customerService.findCustomer(customerIdentifier);
 	}
 	
-	public String sendSMS(String receiver, String template) {
+	public int sendSMS(String receiver, String template) {
 		if (!this.smsService.isConfigured) this.smsService.configureServiceWithDefaultGateway();
 		return this.smsService.sendSMS(receiver, template);
 	}

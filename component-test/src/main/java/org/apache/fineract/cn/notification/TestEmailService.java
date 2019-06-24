@@ -54,7 +54,6 @@ public class TestEmailService extends AbstractNotificationTest {
 				TEST_ADDRESS,
 				TEST_TEMPLATE,
 				null);
-		//Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.SEND_EMAIL_NOTIFICATION,TEST_ADDRESS ));
 	}
 	
 	@Test
@@ -81,8 +80,6 @@ public class TestEmailService extends AbstractNotificationTest {
 				TEST_TEMPLATE,
 				templateVariables
 		);
-		
-		//Assert.assertTrue(this.eventRecorder.wait(NotificationEventConstants.SEND_EMAIL_NOTIFICATION,TEST_ADDRESS ));
 	}
 	
 	@Test(expected = NotFoundException.class)
@@ -112,6 +109,17 @@ public class TestEmailService extends AbstractNotificationTest {
 		notificationManager.createEmailConfiguration(emailConfiguration);
 		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, emailConfiguration.getIdentifier()));
 		Assert.assertTrue(this.emailService.emailConfigurationExists(emailConfiguration.getIdentifier()));
+	}
+	
+	@Test
+	public void deleteConfiguration() throws InterruptedException {
+		logger.info("Delete Email configuration");
+		
+		notificationManager.createEmailConfiguration(emailConfiguration);
+		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, emailConfiguration.getIdentifier()));
+		
+		notificationManager.deleteEmailConfiguration(emailConfiguration.getIdentifier());
+		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.DELETE_EMAIL_CONFIGURATION, emailConfiguration.getIdentifier()));
 	}
 	
 	@Test

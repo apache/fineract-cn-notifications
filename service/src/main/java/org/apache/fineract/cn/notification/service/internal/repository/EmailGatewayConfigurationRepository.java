@@ -35,5 +35,6 @@ public interface EmailGatewayConfigurationRepository extends JpaRepository<Email
 	@Query("SELECT entity FROM EmailGatewayConfigurationEntity entity WHERE entity.identifier='DEFAULT'")
 	Optional<EmailGatewayConfigurationEntity> defaultGateway();
 	
-	void deleteEmailGatewayConfigurationEntityBy(String identifier);
+	void deleteEmailGatewayConfigurationEntityByIdentifier(String identifier);
+	
 }

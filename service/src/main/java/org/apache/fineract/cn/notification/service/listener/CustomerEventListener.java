@@ -98,7 +98,7 @@
 	    )
 	    public void customerUpdatedEvents(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                                      final String payload) {
-		    this.logger.info("{} has been invoked", "customerUpdatedEvents");
+		    this.logger.info("{} has been invoked", "customerUpdatedEvent");
 		    Customer customer = this.notificationService.findCustomer(payload, tenant).get();
 		
 		    customer.getContactDetails().forEach(contact -> {
@@ -117,7 +117,7 @@
 				    // TODO: Pass message to template
 				    notificationService.sendEmail(
 						    emailAddress,
-						    "customerUpdatedEvents",
+						    "customerUpdatedEvent",
 						    payload);
 			    }
 		    });

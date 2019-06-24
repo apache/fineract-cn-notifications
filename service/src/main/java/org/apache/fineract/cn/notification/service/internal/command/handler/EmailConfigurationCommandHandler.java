@@ -63,7 +63,7 @@ public class EmailConfigurationCommandHandler {
 	public String process(final UpdateEmailConfigurationCommand updateEmailConfigurationCommand) {
 		EmailConfiguration emailConfiguration = updateEmailConfigurationCommand.getEmailConfiguration();
 		final EmailGatewayConfigurationEntity newEntity = EmailConfigurationMapper.map(emailConfiguration);
-		this.emailGatewayConfigurationRepository.deleteEmailGatewayConfigurationEntityBy(newEntity.getIdentifier());
+		this.emailGatewayConfigurationRepository.deleteEmailGatewayConfigurationEntityByIdentifier(newEntity.getIdentifier());
 		this.emailGatewayConfigurationRepository.save(newEntity);
 		
 		return emailConfiguration.getIdentifier();
@@ -73,7 +73,7 @@ public class EmailConfigurationCommandHandler {
 	@Transactional
 	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.DELETE_EMAIL_CONFIGURATION)
 	public String process(final DeleteEmailConfigurationCommand deleteEmailConfigurationCommand) {
-		this.emailGatewayConfigurationRepository.deleteEmailGatewayConfigurationEntityBy(deleteEmailConfigurationCommand.getIdentifier());
+		this.emailGatewayConfigurationRepository.deleteEmailGatewayConfigurationEntityByIdentifier(deleteEmailConfigurationCommand.getIdentifier());
 		return deleteEmailConfigurationCommand.getIdentifier();
 	}
 }

@@ -59,4 +59,7 @@ public interface NotificationEventConstants {
 	
 	String SELECTOR_SEND_EMAIL_NOTIFICATION = SELECTOR_NAME + " = '" + SEND_EMAIL_NOTIFICATION + "'";
 	String SELECTOR_SEND_SMS_NOTIFICATION = SELECTOR_NAME + " = '" + SEND_SMS_NOTIFICATION + "'";
+	
+	String TEST = "jms-test";
+	String SELECTOR_TEST = SELECTOR_NAME + " = '" + TEST + "'";
 }

@@ -84,8 +84,19 @@ public class TestSMSService extends AbstractNotificationTest {
 	@Test
 	public void shouldSendAnSMS(){
 		this.logger.info("Send SMS Notification");
-		String to = this.notificationService.sendSMS("+23058409206",
+		int to = this.notificationService.sendSMS(SMS_TEST_NUMBER,
 				"Dear Valued Customer\n\nTalk is cheap show me the code\n\nBest Regards\nYour MFI");
 		Assert.assertNotNull(to);
+	}
+	
+	@Test
+	public void deleteConfiguration() throws InterruptedException {
+		logger.info("Delete SMS configuration");
+		
+		notificationManager.createSMSConfiguration(smsConfiguration);
+		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_SMS_CONFIGURATION, smsConfiguration.getIdentifier()));
+		
+		notificationManager.deleteSMSConfiguration(smsConfiguration.getIdentifier());
+		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.DELETE_SMS_CONFIGURATION, smsConfiguration.getIdentifier()));
 	}
 }

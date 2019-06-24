@@ -18,7 +18,6 @@
  */
 package org.apache.fineract.cn.notification.service.internal.service;
 
-import org.apache.fineract.cn.command.annotation.Aggregate;
 import org.apache.fineract.cn.command.annotation.CommandHandler;
 import org.apache.fineract.cn.command.annotation.CommandLogLevel;
 import org.apache.fineract.cn.command.annotation.EventEmitter;
@@ -46,7 +45,6 @@ import java.util.Optional;
 import java.util.Properties;
 
 @Component
-@Aggregate
 public class EmailService {
 	
 	private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
@@ -113,9 +111,6 @@ public class EmailService {
 		return false;
 	}
 	
-	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
-	@Transactional
-	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.SEND_EMAIL_NOTIFICATION)
 	public String sendPlainEmail(String to, String subject, String message) {
 		SimpleMailMessage mail = new SimpleMailMessage();
 		
@@ -123,7 +118,7 @@ public class EmailService {
 			mail.setTo(to);
 			mail.setSubject(subject);
 			mail.setText(message);
-			//this.mailSender.send(mail);
+			this.mailSender.send(mail);
 			return to;
 		} catch (MailException exception) {
 			logger.debug("Caused by:" + exception.getCause().toString());
@@ -131,9 +126,6 @@ public class EmailService {
 		return to;
 	}
 	
-	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
-	@Transactional
-	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.SEND_EMAIL_NOTIFICATION)
 	public String sendFormattedEmail(String to,
 	                                 String subject,
 	                                 Map<String, Object> message,
@@ -146,7 +138,7 @@ public class EmailService {
 			messageHelper.setText(content, true);
 		};
 		try {
-			//this.mailSender.send(messagePreparator);
+			this.mailSender.send(messagePreparator);
 			return to;
 		} catch (MailException e) {
 			logger.error("Failed to send Formatted email{}", e.getMessage());

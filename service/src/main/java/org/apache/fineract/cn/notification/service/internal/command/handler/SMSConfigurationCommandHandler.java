@@ -60,7 +60,7 @@ public class SMSConfigurationCommandHandler {
 	@Transactional
 	public String process(final UpdateSMSConfigurationCommand updateSMSConfigurationCommand) {
 		final SMSGatewayConfigurationEntity newEntity = SMSConfigurationMapper.map(updateSMSConfigurationCommand.getSMSConfiguration());
-		this.smsGatewayConfigurationRepository.deleteSMSGatewayConfigurationEntityBy(newEntity.getIdentifier());
+		this.smsGatewayConfigurationRepository.deleteSMSGatewayConfigurationEntityByIdentifier(newEntity.getIdentifier());
 		this.smsGatewayConfigurationRepository.save(newEntity);
 		
 		return newEntity.getIdentifier();
@@ -70,7 +70,7 @@ public class SMSConfigurationCommandHandler {
 	@Transactional
 	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.DELETE_SMS_CONFIGURATION)
 	public String process(final DeleteSMSConfigurationCommand deleteSMSConfigurationCommand) {
-		smsGatewayConfigurationRepository.deleteSMSGatewayConfigurationEntityBy(deleteSMSConfigurationCommand.getIdentifier());
+		smsGatewayConfigurationRepository.deleteSMSGatewayConfigurationEntityByIdentifier(deleteSMSConfigurationCommand.getIdentifier());
 		return deleteSMSConfigurationCommand.getIdentifier();
 	}
 }

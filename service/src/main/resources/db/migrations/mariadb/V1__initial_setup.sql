@@ -21,7 +21,7 @@
 -- Table wada_sms_gateway_configurations
 -- -----------------------------------------------------
 CREATE TABLE wada_sms_gateway_configurations (
-  id INT(45) NOT NULL AUTO_INCREMENT,
+  id INT NOT NULL AUTO_INCREMENT,
   identifier VARCHAR(45) NULL DEFAULT NULL,
   account_sid VARCHAR(255) NOT NULL,
   auth_token VARCHAR(255) NOT NULL,
@@ -63,7 +63,7 @@ INSERT INTO wada_email_gateway_configurations VALUES ('1', 'DEFAULT', 'smtp.gmai
 
 /*Insert default template for supported events*/
 INSERT INTO wada_templates VALUES ('1','customerCreatedEvent','DEFAULT','Account created','Your account has been created','template');
-INSERT INTO wada_templates VALUES ('2','customerUpdatedEvents','DEFAULT','Account updated','Your account has been Updated','template');
+INSERT INTO wada_templates VALUES ('2','customerUpdatedEvent','DEFAULT','Account updated','Your account has been Updated','template');
 INSERT INTO wada_templates VALUES ('3','customerActivatedEvent','DEFAULT','Account Activated','Your account has been Activated','template');
 INSERT INTO wada_templates VALUES ('4','customerLockedEvent','DEFAULT','Account Locked','Your account has been Locked','template');
 INSERT INTO wada_templates VALUES ('5','customerUnlockedEvent','DEFAULT','Account unlocked','Your account has been Unlocked','template');
@@ -73,3 +73,4 @@ INSERT INTO wada_templates VALUES ('8','contactDetailsChangedEvent','DEFAULT','C
 INSERT INTO wada_templates VALUES ('9','addressChangedEvent','DEFAULT','Residence address has been changed','Your address has been changed successfully','template');
 
 INSERT INTO wada_templates VALUES ('10','sample','DEFAULT','Test Subject','Talk is cheap! Show me the code','template');
+

@@ -53,8 +53,9 @@ public class AbstractNotificationTest extends SuiteTestEnvironment {
 	public final static TenantDataStoreContextTestRule tenantDataStoreContext = TenantDataStoreContextTestRule.forRandomTenantName(cassandraInitializer, mariaDBInitializer);
 	public static final String LOGGER_NAME = "test-logger";
 	public static final String TEST_USER = "homer";
-	public static final String TEST_ADDRESS = "egraham15@alustudent.com";
+	public static final String TEST_ADDRESS = "egraham15@alustudent.com"; // Replace with developer's dummy testing email
 	public static final String TEST_TEMPLATE= "sample";
+	public static final String SMS_TEST_NUMBER= "+23058409206"; // Replace with developers dummy testing number
 	
 	@SuppressWarnings("WeakerAccess")
 	@Autowired

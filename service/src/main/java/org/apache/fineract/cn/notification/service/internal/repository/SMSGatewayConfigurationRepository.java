@@ -35,5 +35,5 @@ public interface SMSGatewayConfigurationRepository extends JpaRepository<SMSGate
 	@Query("SELECT entity FROM SMSGatewayConfigurationEntity entity WHERE entity.identifier='DEFAULT'")
 	Optional<SMSGatewayConfigurationEntity> defaultGateway();
 	
-	void deleteSMSGatewayConfigurationEntityBy(String identifier);
+	void deleteSMSGatewayConfigurationEntityByIdentifier(String identifier);
 }

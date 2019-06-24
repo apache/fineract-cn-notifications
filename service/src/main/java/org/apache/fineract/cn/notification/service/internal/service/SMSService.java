@@ -106,15 +106,15 @@ public class SMSService {
 	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
 	@Transactional
 	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.SEND_SMS_NOTIFICATION)
-	public String sendSMS(String receiver, String template) {
+	public int sendSMS(String receiver, String template) {
 		Twilio.init(this.accountSid, this.authToken);
 		MessageCreator messageCreator = Message.creator(this.accountSid,
 				new PhoneNumber(receiver),
 				new PhoneNumber(this.senderNumber),
 				template);
-		//Message message = messageCreator.create();
+		Message message = messageCreator.create();
 		
 		System.out.println("\n\n\nsent");
-		return "";//message;
+		return message.hashCode();
 	}
 }
