@@ -16,7 +16,14 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-FROM openjdk:8-jdk-alpine
+FROM openjdk:8-jdk-alpine AS builder
+RUN mkdir builddir
+COPY . builddir
+WORKDIR builddir
+RUN ./gradlew publishToMavenLocal
+
+
+FROM openjdk:8-jdk-alpine AS runner
 
 ARG notification_port=2031
 
@@ -26,6 +33,6 @@ ENV server.max-http-header-size=16384 \
     system.initialclientid=service-runner
 
 WORKDIR /tmp
-COPY notification-service-boot-0.1.0-BUILD-SNAPSHOT.jar .
+COPY --from=builder /builddir/service/build/libs/service-0.1.0-BUILD-SNAPSHOT.jar ./notification-service-boot.jar
 
-CMD ["java", "-jar", "notification-service-boot-0.1.0-BUILD-SNAPSHOT.jar"]
+CMD ["java", "-jar", "notification-service-boot.jar"]
