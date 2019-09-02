@@ -23,19 +23,6 @@ spring:
       enabled: false
     config:
       enabled: false
-    mail:
-      host: smtp.gmail.com
-      port: 587
-      username:
-      password:
-      properties:
-        debug: true
-        mail:
-          smtp:
-            auth: true
-            starttls:
-              enable: true
-
 
 
 eureka:

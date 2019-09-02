@@ -1,0 +1,2 @@
+template_identifier,sender_email,subject,message,url
+test_sample,DEFAULT,Test Sample,This is a test message,template

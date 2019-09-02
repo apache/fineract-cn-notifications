@@ -21,21 +21,11 @@ package org.apache.fineract.cn.notification.service;
 public interface ServiceConstants {
 	String LOGGER_NAME = "notification-logger";
 	
-	String CUSTOMER_SERVICE_NAME ="customer-v1";
-	String ACCOUNT_SERVICE_NAME ="account-v1";
-	String PORTFOLIO_SERVICE_NAME ="porfolio-v1";
-	
 	String MAIL_TRANSPORT_PROTOCOL_PROPERTY = "mail.transport.protocol";
-	String MAIL_TRANSPORT_PROTOCOL_VALUE = "smtp";
 	String MAIL_SMTP_AUTH_PROPERTY = "mail.smtp.auth";
-	String MAIL_SMTP_AUTH_VALUE = "true";
 	String MAIL_SMTP_STARTTLS_ENABLE_PROPERTY = "mail.smtp.starttls.enable";
-	String MAIL_SMTP_STARTTLS_ENABLE_VALUE = "true";
+	String MAIL_SMTP_TIMEOUT_PROPERTY = "";
 	
 	String GOOGLE_MAIL_SERVER = "smtp.gmail.com";
 	String YAHOO_MAIL_SERVER = "smtp.mail.yahoo.com";
-	
-	String MAIL_SMTP_TIMEOUT_PROPERTY = "";
-	String MAIL_SMTP_TIMEOUT_VALUE = "";
-	
 }

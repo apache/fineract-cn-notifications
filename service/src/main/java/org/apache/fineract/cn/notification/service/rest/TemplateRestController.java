@@ -24,9 +24,14 @@ import org.apache.fineract.cn.command.gateway.CommandGateway;
 import org.apache.fineract.cn.lang.ServiceException;
 import org.apache.fineract.cn.notification.api.v1.PermittableGroupIds;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
+import org.apache.fineract.cn.notification.api.v1.domain.Template;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
-import org.apache.fineract.cn.notification.service.internal.command.*;
+import org.apache.fineract.cn.notification.service.internal.command.CreateSMSConfigurationCommand;
+import org.apache.fineract.cn.notification.service.internal.command.CreateTemplateCommand;
+import org.apache.fineract.cn.notification.service.internal.command.DeleteSMSConfigurationCommand;
+import org.apache.fineract.cn.notification.service.internal.command.UpdateSMSConfigurationCommand;
 import org.apache.fineract.cn.notification.service.internal.service.SMSService;
+import org.apache.fineract.cn.notification.service.internal.service.TemplateService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,33 +45,21 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 @RestController
-@RequestMapping("/configuration/sms")
-public class SMSServiceRestController {
+@RequestMapping("/template")
+public class TemplateRestController {
 	
 	private final Logger logger;
 	private final CommandGateway commandGateway;
-	private final SMSService smsService;
+	private final TemplateService templateService;
 	
 	@Autowired
-	public SMSServiceRestController(@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger,
-	                                final CommandGateway commandGateway,
-	                                final SMSService smsService) {
+	public TemplateRestController(@Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger,
+	                              final CommandGateway commandGateway,
+	                              final TemplateService templateService) {
 		super();
 		this.logger = logger;
 		this.commandGateway = commandGateway;
-		this.smsService = smsService;
-	}
-	
-	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)
-	@RequestMapping(
-			method = RequestMethod.GET,
-			consumes = MediaType.ALL_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE
-	)
-	public
-	@ResponseBody
-	List<SMSConfiguration> findAllSMSConfigurationEntities() {
-		return this.smsService.findAllSMSConfigurationEntities();
+		this.templateService = templateService;
 	}
 	
 	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)
@@ -78,10 +71,10 @@ public class SMSServiceRestController {
 	)
 	public
 	@ResponseBody
-	ResponseEntity<SMSConfiguration> findSMSConfigurationByIdentifier(@PathVariable("identifier") final String identifier) {
-		return this.smsService.findSMSConfigurationByIdentifier(identifier)
+	ResponseEntity<Template> findTemplateByIdentifier(@PathVariable("identifier") final String identifier) {
+		return this.templateService.findTemplateWithIdentifier(identifier)
 				.map(ResponseEntity::ok)
-				.orElseThrow(() -> ServiceException.notFound("SMS Gateway Configuration with identifier " + identifier + " doesn't exist."));
+				.orElseThrow(() -> ServiceException.notFound("Template with identifier " + identifier + " doesn't exist."));
 	}
 	
 	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)
@@ -92,12 +85,12 @@ public class SMSServiceRestController {
 	)
 	public
 	@ResponseBody
-	ResponseEntity<Void> createSMSConfiguration(@RequestBody @Valid final SMSConfiguration smsConfiguration) {
-		if (this.smsService.smsConfigurationExists(smsConfiguration.getIdentifier())) {
-			throw ServiceException.conflict("Configuration {0} already exists.", smsConfiguration.getIdentifier());
+	ResponseEntity<Void> createTemplate(@RequestBody @Valid final Template template) throws InterruptedException {
+		if (this.templateService.templateExists(template.getTemplateIdentifier())) {
+			throw ServiceException.conflict("Template {0} already exists.", template.getTemplateIdentifier());
 		}
 		
-		this.commandGateway.process(new CreateSMSConfigurationCommand(smsConfiguration));
+		this.commandGateway.process(new CreateTemplateCommand(template));
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
@@ -109,8 +102,8 @@ public class SMSServiceRestController {
 	)
 	public
 	@ResponseBody
-	ResponseEntity<Void> updateSMSConfiguration(@RequestBody @Valid final SMSConfiguration smsConfiguration) {
-		this.commandGateway.process(new UpdateSMSConfigurationCommand(smsConfiguration));
+	ResponseEntity<Void> updateTemplate(@RequestBody @Valid final Template template) {
+		this.commandGateway.process(template);
 		return ResponseEntity.accepted().build();
 	}
 	
@@ -122,8 +115,8 @@ public class SMSServiceRestController {
 	)
 	public
 	@ResponseBody
-	ResponseEntity<Void> deleteSMSConfiguration(@PathVariable @Valid final String identifier) {
-		this.commandGateway.process(new DeleteSMSConfigurationCommand(identifier));
+	ResponseEntity<Void> deleteTemplate(@PathVariable @Valid final String identifier) {
+		this.commandGateway.process(identifier);
 		return ResponseEntity.ok().build();
 	}
 }

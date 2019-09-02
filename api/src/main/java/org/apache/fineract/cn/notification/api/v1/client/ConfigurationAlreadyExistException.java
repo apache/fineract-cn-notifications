@@ -16,20 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification;
+package org.apache.fineract.cn.notification.api.v1.client;
 
-import org.apache.fineract.cn.notification.importer.TestTemplateImport;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
-
-@RunWith(Suite.class)
-@SuiteClasses({
-		TestTemplateImport.class,
-		TestEmailService.class,
-		TestSMSService.class,
-		EmailApiDocumentation.class,
-		SmsApiDocumentation.class,
-})
-public class TestSuite extends SuiteTestEnvironment {
+public final class ConfigurationAlreadyExistException extends RuntimeException {
 }

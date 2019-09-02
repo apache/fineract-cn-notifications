@@ -32,8 +32,8 @@ public interface SMSGatewayConfigurationRepository extends JpaRepository<SMSGate
 	@Query("SELECT CASE WHEN COUNT(c) > 0 THEN 'true' ELSE 'false' END FROM SMSGatewayConfigurationEntity c WHERE c.identifier = :identifier")
 	Boolean existsByIdentifier(@Param("identifier") final String identifier);
 	
-	@Query("SELECT entity FROM SMSGatewayConfigurationEntity entity WHERE entity.state='ACTIVE'")
-	Optional<SMSGatewayConfigurationEntity> active();
+	@Query("SELECT entity FROM SMSGatewayConfigurationEntity entity WHERE entity.identifier='DEFAULT'")
+	Optional<SMSGatewayConfigurationEntity> defaultGateway();
 	
-	void deleteSMSGatewayConfigurationEntityBy(String identifier);
+	void deleteSMSGatewayConfigurationEntityByIdentifier(String identifier);
 }

@@ -16,19 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.service.internal.repository;
+package org.apache.fineract.cn.notification.api.v1.client;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
-import org.springframework.stereotype.Repository;
-
-import javax.persistence.LockModeType;
-import java.util.Optional;
-
-@Repository
-public interface ApplicationRepository extends JpaRepository<ApplicationEntity, Long> {
-  @Lock(LockModeType.PESSIMISTIC_WRITE)
-  void deleteByTenantIdentifierAndApplicationIdentifier(String tenantIdentifier, String applicationIdentifier);
-  
-  Optional<ApplicationEntity> findByTenantIdentifierAndApplicationIdentifier(String tenantIdentifier, String applicationIdentifier);
+public final class TemplateNotFoundException extends RuntimeException {
 }

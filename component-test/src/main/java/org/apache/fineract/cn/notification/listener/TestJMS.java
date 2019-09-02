@@ -16,20 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.service.internal.repository;
+package org.apache.fineract.cn.notification.listener;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+import org.apache.fineract.cn.notification.AbstractNotificationTest;
+import org.apache.fineract.cn.notification.service.internal.service.EventHelper;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Optional;
+import java.io.IOException;
 
-@Repository
-public interface TemplateRepository extends JpaRepository<TemplateEntity, Long> {
-	Optional<TemplateEntity> findByTemplateIdentifier(String identifier);
+import static org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants.TEST;
+
+public class TestJMS extends AbstractNotificationTest {
 	
-	@Query("SELECT CASE WHEN COUNT(c) > 0 THEN 'true' ELSE 'false' END FROM TemplateEntity c WHERE c.templateIdentifier = :template_identifier")
-	Boolean existsByTemplateIdentifier(@Param("template_identifier") final String identifier);
+	@Autowired
+	EventHelper eventHelper;
 	
+	
+	public TestJMS() {
+		super();
+	}
+	
+	@Test
+	public void testJMSConcurrency() throws InterruptedException,IOException {
+		this.logger.info("Send JMS event");
+		eventHelper.sendEvent(TEST,"test-tenant","payload");
+		Assert.assertTrue(eventRecorder.wait(TEST,"payload"));
+	}
 }

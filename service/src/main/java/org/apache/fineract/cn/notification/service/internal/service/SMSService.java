@@ -63,15 +63,15 @@ public class SMSService {
 	
 	//@PostConstruct
 	public void init() {
-		if (findActiveSMSConfigurationEntity().isPresent()){
-			configureSMSGatewayWithActiveConfiguration();
+		if (getDefaultSMSConfiguration().isPresent()){
+			configureServiceWithDefaultGateway();
 		}else{
 			//Todo: Send an alert on the interface to configure the service
 		}
 	}
 	
-	public boolean configureSMSGatewayWithActiveConfiguration() {
-		SMSConfiguration configuration = findActiveSMSConfigurationEntity().get();
+	public boolean configureServiceWithDefaultGateway() {
+		SMSConfiguration configuration = getDefaultSMSConfiguration().get();
 		this.accountSid = configuration.getAccount_sid();
 		this.authToken = configuration.getAuth_token();
 		this.senderNumber = configuration.getSender_number();
@@ -86,8 +86,8 @@ public class SMSService {
 		return this.isConfigured = true;
 	}
 	
-	public Optional<SMSConfiguration> findActiveSMSConfigurationEntity() {
-		return this.smsGatewayConfigurationRepository.active().map(SMSConfigurationMapper::map);
+	public Optional<SMSConfiguration> getDefaultSMSConfiguration() {
+		return this.smsGatewayConfigurationRepository.defaultGateway().map(SMSConfigurationMapper::map);
 	}
 	
 	public Boolean smsConfigurationExists(final String identifier) {
@@ -98,20 +98,22 @@ public class SMSService {
 		return this.smsGatewayConfigurationRepository.findByIdentifier(identifier).map(SMSConfigurationMapper::map);
 	}
 	
-	public List<SMSConfiguration> findAllActiveSMSConfigurationEntities() {
+	public List<SMSConfiguration> findAllSMSConfigurationEntities() {
 		return SMSConfigurationMapper.map(this.smsGatewayConfigurationRepository.findAll());
 	}
 	
 	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
 	@Transactional
 	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.SEND_SMS_NOTIFICATION)
-	public String sendSMS(String receiver, String template) {
+	public int sendSMS(String receiver, String template) {
 		Twilio.init(this.accountSid, this.authToken);
 		MessageCreator messageCreator = Message.creator(this.accountSid,
 				new PhoneNumber(receiver),
 				new PhoneNumber(this.senderNumber),
 				template);
 		Message message = messageCreator.create();
-		return message.getTo();
+		
+		System.out.println("\n\n\nsent");
+		return message.hashCode();
 	}
 }

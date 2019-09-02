@@ -18,7 +18,6 @@
  */
 package org.apache.fineract.cn.notification.service.internal.service;
 
-import org.apache.fineract.cn.command.annotation.Aggregate;
 import org.apache.fineract.cn.command.annotation.CommandHandler;
 import org.apache.fineract.cn.command.annotation.CommandLogLevel;
 import org.apache.fineract.cn.command.annotation.EventEmitter;
@@ -28,73 +27,55 @@ import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.apache.fineract.cn.notification.service.internal.mapper.EmailConfigurationMapper;
 import org.apache.fineract.cn.notification.service.internal.repository.EmailGatewayConfigurationRepository;
 
+import org.apache.fineract.cn.notification.service.internal.service.util.MailBuilder;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
 @Component
-@Aggregate
 public class EmailService {
 	
-	static boolean isConfigured;
-	
 	private final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository;
+	boolean isConfigured;
 	private JavaMailSenderImpl mailSender;
-	
+	private MailBuilder mailBuilder;
 	private Logger logger;
-	private String host;
-	private String email;
-	private int port;
-	private String password;
 	
 	@Autowired
 	public EmailService(final EmailGatewayConfigurationRepository emailGatewayConfigurationRepository,
+	                    final MailBuilder mailBuilder,
 	                    @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger) {
 		super();
 		this.isConfigured = false;
 		this.logger = logger;
 		this.mailSender = new JavaMailSenderImpl();
 		this.emailGatewayConfigurationRepository = emailGatewayConfigurationRepository;
+		this.mailBuilder = mailBuilder;
 	}
 	
-	//@PostConstruct
-	public void init() {
-		if (findActiveEmailConfigurationEntity().isPresent()){
-			configureEmailGatewayWithActiveConfiguration();
-		}else{
-			//Todo: Send an alert on the interface to configure the service
-		}
+	public boolean configureEmailGatewayWithDefaultGateway() {
+		EmailConfiguration configuration = getDefaultEmailConfigurationEntity().get();
+		return setNewConfiguration(configuration);
 	}
 	
-	public boolean configureEmailGatewayWithActiveConfiguration() {
-		EmailConfiguration configuration = findActiveEmailConfigurationEntity().get();
-		
-		this.host = configuration.getHost();
-		this.email = configuration.getUsername();
-		this.port = Integer.parseInt(configuration.getPort());
-		this.password = configuration.getApp_password();
-		return this.isConfigured = setJavaMailSender();
-	}
-	
-	public boolean customConfiguration(String identifier) {
-		return this.isConfigured = setCustomProperties(identifier);
-	}
-	
-	public List<EmailConfiguration> findAllActiveEmailConfigurationEntities() {
+	public List<EmailConfiguration> findAllEmailConfigurationEntities() {
 		return EmailConfigurationMapper.map(this.emailGatewayConfigurationRepository.findAll());
 	}
 	
-	public Optional<EmailConfiguration> findActiveEmailConfigurationEntity() {
-		return this.emailGatewayConfigurationRepository.active().map(EmailConfigurationMapper::map);
+	public Optional<EmailConfiguration> getDefaultEmailConfigurationEntity() {
+		return this.emailGatewayConfigurationRepository.defaultGateway().map(EmailConfigurationMapper::map);
 	}
 	
 	public Optional<EmailConfiguration> findEmailConfigurationByIdentifier(final String identifier) {
@@ -105,65 +86,63 @@ public class EmailService {
 		return this.emailGatewayConfigurationRepository.existsByIdentifier(identifier);
 	}
 	
-	public boolean setJavaMailSender() {
-		mailSender.setHost(host);
-		mailSender.setPort(port);
-		mailSender.setUsername(email);
-		mailSender.setPassword(password);
-		
-		switch (host.toLowerCase()) {
-			case ServiceConstants.GOOGLE_MAIL_SERVER:
-				return setProperties();
-			case ServiceConstants.YAHOO_MAIL_SERVER:
-				return setProperties();
+	boolean setNewConfiguration(String identifier) {
+		EmailConfiguration configuration = findEmailConfigurationByIdentifier(identifier).get();
+		return setNewConfiguration(configuration);
+	}
+	
+	private boolean setNewConfiguration(EmailConfiguration configuration) {
+		try {
+			this.mailSender.setHost(configuration.getHost());
+			this.mailSender.setPort(Integer.parseInt(configuration.getPort()));
+			this.mailSender.setUsername(configuration.getUsername());
+			this.mailSender.setPassword(configuration.getApp_password());
+			
+			Properties properties = new Properties();
+			properties.put(ServiceConstants.MAIL_TRANSPORT_PROTOCOL_PROPERTY, configuration.getProtocol());
+			properties.put(ServiceConstants.MAIL_SMTP_AUTH_PROPERTY, configuration.getSmtp_auth());
+			properties.put(ServiceConstants.MAIL_SMTP_STARTTLS_ENABLE_PROPERTY, configuration.getStart_tls());
+			this.mailSender.setJavaMailProperties(properties);
+			this.isConfigured = true;
+			return true;
+		} catch (RuntimeException ignore) {
+			logger.error("Failed to configure the Email Gateway");
 		}
 		return false;
 	}
 	
-	public boolean setProperties() {
-		Properties properties = new Properties();
-		properties.put(ServiceConstants.MAIL_TRANSPORT_PROTOCOL_PROPERTY,
-				ServiceConstants.MAIL_TRANSPORT_PROTOCOL_VALUE);
-		properties.put(ServiceConstants.MAIL_SMTP_AUTH_PROPERTY,
-				ServiceConstants.MAIL_SMTP_AUTH_VALUE);
-		properties.put(ServiceConstants.MAIL_SMTP_STARTTLS_ENABLE_PROPERTY,
-				ServiceConstants.MAIL_SMTP_STARTTLS_ENABLE_VALUE);
-		this.mailSender.setJavaMailProperties(properties);
-		return true;
-	}
-	
-	public boolean setCustomProperties(String identifier) {
-		EmailConfiguration configuration = findEmailConfigurationByIdentifier(identifier).get();
-		this.mailSender.setHost(configuration.getHost());
-		this.mailSender.setPort(Integer.parseInt(configuration.getPort()));
-		this.mailSender.setUsername(configuration.getUsername());
-		this.mailSender.setPassword(configuration.getApp_password());
-		
-		Properties properties = new Properties();
-		properties.put(ServiceConstants.MAIL_TRANSPORT_PROTOCOL_PROPERTY, configuration.getProtocol());
-		properties.put(ServiceConstants.MAIL_SMTP_AUTH_PROPERTY, configuration.getSmtp_auth());
-		properties.put(ServiceConstants.MAIL_SMTP_STARTTLS_ENABLE_PROPERTY, configuration.getStart_tls());
-		//properties.put(ServiceConstants.MAIL_SMTP_TIMEOUT_PROPERTY, ServiceConstants.MAIL_SMTP_TIMEOUT_VALUE);
-		this.mailSender.setJavaMailProperties(properties);
-		return true;
-	}
-	
-	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
-	@Transactional
-	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.SEND_EMAIL_NOTIFICATION)
-	public String sendEmail(String from, String to, String subject, String message) {
+	public String sendPlainEmail(String to, String subject, String message) {
 		SimpleMailMessage mail = new SimpleMailMessage();
 		
 		try {
-			mail.setFrom(from);
 			mail.setTo(to);
 			mail.setSubject(subject);
 			mail.setText(message);
-			
 			this.mailSender.send(mail);
+			return to;
 		} catch (MailException exception) {
 			logger.debug("Caused by:" + exception.getCause().toString());
 		}
 		return to;
+	}
+	
+	public String sendFormattedEmail(String to,
+	                                 String subject,
+	                                 Map<String, Object> message,
+	                                 String emailTemplate) {
+		MimeMessagePreparator messagePreparator = mimeMessage -> {
+			MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+			messageHelper.setTo(to);
+			messageHelper.setSubject(subject);
+			String content = mailBuilder.build(message, emailTemplate);
+			messageHelper.setText(content, true);
+		};
+		try {
+			this.mailSender.send(messagePreparator);
+			return to;
+		} catch (MailException e) {
+			logger.error("Failed to send Formatted email{}", e.getMessage());
+		}
+		return null;
 	}
 }

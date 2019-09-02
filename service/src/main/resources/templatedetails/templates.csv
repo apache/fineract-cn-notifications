@@ -1,0 +1,10 @@
+template_identifier,sender_email,subject,message,url
+customerCreatedEvent,DEFAULT,Account created,"Your account has been created",template
+customerUpdatedEvents,DEFAULT,Account updated,Your account has been Updated,template
+customerActivatedEvent,DEFAULT,Account Activated,Your account has been Activated,template
+customerLockedEvent,DEFAULT,Account Locked,Your account has been Locked,template
+customerUnlockedEvent,DEFAULT,Account unlocked,Your account has been Unlocked,template
+customerClosedEvent,DEFAULT,Account closed successfully,Your account has been Closed,template
+customerReopenedEvent,DEFAULT,Account Reopened,Your account has been reopened,template
+contactDetailsChangedEvent,DEFAULT,Contact details has been updated,Your contact has been changed successfully,template
+addressChangedEvent,DEFAULT,Residence address has been changed,Your address has been changed successfully,template

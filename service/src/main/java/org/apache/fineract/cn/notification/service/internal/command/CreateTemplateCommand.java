@@ -16,20 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification;
+package org.apache.fineract.cn.notification.service.internal.command;
 
-import org.apache.fineract.cn.notification.importer.TestTemplateImport;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.apache.fineract.cn.notification.api.v1.domain.Template;
 
-@RunWith(Suite.class)
-@SuiteClasses({
-		TestTemplateImport.class,
-		TestEmailService.class,
-		TestSMSService.class,
-		EmailApiDocumentation.class,
-		SmsApiDocumentation.class,
-})
-public class TestSuite extends SuiteTestEnvironment {
+public class CreateTemplateCommand {
+	
+	private final Template template;
+	
+	public CreateTemplateCommand(final Template template) {
+		super();
+		this.template = template;
+	}
+	
+	public Template getTemplate() {
+		return this.template;
+	}
+	
+	@Override
+	public String toString() {
+		return "CreateTemplateCommand{" +
+				"template=" + template +
+				'}';
+	}
 }

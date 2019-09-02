@@ -16,42 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.fineract.cn.notification.service.internal.repository;
+package org.apache.fineract.cn.notification.api.v1.domain;
+/*
+ebenezergraham created on 5/22/19
+*/
 
-import javax.persistence.*;
 import java.util.Objects;
 
-@SuppressWarnings("unused")
-@Entity
-@Table(name = "wada_templates")
-public class TemplateEntity {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
-	@Column(name = "template_identifier")
+public class Template {
 	private String templateIdentifier;
-	@Column(name = "subject")
 	private String subject;
-	@Column(name = "sender_email")
 	private String senderEmail;
-	@Column(name = "message")
 	private String message;
-	@Column(name = "url")
 	private String url;
 	
-	
-	public TemplateEntity() {
-		super();
+	public Template(String templateIdentifier, String senderEmail, String subject, String message, String url) {
+		this.templateIdentifier = templateIdentifier;
+		this.senderEmail = senderEmail;
+		this.subject = subject;
+		this.message = message;
+		this.url = url;
 	}
 	
-	public Long getId() {
-		return id;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
+	public Template() {
 	}
 	
 	public String getTemplateIdentifier() {
@@ -95,30 +82,29 @@ public class TemplateEntity {
 	}
 	
 	@Override
+	public String toString() {
+		return "Template{" +
+				"templateIdentifier='" + templateIdentifier + '\'' +
+				", subject='" + subject + '\'' +
+				", senderEmail='" + senderEmail + '\'' +
+				", message='" + message + '\'' +
+				", url='" + url + '\'' +
+				'}';
+	}
+	
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		TemplateEntity that = (TemplateEntity) o;
-		return Objects.equals(id, that.id) &&
-				Objects.equals(templateIdentifier, that.templateIdentifier) &&
-				Objects.equals(subject, that.subject) &&
-				Objects.equals(url, that.url);
+		Template template = (Template) o;
+		return Objects.equals(templateIdentifier, template.templateIdentifier) &&
+				Objects.equals(subject, template.subject) &&
+				Objects.equals(message, template.message) &&
+				Objects.equals(url, template.url);
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, templateIdentifier, subject, message, url);
-	}
-	
-	@Override
-	public String toString() {
-		return "TemplateEntity{" +
-				"id=" + id +
-				", templateIdentifier='" + templateIdentifier + '\'' +
-				", subject='" + subject + '\'' +
-				", message='" + message + '\'' +
-				", senderEmail='" + senderEmail + '\'' +
-				", url='" + url + '\'' +
-				'}';
+		return Objects.hash(templateIdentifier, subject, message, senderEmail,url);
 	}
 }

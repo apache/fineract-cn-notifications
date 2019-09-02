@@ -49,7 +49,9 @@ dependencies {
             [group: 'org.apache.fineract.cn', name: 'lang', version: versions.frameworklang],
             [group: 'org.springframework.boot', name: 'spring-boot-starter-test'],
             [group: 'org.springframework.restdocs', name: 'spring-restdocs-mockmvc'],
-            [group: 'junit', name: 'junit', version: versions.junit]
+            [group: 'junit', name: 'junit', version: versions.junit],
+            [group: 'org.apache.commons', name: 'commons-csv', version: versions.apachecsvreader]
+
     )
 }
 asciidoctor {

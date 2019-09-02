@@ -47,11 +47,15 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
+import static org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants.SELECTOR_TEST;
+import static org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants.TEST;
+
 @SuppressWarnings("unused")
 @Component
 public class EventListener {
 	private final EventRecorder eventRecorder;
 	private final Logger logger;
+	
 	
 	@Autowired
 	public EventListener(final EventRecorder eventRecorder,
@@ -59,45 +63,15 @@ public class EventListener {
 		this.logger = logger;
 		this.eventRecorder = eventRecorder;
 	}
-	
+	static int counter = 0;
 	@JmsListener(
-			subscription = NotificationEventConstants.DESTINATION,
-			destination = NotificationEventConstants.DESTINATION,
-			selector = NotificationEventConstants.SELECTOR_POST_EMAIL_CONFIGURATION
+			destination = TEST,
+			selector = SELECTOR_TEST
 	)
-	public void postEmailConfiguration(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
+	public void jmsTest(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
 	                                 final String payload) {
-		this.eventRecorder.event(tenant, NotificationEventConstants.POST_EMAIL_CONFIGURATION, payload, String.class);
+		counter++;
+		logger.info("Received {}",counter);
+		this.eventRecorder.event(tenant, NotificationEventConstants.TEST, payload, String.class);
 	}
-	
-	@JmsListener(
-			subscription = NotificationEventConstants.DESTINATION,
-			destination = NotificationEventConstants.DESTINATION,
-			selector = NotificationEventConstants.SELECTOR_POST_SMS_CONFIGURATION
-	)
-	public void postSMSConfiguration(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-	                                   final String payload) {
-		this.eventRecorder.event(tenant, NotificationEventConstants.POST_SMS_CONFIGURATION, payload, String.class);
-	}
-	
-	@JmsListener(
-			subscription = NotificationEventConstants.DESTINATION,
-			destination = NotificationEventConstants.DESTINATION,
-			selector = NotificationEventConstants.SELECTOR_SEND_EMAIL_NOTIFICATION
-	)
-	public void onSendEmailTrigger(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-	                                   final String payload) {
-		this.eventRecorder.event(tenant, NotificationEventConstants.SEND_EMAIL_NOTIFICATION, payload, String.class);
-	}
-	
-	@JmsListener(
-			subscription = NotificationEventConstants.DESTINATION,
-			destination = NotificationEventConstants.DESTINATION,
-			selector = NotificationEventConstants.SELECTOR_SEND_SMS_NOTIFICATION
-	)
-	public void onSendSmsTrigger(@Header(TenantHeaderFilter.TENANT_HEADER) final String tenant,
-	                               final String payload) {
-		this.eventRecorder.event(tenant, NotificationEventConstants.SEND_SMS_NOTIFICATION, payload, String.class);
-	}
-	
 }

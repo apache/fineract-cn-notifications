@@ -23,54 +23,41 @@ import org.apache.fineract.cn.command.annotation.CommandHandler;
 import org.apache.fineract.cn.command.annotation.CommandLogLevel;
 import org.apache.fineract.cn.command.annotation.EventEmitter;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
+import org.apache.fineract.cn.notification.api.v1.domain.Template;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
-import org.apache.fineract.cn.notification.service.internal.command.UpdateSMSConfigurationCommand;
 import org.apache.fineract.cn.notification.service.internal.command.CreateSMSConfigurationCommand;
+import org.apache.fineract.cn.notification.service.internal.command.CreateTemplateCommand;
 import org.apache.fineract.cn.notification.service.internal.command.DeleteSMSConfigurationCommand;
+import org.apache.fineract.cn.notification.service.internal.command.UpdateSMSConfigurationCommand;
 import org.apache.fineract.cn.notification.service.internal.mapper.SMSConfigurationMapper;
+import org.apache.fineract.cn.notification.service.internal.mapper.TemplateMapper;
 import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationEntity;
 import org.apache.fineract.cn.notification.service.internal.repository.SMSGatewayConfigurationRepository;
+import org.apache.fineract.cn.notification.service.internal.repository.TemplateEntity;
+import org.apache.fineract.cn.notification.service.internal.repository.TemplateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("unused")
 @Aggregate
-public class SMSConfigurationCommandHandler {
+public class TemplateCommandHandler {
 	
-	private final SMSGatewayConfigurationRepository smsGatewayConfigurationRepository;
+	private final TemplateRepository templateRepository;
 	
 	@Autowired
-	public SMSConfigurationCommandHandler(SMSGatewayConfigurationRepository smsGatewayConfigurationRepository) {
+	public TemplateCommandHandler(TemplateRepository templateRepository) {
 		super();
-		this.smsGatewayConfigurationRepository = smsGatewayConfigurationRepository;
+		this.templateRepository = templateRepository;
 	}
 	
 	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
 	@Transactional
-	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_SMS_CONFIGURATION)
-	public String process(final CreateSMSConfigurationCommand createSMSConfigurationCommand) {
-		SMSConfiguration smsConfiguration = createSMSConfigurationCommand.getSMSConfiguration();
-		final SMSGatewayConfigurationEntity entity = SMSConfigurationMapper.map(smsConfiguration);
-		this.smsGatewayConfigurationRepository.save(entity);
+	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.POST_TEMPLATE)
+	public String process(final CreateTemplateCommand createTemplateCommand) {
+		Template template = createTemplateCommand.getTemplate();
+		final TemplateEntity entity = TemplateMapper.map(template);
+		this.templateRepository.save(entity);
 		
-		return smsConfiguration.getIdentifier();
-	}
-	
-	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
-	@Transactional
-	public String process(final UpdateSMSConfigurationCommand updateSMSConfigurationCommand) {
-		final SMSGatewayConfigurationEntity newEntity = SMSConfigurationMapper.map(updateSMSConfigurationCommand.getSMSConfiguration());
-		this.smsGatewayConfigurationRepository.deleteSMSGatewayConfigurationEntityByIdentifier(newEntity.getIdentifier());
-		this.smsGatewayConfigurationRepository.save(newEntity);
-		
-		return newEntity.getIdentifier();
-	}
-	
-	@CommandHandler(logStart = CommandLogLevel.INFO, logFinish = CommandLogLevel.INFO)
-	@Transactional
-	@EventEmitter(selectorName = NotificationEventConstants.SELECTOR_NAME, selectorValue = NotificationEventConstants.DELETE_SMS_CONFIGURATION)
-	public String process(final DeleteSMSConfigurationCommand deleteSMSConfigurationCommand) {
-		smsGatewayConfigurationRepository.deleteSMSGatewayConfigurationEntityByIdentifier(deleteSMSConfigurationCommand.getIdentifier());
-		return deleteSMSConfigurationCommand.getIdentifier();
+		return template.getTemplateIdentifier();
 	}
 }

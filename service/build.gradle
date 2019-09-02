@@ -48,6 +48,7 @@ dependencies {
     compile(
             [group: 'com.twilio.sdk', name: 'twilio', version: versions.twilioapi],
             [group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: versions.springjavamail],
+            [group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'],
 
             [group: 'org.apache.fineract.cn.customer', name: 'api', version: versions.fineractcncustomer],
             [group: 'org.apache.fineract.cn.portfolio', name: 'api', version: versions.fineractcnportfolio],
@@ -66,7 +67,9 @@ dependencies {
             [group: 'org.apache.fineract.cn', name: 'mariadb', version: versions.frameworkmariadb],
             [group: 'org.apache.fineract.cn', name: 'command', version: versions.frameworkcommand],
             [group: 'org.apache.fineract.cn.permitted-feign-client', name: 'library', version: versions.frameworkpermittedfeignclient],
-            [group: 'org.hibernate', name: 'hibernate-validator', version: versions.validator]
+            [group: 'org.hibernate', name: 'hibernate-validator', version: versions.validator],
+            [group: 'org.apache.commons', name: 'commons-csv', version: versions.apachecsvreader]
+
     )
 }
 

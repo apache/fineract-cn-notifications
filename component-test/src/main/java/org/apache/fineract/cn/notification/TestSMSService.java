@@ -20,8 +20,6 @@ package org.apache.fineract.cn.notification;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.fineract.cn.api.util.NotFoundException;
-import org.apache.fineract.cn.customer.api.v1.client.CustomerNotFoundException;
-import org.apache.fineract.cn.notification.api.v1.client.ConfigurationNotFoundException;
 import org.apache.fineract.cn.notification.api.v1.client.NotificationManager;
 import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
@@ -70,7 +68,7 @@ public class TestSMSService extends AbstractNotificationTest {
 	@Test
 	public void shouldFindActiveGateway() {
 		this.logger.info("Find Active Gateway");
-		Assert.assertNotNull(this.smsService.findActiveSMSConfigurationEntity());
+		Assert.assertNotNull(this.smsService.getDefaultSMSConfiguration());
 	}
 	
 	@Test
@@ -86,8 +84,19 @@ public class TestSMSService extends AbstractNotificationTest {
 	@Test
 	public void shouldSendAnSMS(){
 		this.logger.info("Send SMS Notification");
-		String to = this.notificationService.sendSMS("+23058409206",
+		int to = this.notificationService.sendSMS(SMS_TEST_NUMBER,
 				"Dear Valued Customer\n\nTalk is cheap show me the code\n\nBest Regards\nYour MFI");
 		Assert.assertNotNull(to);
+	}
+	
+	@Test
+	public void deleteConfiguration() throws InterruptedException {
+		logger.info("Delete SMS configuration");
+		
+		notificationManager.createSMSConfiguration(smsConfiguration);
+		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_SMS_CONFIGURATION, smsConfiguration.getIdentifier()));
+		
+		notificationManager.deleteSMSConfiguration(smsConfiguration.getIdentifier());
+		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.DELETE_SMS_CONFIGURATION, smsConfiguration.getIdentifier()));
 	}
 }

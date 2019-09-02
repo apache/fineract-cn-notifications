@@ -40,6 +40,10 @@ public class EmailConfigurationMapper {
 		emailConfiguration.setPort(emailGatewayConfigurationEntity.getPort());
 		emailConfiguration.setUsername(emailGatewayConfigurationEntity.getUsername());
 		emailConfiguration.setApp_password(emailGatewayConfigurationEntity.getApp_password());
+		emailConfiguration.setProtocol(emailGatewayConfigurationEntity.getProtocol());
+		emailConfiguration.setSmtp_auth(emailGatewayConfigurationEntity.getSmtp_auth());
+		emailConfiguration.setStart_tls(emailGatewayConfigurationEntity.getStart_tls());
+		emailConfiguration.setState(emailGatewayConfigurationEntity.getState());
 		return emailConfiguration;
 	}
 	

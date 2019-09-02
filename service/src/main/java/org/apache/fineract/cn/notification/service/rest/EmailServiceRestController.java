@@ -24,11 +24,9 @@ import org.apache.fineract.cn.command.gateway.CommandGateway;
 import org.apache.fineract.cn.lang.ServiceException;
 import org.apache.fineract.cn.notification.api.v1.PermittableGroupIds;
 import org.apache.fineract.cn.notification.api.v1.domain.EmailConfiguration;
-import org.apache.fineract.cn.notification.api.v1.domain.SMSConfiguration;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.apache.fineract.cn.notification.service.internal.command.*;
 import org.apache.fineract.cn.notification.service.internal.service.EmailService;
-import org.apache.fineract.cn.notification.service.internal.service.NotificationService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -60,42 +58,15 @@ public class EmailServiceRestController {
 	}
 	
 	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)
-	@RequestMapping(value = "/update",
-			method = RequestMethod.PUT,
-			consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE
-	)
-	public
-	@ResponseBody
-	ResponseEntity<Void> updateEmailConfiguration(@RequestBody @Valid final EmailConfiguration emailConfiguration) {
-		this.commandGateway.process(new UpdateEmailConfigurationCommand(emailConfiguration));
-		return ResponseEntity.accepted().build();
-	}
-	
-	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)
-	@RequestMapping(value = "/delete/{identifier}",
-			method = RequestMethod.DELETE,
-			consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE
-	)
-	public
-	@ResponseBody
-	ResponseEntity<Void> deleteEmailConfiguration(@PathVariable @Valid final String identifier) {
-		this.commandGateway.process(new DeleteEmailConfigurationCommand(identifier));
-		return ResponseEntity.ok().build();
-	}
-	
-	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)
 	@RequestMapping(
-			value = "/active",
 			method = RequestMethod.GET,
 			consumes = MediaType.ALL_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
 	)
 	public
 	@ResponseBody
-	List<EmailConfiguration> findAllActiveEmailConfigurationEntities() {
-		return this.emailService.findAllActiveEmailConfigurationEntities();
+	List<EmailConfiguration> findAllEmailConfigurationEntities() {
+		return this.emailService.findAllEmailConfigurationEntities();
 	}
 	
 	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)
@@ -115,7 +86,6 @@ public class EmailServiceRestController {
 	
 	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)
 	@RequestMapping(
-			value = "/create",
 			method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE
@@ -129,5 +99,32 @@ public class EmailServiceRestController {
 		
 		this.commandGateway.process(new CreateEmailConfigurationCommand(emailConfiguration));
 		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+	
+	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)
+	@RequestMapping(
+			method = RequestMethod.PUT,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	public
+	@ResponseBody
+	ResponseEntity<Void> updateEmailConfiguration(@RequestBody @Valid final EmailConfiguration emailConfiguration) {
+		this.commandGateway.process(new UpdateEmailConfigurationCommand(emailConfiguration));
+		return ResponseEntity.accepted().build();
+	}
+	
+	@Permittable(value = AcceptedTokenType.TENANT, groupId = PermittableGroupIds.SELF_MANAGEMENT)
+	@RequestMapping(
+			value = "/{identifier}",
+			method = RequestMethod.DELETE,
+			consumes = MediaType.APPLICATION_JSON_VALUE,
+			produces = MediaType.APPLICATION_JSON_VALUE
+	)
+	public
+	@ResponseBody
+	ResponseEntity<Void> deleteEmailConfiguration(@PathVariable @Valid final String identifier) {
+		this.commandGateway.process(new DeleteEmailConfigurationCommand(identifier));
+		return ResponseEntity.ok().build();
 	}
 }
