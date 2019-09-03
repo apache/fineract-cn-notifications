@@ -76,10 +76,7 @@
 				    String receiverNumber = contact.getValue();
 				    // TODO: Localize message
 				    // TODO: Pass message to template
-				    notificationService.sendSMS(receiverNumber, "Dear Valued Customer," +
-						    "\n\nYour account has been created" +
-						    "\n\nBest Regards," +
-						    "\nYour MFI");
+				    notificationService.sendSMS(receiverNumber, "customerCreatedEvent");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
@@ -107,10 +104,8 @@
 				    // TODO: Localize message
 				    // TODO: Pass message to template
 				    notificationService.sendSMS(receiverNumber,
-						    "Dear Valued Customer," +
-								    "\n\nYour account has been Updated" +
-								    "\n\nBest Regards," +
-								    "\nYour MFI");
+								"customerUpdatedEvent"
+								);
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
@@ -136,10 +131,7 @@
 			    if (contact.getType().equalsIgnoreCase(ContactDetail.Type.PHONE.toString())) {
 				    String receiverNumber = contact.getValue();
 				    notificationService.sendSMS(receiverNumber,
-						    "Dear Valued Customer," +
-								    "\n\nYour account has been Activated" +
-								    "\n\nBest Regards," +
-								    "\nYour MFI");
+								"customerActivatedEvent");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
@@ -165,10 +157,7 @@
 			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
 				    String receiverNumber = contact.getValue();
 				    notificationService.sendSMS(receiverNumber,
-						    "Dear Valued Customer," +
-								    "\n\nYour account has been Locked" +
-								    "\n\nBest Regards," +
-								    "\nYour MFI");
+								"customerLockedEvent");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
@@ -193,10 +182,7 @@
 			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
 				    String receiverNumber = contact.getValue();
 				    notificationService.sendSMS(receiverNumber,
-						    "Dear Valued Customer," +
-						    "\n\nYour account has been Unlocked" +
-								    "\n\nBest Regards," +
-								    "\nYour MFI");
+								"customerUnlockedEvent");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
@@ -222,10 +208,7 @@
 			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
 				    String receiverNumber = contact.getValue();
 				    notificationService.sendSMS(receiverNumber,
-						    "Dear Valued Customer," +
-						    "\n\nYour account has been Closed" +
-								    "\n\nBest Regards" +
-								    "\nYour MFI");
+								"customerClosedEvent");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
@@ -250,10 +233,7 @@
 			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
 				    String receiverNumber = contact.getValue();
 				    notificationService.sendSMS(receiverNumber,
-						    "Dear Valued Customer," +
-								    "\n\nYour account has been reopened" +
-								    "\n\nBest Regards," +
-								    "\nYour MFI");
+								"customerReopenedEvent");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
@@ -279,11 +259,7 @@
 			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
 				    String receiverNumber = contact.getValue();
 				    notificationService.sendSMS(receiverNumber,
-						    "Dear Valued Customer," +
-								    "\n\nYour contact has been changed successfully" +
-								    "\nNew Contact: "+receiverNumber+
-								    "\n\nBest Regards," +
-								    "\nYour MFI");
+								"contactDetailsChangedEvent");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message
@@ -310,14 +286,7 @@
 			    if (contact.getType().equals(ContactDetail.Type.PHONE.toString())) {
 				    String receiverNumber = contact.getValue();
 				    notificationService.sendSMS(receiverNumber,
-						    "Dear Valued Customer," +
-								    "\n\nYour address has been changed successfully" +
-								    "\n\tStreet: "+ customer.getAddress().getStreet()+
-								    "\n\tCity: "+ customer.getAddress().getCity()+
-								    "\n\tState: "+ customer.getAddress().getRegion()+
-								    "\n\tCountry: "+ customer.getAddress().getCountry()+
-								    "\n\nBest Regards," +
-								    "\nYour MFI");
+								"addressChangedEvent");
 			    } else if (contact.getType().equals(ContactDetail.Type.EMAIL.toString())) {
 				    String emailAddress = contact.getValue();
 				    // TODO: Localize message

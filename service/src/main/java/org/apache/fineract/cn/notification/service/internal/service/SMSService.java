@@ -20,6 +20,7 @@ package org.apache.fineract.cn.notification.service.internal.service;
 
 
 import com.twilio.Twilio;
+import com.twilio.exception.ApiException;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.rest.api.v2010.account.MessageCreator;
 import com.twilio.type.PhoneNumber;
@@ -111,9 +112,14 @@ public class SMSService {
 				new PhoneNumber(receiver),
 				new PhoneNumber(this.senderNumber),
 				template);
-		Message message = messageCreator.create();
-		
-		System.out.println("\n\n\nsent");
+		Message message = null;
+		try{
+			message = messageCreator.create();
+
+		}catch (ApiException apiException){
+			logger.error("Error: {}" ,apiException.getMoreInfo());
+		}
+
 		return message.hashCode();
 	}
 }

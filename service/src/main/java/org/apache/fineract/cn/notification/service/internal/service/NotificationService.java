@@ -22,6 +22,7 @@ import org.apache.fineract.cn.customer.api.v1.domain.Customer;
 import org.apache.fineract.cn.notification.api.v1.domain.Template;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.apache.fineract.cn.notification.service.internal.service.externalServiceClients.CustomerService;
+import org.apache.fineract.cn.notification.service.internal.service.externalServiceClients.NotificationAuthentication;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,6 +39,7 @@ public class NotificationService {
 	private final TemplateService templateService;
 	
 	private final CustomerService customerService;
+	private final NotificationAuthentication notificationAuthentication;
 	private final Logger logger;
 	
 	@Autowired
@@ -46,6 +48,7 @@ public class NotificationService {
 	                           final SMSService smsService,
 	                           final EmailService emailService,
 	                           final TemplateService templateService,
+	                           final NotificationAuthentication notificationAuthentication,
 	                           @Qualifier(ServiceConstants.LOGGER_NAME) final Logger logger
 	) {
 		super();
@@ -53,10 +56,12 @@ public class NotificationService {
 		this.smsService = smsService;
 		this.emailService = emailService;
 		this.templateService = templateService;
+		this.notificationAuthentication = notificationAuthentication;
 		this.logger = logger;
 	}
 	
 	public Optional<Customer> findCustomer(final String customerIdentifier, String tenant) {
+		notificationAuthentication.authenticate(tenant);
 		return customerService.findCustomer(customerIdentifier);
 	}
 	
