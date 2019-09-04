@@ -21,7 +21,7 @@ package org.apache.fineract.cn.notification.importer;
 import org.apache.fineract.cn.notification.AbstractNotificationTest;
 import org.apache.fineract.cn.notification.api.v1.domain.Template;
 import org.apache.fineract.cn.notification.api.v1.events.NotificationEventConstants;
-import org.apache.fineract.cn.notification.service.internal.importer.TemplateImporter;
+import org.apache.fineract.cn.notification.service.internal.importer.Importer;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,9 +29,9 @@ import java.io.IOException;
 import java.net.URL;
 
 
-public class TestTemplateImport extends AbstractNotificationTest {
+public class TestImport extends AbstractNotificationTest {
 	
-	public TestTemplateImport() {
+	public TestImport() {
 		super();
 	}
 	
@@ -47,9 +47,26 @@ public class TestTemplateImport extends AbstractNotificationTest {
 		notificationManager.createTemplate(template);
 		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_TEMPLATE, template.getTemplateIdentifier()));
 		
-		final TemplateImporter importer = new TemplateImporter(notificationManager, logger);
+		final Importer importer = new Importer(notificationManager, logger);
 		final URL uri = ClassLoader.getSystemResource("importdata/test-templates.csv");
-		importer.importCSV(uri);
+		importer.importTemplateCSV(uri);
 		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_TEMPLATE, "test_sample"));
+	}
+
+	@Test
+	public void testSmsConfigImportHappyCase() throws IOException, InterruptedException {
+
+		final Importer importer = new Importer(notificationManager, logger);
+		final URL uri = ClassLoader.getSystemResource("importdata/test-sms-config.csv");
+		importer.importSmsConfigurationCSV(uri);
+		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_SMS_CONFIGURATION, "DEFAULT"));
+	}
+
+	@Test
+	public void testEmailConfigImportHappyCase() throws IOException, InterruptedException {
+		final Importer importer = new Importer(notificationManager, logger);
+		final URL uri = ClassLoader.getSystemResource("importdata/test-email-config.csv");
+		importer.importEmailConfigurationCSV(uri);
+		Assert.assertTrue(eventRecorder.wait(NotificationEventConstants.POST_EMAIL_CONFIGURATION, "DEFAULT"));
 	}
 }

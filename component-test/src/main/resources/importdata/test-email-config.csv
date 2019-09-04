@@ -1,0 +1,2 @@
+identifier,host,port,username,app_password,protocol,smtp_auth,start_tls,state
+DEFAULT,smtp.gmail.com,587,fineractcnnotificationdemo@gmail.com,pnuugpwmcibipdpw,smtp,true,true,ACTIVE

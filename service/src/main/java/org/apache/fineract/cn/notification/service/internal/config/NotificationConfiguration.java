@@ -30,7 +30,7 @@ import org.apache.fineract.cn.identity.api.v1.client.IdentityManager;
 import org.apache.fineract.cn.lang.ApplicationName;
 import org.apache.fineract.cn.lang.config.EnableServiceException;
 import org.apache.fineract.cn.lang.config.EnableTenantContext;
-import org.apache.fineract.cn.mariadb.config.EnableMariaDB;
+import org.apache.fineract.cn.postgresql.config.EnablePostgreSQL;
 import org.apache.fineract.cn.notification.service.ServiceConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +63,7 @@ import java.nio.charset.StandardCharsets;
 @EnableAsync
 @EnableTenantContext
 @EnableCassandra
-@EnableMariaDB
+@EnablePostgreSQL
 @EnableCommandProcessing
 @EnableAnubis
 @EnableServiceException

@@ -18,14 +18,14 @@
  */
 package org.apache.fineract.cn.notification;
 
-import org.apache.fineract.cn.notification.importer.TestTemplateImport;
+import org.apache.fineract.cn.notification.importer.TestImport;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-		TestTemplateImport.class,
+		TestImport.class,
 		TestEmailService.class,
 		TestSMSService.class,
 		EmailApiDocumentation.class,

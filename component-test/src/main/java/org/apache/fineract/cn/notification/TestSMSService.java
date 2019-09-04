@@ -85,7 +85,7 @@ public class TestSMSService extends AbstractNotificationTest {
 	public void shouldSendAnSMS(){
 		this.logger.info("Send SMS Notification");
 		int to = this.notificationService.sendSMS(SMS_TEST_NUMBER,
-				"Dear Valued Customer\n\nTalk is cheap show me the code\n\nBest Regards\nYour MFI");
+				TEST_TEMPLATE);
 		Assert.assertNotNull(to);
 	}
 	
