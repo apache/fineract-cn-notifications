@@ -25,7 +25,7 @@ RUN ./gradlew publishToMavenLocal
 
 FROM openjdk:8-jdk-alpine AS runner
 
-ARG notification_port=2031
+ARG notification_port=2033
 
 ENV server.max-http-header-size=16384 \
     cassandra.clusterName="Test Cluster" \
@@ -33,6 +33,6 @@ ENV server.max-http-header-size=16384 \
     system.initialclientid=service-runner
 
 WORKDIR /tmp
-COPY --from=builder /builddir/service/build/libs/service-0.1.0-BUILD-SNAPSHOT.jar ./notification-service-boot.jar
+COPY --from=builder /builddir/service/build/libs/service-0.1.0-BUILD-SNAPSHOT-boot.jar ./notification-service-boot.jar
 
 CMD ["java", "-jar", "notification-service-boot.jar"]
