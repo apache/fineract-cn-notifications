@@ -74,6 +74,7 @@ dependencies {
 tasks.withType(PublishToMavenLocal) { task ->
     task.dependsOn 'bootRepackage'
 }
+
 publishing {
     publications {
         service(MavenPublication) {
