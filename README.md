@@ -1,7 +1,8 @@
+# Apache Fineract CN Notifications [![Build Status](https://api.travis-ci.com/apache/fineract-cn-notifications.svg?branch=develop)](https://travis-ci.com/apache/fineract-cn-notifications) [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/apache/fineract-cn-notifications)](https://hub.docker.com/r/apache/fineract-cn-notifications/builds)
 
-# Apache Fineract CN Notification [![Build Status](https://api.travis-ci.com/apache/fineract-cn-notifications.svg?branch=develop)](https://travis-ci.com/apache/fineract-cn-notifications)
+This microservice implements SMS and Email Notification functionality.
+[Read more](https://cwiki.apache.org/confluence/display/FINERACT/Fineract+CN+Project+Structure#FineractCNProjectStructure-notifications).
 
-This mircroservice implements SMS and Email Notification functionalities
 
 ## Abstract
 Apache Fineract CN is an application framework for digital financial services, a system to support nationwide and cross-national financial transactions and help to level and speed the creation of an inclusive, interconnected digital economy for every nation in the world.
