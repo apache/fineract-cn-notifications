@@ -44,11 +44,6 @@ ext.versions = [
     
 ]
 
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'maven-publish'
-apply plugin: 'io.spring.dependency-management'
-
 tasks.withType(JavaCompile) {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -85,7 +80,7 @@ dependencies {
 }
 
 jar {
-    from sourceSets.main.allSource
+    from sourceSets.main.java
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
@@ -119,17 +114,17 @@ license {
 rat {
     // List of exclude directives, defaults to ['**/.gradle/**']
     excludes = [
-            "**/.idea/**",
-            "**/.gradle/**",
-            "**/gradle/**",
-            "**/build/**",
-            "gradlew",
-            "gradlew.bat",
-            "README.md",
-            ".dockerignore",
-            "component-test/src/main/resources/importdata/*.csv",
-            "service/src/main/resources/templatedetails/*.csv",
+        "**/*.csv",
+        "**/*.log",
+        "**/.gradle/**",
+        "**/.idea/**",
+        "**/banner.txt",
+        "**/build/**",
+        "**/gradle/**",
+        ".dockerignore",
+        "gradlew",
+        "gradlew.bat",
+        "README.md",
     ]
-    plainOutput = true
 }
 
