@@ -38,7 +38,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -52,7 +52,7 @@ import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
-import org.thymeleaf.templatemode.StandardTemplateModeHandlers;
+import org.thymeleaf.templatemode.TemplateMode;
 
 import java.nio.charset.StandardCharsets;
 
@@ -145,7 +145,7 @@ public class NotificationConfiguration extends WebMvcConfigurerAdapter {
 		SpringResourceTemplateResolver emailTemplateResolver = new SpringResourceTemplateResolver();
 		emailTemplateResolver.setPrefix("classpath:/templates/");
 		emailTemplateResolver.setSuffix(".html");
-		emailTemplateResolver.setTemplateMode(StandardTemplateModeHandlers.HTML5.getTemplateModeName());
+		emailTemplateResolver.setTemplateMode(TemplateMode.HTML5);
 		emailTemplateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
 		return emailTemplateResolver;
 	}
