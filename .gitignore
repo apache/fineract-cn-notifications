@@ -8,6 +8,10 @@ logs
 **/logs
 **/target
 local.properties
+.classpath
+.project
+.settings
+bin
 
 # Ignore Gradle GUI config
 gradle-app.setting

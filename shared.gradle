@@ -16,27 +16,27 @@
  */
 
 group 'org.apache.fineract.cn.notification'
-version '0.1.0-BUILD-SNAPSHOT'
+version 'spring_boot_2-SNAPSHOT'
 
 ext.versions = [
-        fineractcnidentity              : '0.1.0-BUILD-SNAPSHOT',
-        fineractcnoffice                : '0.1.0-BUILD-SNAPSHOT',
-        fineractcncustomer              : '0.1.0-BUILD-SNAPSHOT',
-        fineractcnaccounting            : '0.1.0-BUILD-SNAPSHOT',
-        fineractcnportfolio             : '0.1.0-BUILD-SNAPSHOT',
-        fineractcnteller                : '0.1.0-BUILD-SNAPSHOT',
-        fineractcnpayroll               : '0.1.0-BUILD-SNAPSHOT',
-        fineractcngroup                 : '0.1.0-BUILD-SNAPSHOT',
-        frameworkapi                    : '0.1.0-BUILD-SNAPSHOT',
-        frameworklang                   : '0.1.0-BUILD-SNAPSHOT',
-        frameworkasync                  : '0.1.0-BUILD-SNAPSHOT',
-        frameworkcassandra              : '0.1.0-BUILD-SNAPSHOT',
-        frameworkpostgresql             : '0.1.0-BUILD-SNAPSHOT',
-        frameworkcommand                : '0.1.0-BUILD-SNAPSHOT',
-        frameworktest                   : '0.1.0-BUILD-SNAPSHOT',
-        frameworkanubis                 : '0.1.0-BUILD-SNAPSHOT',
-        frameworkpermittedfeignclient   : '0.1.0-BUILD-SNAPSHOT',
-        validator                       : '5.3.0.Final',
+        fineractcnidentity              : 'spring_boot_2-SNAPSHOT',
+        fineractcnoffice                : 'spring_boot_2-SNAPSHOT',
+        fineractcncustomer              : 'spring_boot_2-SNAPSHOT',
+        fineractcnaccounting            : 'spring_boot_2-SNAPSHOT',
+        fineractcnportfolio             : 'spring_boot_2-SNAPSHOT',
+        fineractcnteller                : 'spring_boot_2-SNAPSHOT',
+        fineractcnpayroll               : 'spring_boot_2-SNAPSHOT',
+        fineractcngroup                 : 'spring_boot_2-SNAPSHOT',
+        frameworkapi                    : 'spring_boot_2-SNAPSHOT',
+        frameworklang                   : 'spring_boot_2-SNAPSHOT',
+        frameworkasync                  : 'spring_boot_2-SNAPSHOT',
+        frameworkcassandra              : 'spring_boot_2-SNAPSHOT',
+        frameworkpostgresql             : 'spring_boot_2-SNAPSHOT',
+        frameworkcommand                : 'spring_boot_2-SNAPSHOT',
+        frameworktest                   : 'spring_boot_2-SNAPSHOT',
+        frameworkanubis                 : 'spring_boot_2-SNAPSHOT',
+        frameworkpermittedfeignclient   : 'spring_boot_2-SNAPSHOT',
+        validator                       : '6.1.4.Final',
         springjavamail                  : '1.4.1.RELEASE',
         twilioapi                       : '7.17.+',
         junit                           : '4.12',
@@ -57,8 +57,8 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom 'io.spring.platform:platform-bom:Athens-RELEASE'
-        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Camden.SR1'
+        mavenBom 'io.spring.platform:platform-bom:Cairo-SR8'
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Hoxton.SR3'
     }
 }
 
@@ -125,6 +125,10 @@ rat {
         "gradlew",
         "gradlew.bat",
         "README.md",
+        ".classpath",
+        ".project",
+        ".settings/**",
+        "**/bin/**"
     ]
 }
 
