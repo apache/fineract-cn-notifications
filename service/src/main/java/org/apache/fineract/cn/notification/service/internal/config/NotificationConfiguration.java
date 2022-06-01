@@ -59,7 +59,6 @@ import java.nio.charset.StandardCharsets;
 @SuppressWarnings("WeakerAccess")
 @Configuration
 @EnableAutoConfiguration
-@EnableDiscoveryClient
 @EnableAsync
 @EnableTenantContext
 @EnableCassandra
