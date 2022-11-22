@@ -24,13 +24,6 @@ spring:
     config:
       enabled: false
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-  instance:
-    homePageUrl: "http://${eureka.hostname}:2033/notification/v1/"
-
 server:
   port: 2033
   contextPath: /notification/v1/*
@@ -73,3 +66,24 @@ flyway:
 notification:
   user: operator
   password: init1@l
+
+kubernetes:
+  notifications:
+    service:
+      name: notifications-service
+    server:
+      port: 2033
+  customer:
+    service:
+      name: customer-service
+    server:
+      port: 2024
+  identity:
+    service:
+      name: identity-service
+    server:
+      port: 2021
+
+ribbon:
+  eureka:
+    enabled: false

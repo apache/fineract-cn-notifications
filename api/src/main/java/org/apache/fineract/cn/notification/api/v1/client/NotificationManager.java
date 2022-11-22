@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 
 @SuppressWarnings("unused")
-@FeignClient(value = "notification-v1", path = "/notification/v1", configuration = CustomFeignClientsConfiguration.class)
+@FeignClient(path = "/notification/v1", url = "http://${kubernetes.notifications.service.name}:${kubernetes.notifications.server.port}", configuration = CustomFeignClientsConfiguration.class)
 public interface NotificationManager {
 	
 	@RequestMapping(

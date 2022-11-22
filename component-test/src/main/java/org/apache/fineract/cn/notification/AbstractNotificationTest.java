@@ -101,7 +101,6 @@ public class AbstractNotificationTest extends SuiteTestEnvironment {
 	@Configuration
 	@EnableEventRecording
 	@EnableFeignClients(basePackages = {"org.apache.fineract.cn.notification.api.v1.client"})
-	@RibbonClient(name = APP_NAME)
 	@ComponentScan({"org.apache.fineract.cn.notification.listener",
 			"org.apache.fineract.cn.notification.service.internal.service",
 			"org.apache.fineract.cn.notification.service.internal.service.externalServiceClients"
