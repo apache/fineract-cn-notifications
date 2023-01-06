@@ -1,4 +1,4 @@
-# Apache Fineract CN Notifications [![Build Status](https://api.travis-ci.com/apache/fineract-cn-notifications.svg?branch=develop)](https://travis-ci.com/apache/fineract-cn-notifications) [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/apache/fineract-cn-notifications)](https://hub.docker.com/r/apache/fineract-cn-notifications/builds)
+# Apache Fineract CN Notifications [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/apache/fineract-cn-notifications)](https://hub.docker.com/r/apache/fineract-cn-notifications/builds)
 
 This microservice implements SMS and Email Notification functionality.
 [Read more](https://cwiki.apache.org/confluence/display/FINERACT/Fineract+CN+Project+Structure#FineractCNProjectStructure-notifications).
